@@ -24,7 +24,7 @@ public class Area {
 		this.antiShapes = antiShapes;
 	}
 	
-	//@TODO: Implement
+	//TODO: Implement
 	/**
 	 * Checks if a given point, p, is inside the area. This is true if the point
 	 * is NOT inside any of the anti shapes, but is inside one of the normal
@@ -41,12 +41,12 @@ public class Area {
 		return false;
 	}
 
-	//@TODO: Implement
+	//TODO: Implement
 	public Shape[] getShapes() {
 		return null;
 	}
 
-	//@TODO: Implement
+	//TODO: Implement
 	public Shape[] getAntiShapes() {
 		return null;
 	}
