@@ -1,5 +1,6 @@
 package mdsd.controller;
 
+import mdsd.model.Mission;
 import project.Point;
 
 /**
@@ -23,11 +24,6 @@ public interface ControllableRover {
 	 * Get the current position for the rover.
 	 */
 	public Point getPosition();
-	
-	/*
-	 * Get the current status of the rover.
-	 */
-	public Status getStatus();
 	
 	/*
 	 * Start executing the current mission, if there is any.
