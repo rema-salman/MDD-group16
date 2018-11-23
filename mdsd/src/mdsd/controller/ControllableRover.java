@@ -26,11 +26,6 @@ public interface ControllableRover {
 	public Point getPosition();
 	
 	/*
-	 * Get the current status of the rover.
-	 */
-	public Status getStatus();
-	
-	/*
 	 * Start executing the current mission, if there is any.
 	 */
 	public void start();
