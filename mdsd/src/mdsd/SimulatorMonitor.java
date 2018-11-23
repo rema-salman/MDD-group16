@@ -1,5 +1,6 @@
 package mdsd;
 
+import mdsd.controller.Robot;
 import project.AbstractSimulatorMonitor;
 import simbad.sim.EnvironmentDescription;
 

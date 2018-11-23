@@ -1,5 +1,6 @@
 package mdsd;
 
+import mdsd.controller.Robot;
 import project.AbstractSimulatorMonitor;
 import project.Point;
 import simbad.sim.*;
@@ -7,6 +8,8 @@ import simbad.sim.*;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
+
+import mdsd.controller.Robot;
 
 @SuppressWarnings("unused")
 public class Main {

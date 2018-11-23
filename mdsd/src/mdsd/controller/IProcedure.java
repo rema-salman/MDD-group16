@@ -1,6 +1,7 @@
 package mdsd.controller;
 
 import java.awt.*;
+import mdsd.model.Area;
 
 public interface IProcedure {
 
@@ -12,5 +13,5 @@ public interface IProcedure {
 	 * @return score
 	 */
 
-	public int calculateScore( Point[] roverLocations, Area [] logicalAreas, Area [] physicalAreas);
+    int calculateScore(Point[] roverLocations, Area[] logicalAreas, Area[] physicalAreas);
 }

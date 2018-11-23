@@ -1,6 +1,6 @@
 package mdsd.model;
 
-import java.awt.*;
+import project.Point;
 
 public class Mission {
     private final Point[] points;
