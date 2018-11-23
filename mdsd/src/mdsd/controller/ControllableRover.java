@@ -1,4 +1,4 @@
-package mdsd;
+package mdsd.controller;
 
 import project.Point;
 
