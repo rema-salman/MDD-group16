@@ -5,7 +5,7 @@ package mdsd.controller;
  */
 public class ScoreCalculator implements Runnable {
 
-	private IProcedure [] procedures;
+	private IProcedure[] procedures;
 
 	public IProcedure activeProcedure;
 
@@ -13,18 +13,18 @@ public class ScoreCalculator implements Runnable {
 
 	public boolean running = true;
 
-	private void changeProcedure (IProcedure procedure){
+	private void changeProcedure(IProcedure procedure) {
 		this.activeProcedure = procedure;
 	}
 
-	private void scoreLoop(){
+	private void scoreLoop() {
 
 	}
 
 	public void run() {
-		while(running){
+		while (running) {
 
-			//score += activeProcedure.calculateScore();
+			// score += activeProcedure.calculateScore();
 
 			try {
 				this.wait(20000);

@@ -8,14 +8,14 @@ import java.util.Set;
 
 public class SimulatorMonitor extends AbstractSimulatorMonitor<Robot> {
 
-    public SimulatorMonitor(Set<Robot> robots, EnvironmentDescription e) {
-        super(robots, e);
-    }
+	public SimulatorMonitor(Set<Robot> robots, EnvironmentDescription e) {
+		super(robots, e);
+	}
 
-    @Override
-    public void update(Robot arg0) {
-        System.out.println(arg0.getName());
-        System.out.println(arg0.getPosition());
-    }
+	@Override
+	public void update(Robot arg0) {
+		System.out.println(arg0.getName());
+		System.out.println(arg0.getPosition());
+	}
 
 }
