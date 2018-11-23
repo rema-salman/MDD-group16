@@ -5,44 +5,43 @@ import project.Point;
 
 /**
  * A rover that can be controlled by an operator.
- * 
- * @author bondi
  *
+ * @author bondi
  */
 public interface IControllableRover {
 
-	/*
-	 * Set a new mission for the rover to execute.
-	 */
-	void setMission(Mission mission);
+    /*
+     * Set a new mission for the rover to execute.
+     */
+    void setMission(Mission mission);
 
-	/*
-	 * Get the current mission of the rover.
-	 */
-	Mission getMission();
+    /*
+     * Get the current mission of the rover.
+     */
+    Mission getMission();
 
-	/*
-	 * Get the current position for the rover.
-	 */
-	Point getPosition();
+    /*
+     * Get the current position for the rover.
+     */
+    Point getPosition();
 
-	/*
-	 * Start executing the current mission, if there is any.
-	 */
-	void start();
+    /*
+     * Start executing the current mission, if there is any.
+     */
+    void start();
 
-	/*
-	 * Stop whatever the rover is doing.
-	 */
-	void stop();
+    /*
+     * Stop whatever the rover is doing.
+     */
+    void stop();
 
-	/*
-	 * Get a description of all faults of the rover, if any.
-	 */
-	String[] getFaults();
+    /*
+     * Get a description of all faults of the rover, if any.
+     */
+    String[] getFaults();
 
-	/*
-	 * Check if the rover is faulty or not.
-	 */
-	Boolean isFaulty();
+    /*
+     * Check if the rover is faulty or not.
+     */
+    boolean isFaulty();
 }
