@@ -1,9 +1,10 @@
-package mdsd;
+package mdsd.controller;
 
+import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
 import project.Point;
 
-public class Robot extends AbstractRobotSimulator implements ControllableRover {
+public class Robot extends AbstractRobotSimulator implements IControllableRover {
 
     public Robot(Point position, String name) {
         super(position, name);

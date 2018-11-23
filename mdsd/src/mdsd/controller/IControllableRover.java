@@ -8,40 +8,40 @@ import project.Point;
  * @author bondi
  *
  */
-public interface ControllableRover {
+public interface IControllableRover {
 	
 	/*
 	 * Set a new mission for the rover to execute.
 	 */
-	public void setMission(Mission mission);
+	void setMission(Mission mission);
 	
 	/*
 	 * Get the current mission of the rover.
 	 */
-	public Mission getMission();
+	Mission getMission();
 	
 	/*
 	 * Get the current position for the rover.
 	 */
-	public Point getPosition();
+	Point getPosition();
 	
 	/*
 	 * Start executing the current mission, if there is any.
 	 */
-	public void start();
+	void start();
 	
 	/*
 	 * Stop whatever the rover is doing.
 	 */
-	public void stop();
+	void stop();
 	
 	/*
 	 * Get a description of all faults of the rover, if any.
 	 */
-	public String[] getFaults();
+	String[] getFaults();
 	
 	/*
 	 * Check if the rover is faulty or not.
 	 */
-	public Boolean isFaulty();
+	Boolean isFaulty();
 }

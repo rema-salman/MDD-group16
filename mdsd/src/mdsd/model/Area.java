@@ -1,7 +1,8 @@
 package mdsd.model;
 
-import java.awt.Point;
-import java.awt.Shape;
+import project.Point;
+
+import java.awt.*;
 
 public class Area {
 	/**
