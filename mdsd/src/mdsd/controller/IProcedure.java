@@ -1,6 +1,7 @@
 package mdsd.controller;
 
 import java.awt.*;
+import mdsd.model.Area;
 
 public interface IProcedure {
 
