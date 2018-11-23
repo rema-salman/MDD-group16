@@ -1,4 +1,4 @@
-package model;
+package mdsd.model;
 
 import java.awt.Point;
 import java.awt.Shape;
@@ -18,7 +18,7 @@ public class Area {
 	 */
 	private Shape[] antiShapes;
 
-	public Areas(Shape[] shapes, Shape[] antiShapes)
+	public Area(Shape[] shapes, Shape[] antiShapes)
 	{
 		this.shapes = shapes;
 		this.antiShapes = antiShapes;

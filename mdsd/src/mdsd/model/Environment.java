@@ -1,4 +1,4 @@
-package model;
+package mdsd.model;
 
 public class Environment {
 	private Area[] physicalAreas;
