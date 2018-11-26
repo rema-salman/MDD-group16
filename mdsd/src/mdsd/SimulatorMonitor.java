@@ -18,4 +18,12 @@ public class SimulatorMonitor extends AbstractSimulatorMonitor<Robot> {
         System.out.println(arg0.getPosition());
     }
 
+    private void start() {
+        // TODO: Start system. To be implemented in a button.
+    }
+
+    private void stop() {
+        // TODO: Stop system. To be implemented in a button.
+    }
+
 }
