@@ -34,9 +34,9 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return null;
     }
 
-    public Status getStatus() {
+    public void getStatus() {
         // TODO Auto-generated method stub
-        return null;
+        return;
     }
 
     @Override

@@ -6,76 +6,72 @@ import mdsd.model.Environment;
 import java.util.List;
 
 public class MainController {
+    private IControllableRover[] rovers;
+    private Environment environment;
+    private ScoreCalculator scoreCalculator;
+    //private Procedure procedure;
 
-	private IControllableRover [] rovers;
+    // TODO
+    public void getAllRoverPositions() {
 
-	private Environment environment;
+    }
 
-	// TODO
-	public void getAllRoverPositions(){
+    // TODO
+    public void getRoverPositions(Area area) {
 
-	}
+    }
 
-	// TODO
-	public void getRoverPositions(Area area){
+    // TODO
+    public int getScore() {
+        return 0;
+    }
 
-	}
+    // TODO, return copy?
+    public Environment getEnvironment() {
+        return environment;
+    }
 
-	// TODO
-	public int getScore(){
-		return 0;
-	}
+    // TODO, return type
+    public void getRoverStatus() {
 
-	// TODO, return copy?
-	public Environment getEnvironment(){
-		return environment;
-	}
+    }
 
-	// TODO, return type
-	public void getRoverStatus(){
-
-	}
-
-	// TODO
-	public List<IControllableRover> getRovers(){
-		return null;
-	}
+    // TODO
+    public List<IControllableRover> getRovers() {
+        return null;
+    }
 
 
-	// TODO
-	public void stopRover (IControllableRover rover){
+    // TODO
+    public void stopRover(IControllableRover rover) {
 
-	}
+    }
 
-	protected class ScoreCalculator implements Runnable {
+    protected class ScoreCalculator implements Runnable {
+        private IProcedure[] procedures;
+        public IProcedure activeProcedure;
+        public int score = 0;
+        public boolean running = true;
 
-		private IProcedure[] procedures;
+        private void changeProcedure(IProcedure procedure) {
+            this.activeProcedure = procedure;
+        }
 
-		public IProcedure activeProcedure;
+        private void scoreLoop() {
 
-		public int score = 0;
+        }
 
-		public boolean running = true;
+        public void run() {
+            while (running) {
 
-		private void changeProcedure(IProcedure procedure) {
-			this.activeProcedure = procedure;
-		}
+                // score += activeProcedure.calculateScore();
 
-		private void scoreLoop() {
-
-		}
-
-		public void run() {
-			while (running) {
-
-				// score += activeProcedure.calculateScore();
-
-				try {
-					this.wait(20000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+                try {
+                    this.wait(20000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }
