@@ -23,7 +23,7 @@ public class MainController {
 
     // TODO
     public int getScore() {
-        return 0;
+        return scoreCalculator.score;
     }
 
     // TODO, return copy?
