@@ -15,7 +15,8 @@ import mdsd.controller.Robot;
 @SuppressWarnings("unused")
 public class Main {
 
- static Environment e = new Environment();
+    static Environment e = new Environment();
+    static EnvironmentDescription ed;
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
@@ -26,13 +27,45 @@ public class Main {
 
         robots.add(robot1);
         robots.add(robot2);
-        
-        // adding the robots to the environment 
-        e.add(robot1);
-        e.add(robot2);
-        
-        AbstractSimulatorMonitor controller = new SimulatorMonitor(robots, e.getEnviroment());
 
+        ed = getEnvironment();
+
+        // adding the robots to the environment 
+        ed.add(robot1);
+        ed.add(robot2);
+
+        AbstractSimulatorMonitor controller = new SimulatorMonitor(robots, ed);
+
+    }
+
+    /**
+     * Returns the designed environment
+     *
+     * @return object of the designed environment
+     */
+    public static EnvironmentDescription getEnvironment() {
+        EnvironmentDescription env = new EnvironmentDescription();
+        Color color = Color.GRAY;
+
+        // horizontal (yPos, xStart,xEnd)
+        // vertical (xPos, yStart, yEnd)
+        Boundary w1 = new HorizontalBoundary(-6.0f, -6.0f, 6.0f, env, color);
+        Boundary w2 = new HorizontalBoundary(6.0f, -6.0f, 6.0f, env, color);
+        Boundary w3 = new VerticalBoundary(6.0f, -6.0f, -4.0f, env, color);
+        Boundary w4 = new VerticalBoundary(6.0f, -2.0f, 2.0f, env, color);
+        Boundary w5 = new VerticalBoundary(6.0f, 4.0f, 6.0f, env, color);
+        Boundary w6 = new VerticalBoundary(-6.0f, -6.0f, -4.0f, env, color);
+        Boundary w7 = new VerticalBoundary(-6.0f, -2.0f, 2.0f, env, color);
+        Boundary w8 = new VerticalBoundary(-6.0f, 4.0f, 6.0f, env, color);
+
+        Wall roomWall1 = new HorizontalWall(0f, -2f, 2f, env, color);
+        Wall roomWall2 = new VerticalWall(0f, -6f, -4f, env, color);
+        Wall roomWall3 = new VerticalWall(0f, -2f, 2f, env, color);
+        Wall roomWall4 = new VerticalWall(0f, 4f, 6f, env, color);
+        Wall roomWall5 = new HorizontalWall(0f, -6f, -4f, env, color);
+        Wall roomWall6 = new HorizontalWall(0f, 4f, 6f, env, color);
+
+        return env;
     }
 
 }
