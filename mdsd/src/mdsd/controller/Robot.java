@@ -2,9 +2,16 @@ package mdsd.controller;
 
 import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
-import project.Point;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class Robot extends AbstractRobotSimulator implements IControllableRover {
+    private int id;
+    private Point position;
+    private Mission mission;
+    private Point[] path;
+    private ArrayList<Observer> observers;
 
     public Robot(Point position, String name) {
         super(position, name);
@@ -63,4 +70,18 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return false;
     }
 
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void reportEvent(Object event) {
+        // TODO
+    }
 }

@@ -8,7 +8,7 @@ import project.Point;
  *
  * @author bondi
  */
-public interface IControllableRover {
+public interface IControllableRover extends Observable {
 
     /*
      * Set a new mission for the rover to execute.
