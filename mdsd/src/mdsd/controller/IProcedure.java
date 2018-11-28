@@ -2,7 +2,7 @@ package mdsd.controller;
 
 import mdsd.model.Area;
 
-import java.awt.*;
+import javax.vecmath.Point2f;
 
 public interface IProcedure {
 
@@ -15,5 +15,5 @@ public interface IProcedure {
      * @return score
      */
 
-    int calculateScore(Point[] roverLocations, Area[] logicalAreas, Area[] physicalAreas);
+    int calculateScore(Point2f[] roverLocations, Area[] logicalAreas, Area[] physicalAreas);
 }

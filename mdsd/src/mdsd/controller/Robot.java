@@ -41,7 +41,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     }
 
     @Override
-    public project.Point getPosition() {
+    public Point getPosition() {
         // TODO Auto-generated method stub
         return null;
     }

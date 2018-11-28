@@ -1,7 +1,7 @@
 package mdsd.controller;
 
 import mdsd.model.Mission;
-import project.Point;
+import javax.vecmath.Point2f;
 
 /**
  * A rover that can be controlled by an operator.
@@ -23,7 +23,7 @@ public interface IControllableRover extends Observable {
     /*
      * Get the current position for the rover.
      */
-    Point getPosition();
+    Point2f getJavaPosition();
 
     /*
      * Start executing the current mission, if there is any.

@@ -1,9 +1,9 @@
 package mdsd.model;
 
-import project.Point;
+import javax.vecmath.Point2f;
 
 public class Mission {
-    private final Point[] points;
+    private final Point2f[] points;
     private int currentHeading;
 
     /**
@@ -12,7 +12,7 @@ public class Mission {
      * @param points the points to be visited
      * @throws IllegalArgumentException if the argument is null or empty
      */
-    public Mission(Point[] points) {
+    public Mission(Point2f[] points) {
         if (points == null) {
             throw new IllegalArgumentException("Points can't be null");
         } else if (points.length == 0) {
@@ -27,7 +27,7 @@ public class Mission {
      *
      * @return the next Point to visit, or null if end of list
      */
-    public Point getNextPoint() {
+    public Point2f getNextPoint() {
         if (currentHeading >= points.length) {
             return null;
         }
@@ -39,7 +39,7 @@ public class Mission {
      *
      * @return the point being visited
      */
-    public Point getCurrentPoint() {
+    public Point2f getCurrentPoint() {
         return points[currentHeading];
     }
 }
