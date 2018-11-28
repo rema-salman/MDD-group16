@@ -1,7 +1,5 @@
 package mdsd.model;
 
-import java.awt.Color;
-
 public class Environment {
     private Area[] physicalAreas;
     private Area[] logicalAreas;
