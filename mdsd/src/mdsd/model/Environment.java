@@ -2,19 +2,9 @@ package mdsd.model;
 
 import java.awt.Color;
 
-import simbad.sim.AbstractWall;
-import simbad.sim.Boundary;
-import simbad.sim.EnvironmentDescription;
-import simbad.sim.HorizontalBoundary;
-import simbad.sim.HorizontalWall;
-import simbad.sim.VerticalBoundary;
-import simbad.sim.VerticalWall;
-import simbad.sim.Wall;
-
-public class Environment extends EnvironmentDescription {
+public class Environment {
     private Area[] physicalAreas;
     private Area[] logicalAreas;
-    private EnvironmentDescription e;
     // int id; //To be used if we have multiple areas and want an identifier.
 
     public Environment(Area[] physicalAreas, Area[] logicalAreas) {

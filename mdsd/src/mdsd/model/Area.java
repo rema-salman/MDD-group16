@@ -1,8 +1,7 @@
 package mdsd.model;
 
-import project.Point;
-
-import java.awt.*;
+import java.awt.Shape;
+import javax.vecmath.Point2f;
 
 public class Area {
     /**
@@ -31,21 +30,20 @@ public class Area {
      * @param p The point which is being investigated.
      * @return True if the point is inside the area.
      */
-    public boolean contains(Point p) // Change to point class instead of float?
-    {
+    public boolean contains(Point2f p) {
         // if inside any antiShape: return false
         // if inside any shape: return true
         // return false
         return false;
     }
 
-    // TODO: Implement
+    // TODO: Check if actually deep copy
     public Shape[] getShapes() {
-        return null;
+        return shapes.clone();
     }
 
-    // TODO: Implement
+    // TODO: Check if actually deep copy
     public Shape[] getAntiShapes() {
-        return null;
+        return antiShapes.clone();
     }
 }
