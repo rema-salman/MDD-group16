@@ -5,7 +5,7 @@ import mdsd.model.Environment;
 
 import java.util.List;
 
-public class MainController {
+public class MainController implements Observer {
     private IControllableRover[] rovers;
     private Environment environment;
     private ScoreCalculator scoreCalculator;
@@ -45,6 +45,11 @@ public class MainController {
     // TODO
     public void stopRover(IControllableRover rover) {
 
+    }
+
+    @Override
+    public void receiveEvent(Object event) {
+        // TODO
     }
 
     protected class ScoreCalculator implements Runnable {
