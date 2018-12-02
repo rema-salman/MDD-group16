@@ -8,7 +8,6 @@ This repository provides the source code for the ROVU system implemented by grou
 * [Getting Started](#getting-started)
 * [REQUIREMENTS](#requirements)
 * [Cloning](#cloning)
-* [Building](#building)
 * [Running](#running)
 
 ## Introduction
@@ -28,9 +27,10 @@ These instructions will get you a copy of the project up and run on your local m
              
 ## REQUIREMENTS
 needs to be added 
-- javac version..
-- SDK version..
-- Simbad... 
+
+- `Java Development Kit 1.8` (or newer) should be correctly installed in your machine
+- You need to convert the project's configuration into a `maven project`.
+- You'll also need the Simbad simulator dependencies that exists in the `pom.xml file`.
 
 ### Cloning          
    The project can be cloned using the URL provided in the GitHub webpage of the project or you can clone the project by adding the following command on your terminal/bash:
@@ -39,6 +39,6 @@ needs to be added
     git clone --recurse-submodules https://github.com/remasalm/MDD-group16.git
                      
     ```
- ### Building
- 
+
  ### Running# MDD-group16
+You can the project as a normal java project from the `Main.java` class
