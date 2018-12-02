@@ -41,4 +41,4 @@ needs to be added
     ```
 
  ### Running# MDD-group16
-You can the project as a normal java project from the `Main.java` class
+You can run the project as a normal java project from the `Main.java` class
