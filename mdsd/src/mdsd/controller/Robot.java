@@ -14,12 +14,9 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private Mission mission;
     private Point2f[] path;
     private ArrayList<Observer> observers;
-    private String name;
 
     public Robot(Point2f position, String name) {
         super(new project.Point(position.getX(), position.getY()), name);
-        this.position = position;
-        this.name = name;
     }
 
     public Robot(Point position, String name) {
@@ -83,6 +80,11 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     }
 
     @Override
+    public int getId() {
+        return id;
+    }
+
+    @Override
     public void addObserver(Observer observer) {
         observers.add(observer);
     }
@@ -102,7 +104,14 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     }
 
     @Override
-    public String getName() {
-        return name;
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof Robot) {
+            Robot r2 = (Robot) obj;
+            return this.id == r2.id;
+        }
+        return false;
     }
 }
