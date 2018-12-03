@@ -1,7 +1,10 @@
 package mdsd;
 
+import javafx.application.Application;
+import mdsd.controller.MainController;
 import mdsd.controller.Robot;
 import mdsd.model.Environment;
+import mdsd.view.GUI;
 import project.AbstractSimulatorMonitor;
 import project.Point;
 import simbad.sim.*;
@@ -9,8 +12,6 @@ import simbad.sim.*;
 import java.awt.Color;
 import java.util.HashSet;
 import java.util.Set;
-
-import mdsd.controller.Robot;
 
 @SuppressWarnings("unused")
 public class Main {
@@ -21,7 +22,7 @@ public class Main {
     @SuppressWarnings("unused")
     public static void main(String[] args) {
 
-        Set<Robot> robots = new HashSet<>();
+        /*Set<Robot> robots = new HashSet<>();
         Robot robot1 = new Robot(new Point(0, 0), "Robot 1");
         Robot robot2 = new Robot(new Point(1, 3), "Robot 2");
 
@@ -34,8 +35,16 @@ public class Main {
         ed.add(robot1);
         ed.add(robot2);
 
-        AbstractSimulatorMonitor controller = new SimulatorMonitor(robots, ed);
+        AbstractSimulatorMonitor controller = new SimulatorMonitor(robots, ed);*/
 
+        MainController mainController = new MainController();
+        GUI.init(mainController);
+
+        try {
+            Application.launch(GUI.class);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
     }
 
     /**

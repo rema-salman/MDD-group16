@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Label text="Name: "/>
+        <Label fx:id="robotName" layoutX="10.0" layoutY="10.0"/>
+        <Label layoutX="10.0" layoutY="10.0" text=", Position: "/>
+        <Label fx:id="robotPosition" layoutX="57.0" layoutY="10.0"/>
+    </children>
+</HBox>

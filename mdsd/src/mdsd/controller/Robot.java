@@ -14,9 +14,12 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private Mission mission;
     private Point2f[] path;
     private ArrayList<Observer> observers;
+    private String name;
 
     public Robot(Point2f position, String name) {
         super(new project.Point(position.getX(), position.getY()), name);
+        this.position = position;
+        this.name = name;
     }
 
     public Robot(Point position, String name) {
@@ -96,5 +99,10 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     public void setDestination(Point2f dest) {
         setDestination(new project.Point(dest.getX(), dest.getY()));
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }

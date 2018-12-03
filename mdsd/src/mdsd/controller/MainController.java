@@ -47,6 +47,14 @@ public class MainController implements Observer {
 
     }
 
+    public void stopAllRovers() {
+        // TODO
+    }
+
+    public void startAllRovers() {
+        // TODO
+    }
+
     @Override
     public void receiveEvent(Object event) {
         // TODO
