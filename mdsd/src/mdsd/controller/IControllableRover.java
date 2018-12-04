@@ -44,4 +44,6 @@ public interface IControllableRover extends Observable {
      * Check if the rover is faulty or not.
      */
     boolean isFaulty();
+
+    int getId();
 }

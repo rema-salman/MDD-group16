@@ -1,13 +1,19 @@
 package mdsd;
 
+import javafx.application.Application;
+import mdsd.controller.IControllableRover;
+import mdsd.controller.MainController;
 import mdsd.controller.Robot;
 import mdsd.model.Environment;
+import mdsd.view.GUI;
 import project.AbstractSimulatorMonitor;
 import project.Point;
 import simbad.sim.*;
 
-import java.awt.Color;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import mdsd.controller.Robot;
@@ -34,8 +40,12 @@ public class Main {
         ed.add(robot1);
         ed.add(robot2);
 
+        List<IControllableRover> rovers = new ArrayList<>(robots);
+        MainController.getInstance().addRovers(rovers);
+
         AbstractSimulatorMonitor controller = new SimulatorMonitor(robots, ed);
 
+        Application.launch(GUI.class);
     }
 
     /**

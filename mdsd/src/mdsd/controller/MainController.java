@@ -3,13 +3,32 @@ package mdsd.controller;
 import mdsd.model.Area;
 import mdsd.model.Environment;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainController implements Observer {
-    private IControllableRover[] rovers;
+    private List<IControllableRover> rovers;
     private Environment environment;
     private ScoreCalculator scoreCalculator;
     //private Procedure procedure;
+    private static MainController mainController = null;
+
+    private MainController() {
+        rovers = new ArrayList<>();
+        environment = new Environment();
+        scoreCalculator = new ScoreCalculator();
+    }
+
+    public static MainController getInstance() {
+        if (mainController == null) {
+            mainController = new MainController();
+        }
+        return mainController;
+    }
+
+    public void addRovers(List<IControllableRover> rovers) {
+        this.rovers.addAll(rovers);
+    }
 
     // TODO
     public void getAllRoverPositions() {
@@ -23,6 +42,9 @@ public class MainController implements Observer {
 
     // TODO
     public int getScore() {
+        if (scoreCalculator == null) {
+            return 0;
+        }
         return scoreCalculator.score;
     }
 
@@ -38,13 +60,45 @@ public class MainController implements Observer {
 
     // TODO
     public List<IControllableRover> getRovers() {
-        return null;
+        List<IControllableRover> list = new ArrayList<>();
+        if (rovers == null) {
+            return list;
+        }
+        for (IControllableRover r : rovers) {
+            if (r != null) {
+                list.add(r);
+            }
+        }
+        return list;
     }
-
 
     // TODO
     public void stopRover(IControllableRover rover) {
+        rover.stop();
+    }
 
+    public void stop() {
+        if (rovers == null) {
+            return;
+        }
+        for (IControllableRover r : rovers) {
+            if (r == null) {
+                continue;
+            }
+            r.stop();
+        }
+    }
+
+    public void start() {
+        if (rovers == null) {
+            return;
+        }
+        for (IControllableRover r : rovers) {
+            if (r == null) {
+                continue;
+            }
+            r.start();
+        }
     }
 
     @Override
