@@ -17,7 +17,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mdsd.controller.IControllableRover;
 import mdsd.controller.MainController;
-import mdsd.controller.Robot;
 import mdsd.model.Environment;
 
 import javax.vecmath.Point2f;
@@ -76,13 +75,18 @@ public class GUI extends Application {
         obstacles = new ArrayList<>();
         robots = new ArrayList<>();
 
-        addRobot(new Robot(new Point2f(10, 4), "1")); // TODO remove
-        addRobot(new Robot(new Point2f(-4, 10), "2"));
 
-        for (Line2D.Double line : environment.getObstacles()) {
-            if (line != null) {
-                obstacles.add(line);
+        try {
+            Line2D.Double[] obstaclesArr = environment.getObstacles();
+            if (obstaclesArr != null) {
+                for (Line2D.Double line : obstaclesArr) {
+                    if (line != null) {
+                        obstacles.add(line);
+                    }
+                }
             }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         setScaling();
@@ -95,10 +99,10 @@ public class GUI extends Application {
      * Scales the environment to fit in the canvas
      */
     private void setScaling() {
-        double xMin = 0;
-        double xMax = 0;
-        double yMin = 0;
-        double yMax = 0;
+        double xMin = 50; // TODO
+        double xMax = -50;
+        double yMin = 50;
+        double yMax = -50;
         for (Line2D.Double obstacle : obstacles) {
             if (obstacle.x1 > xMax) {
                 xMax = obstacle.x1;
@@ -129,8 +133,8 @@ public class GUI extends Application {
         final float envW = (float) (xMax - xMin);
         final float envH = (float) (yMax - yMin);
 
-        scaleX = w / envW;
-        scaleY = h / envH;
+        scaleX = Math.abs(w / envW);
+        scaleY = Math.abs(h / envH);
     }
 
     /**
@@ -265,26 +269,26 @@ public class GUI extends Application {
     private void updateGUI() {
         drawEnvironment();
         List<IControllableRover> roverList = mainController.getRovers();
-        if (roverList != null) {
-            for (IControllableRover r : roverList) {
-                float x = scaleX(r.getJavaPosition().getX());
-                float y = scaleY(r.getJavaPosition().getY());
-                gc.setFill(Color.GREEN);
-                gc.fillRect(x - 5, y - 5, 10, 10); // Draw
+        for (IControllableRover r : roverList) {
+            final float halfX = w / 2.0f;
+            final float halfY = h / 2.0f;
+            final float x = halfX + scaleX(r.getJavaPosition().getX()) - 5;
+            final float y = halfY + scaleY(r.getJavaPosition().getY()) - 5;
+            gc.setFill(Color.GREEN);
+            gc.fillRect(x, y, 10, 10); // Draw
 
-                if (!robots.contains(r)) {
-                    try {
-                        addRobot(r);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            if (!robots.contains(r)) {
+                try {
+                    addRobot(r);
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
+        }
 
-            for (int i = 0; i < robots.size(); i++) {
-                if (!roverList.contains(robots.get(i))) {
-                    removeRobot(robots.get(i), i);
-                }
+        for (int i = 0; i < robots.size(); i++) {
+            if (!roverList.contains(robots.get(i))) {
+                removeRobot(robots.get(i), i);
             }
         }
 

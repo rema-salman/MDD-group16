@@ -4,23 +4,24 @@ import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
 import project.Point;
 
-import java.util.ArrayList;
-
 import javax.vecmath.Point2f;
+import java.util.ArrayList;
 
 public class Robot extends AbstractRobotSimulator implements IControllableRover {
     private int id;
-    private Point2f position;
+    private static int idCount = 0;
     private Mission mission;
     private Point2f[] path;
     private ArrayList<Observer> observers;
 
     public Robot(Point2f position, String name) {
         super(new project.Point(position.getX(), position.getY()), name);
+        id = idCount++;
     }
 
     public Robot(Point position, String name) {
         super(position, name);
+        id = idCount++;
     }
 
     @Override
@@ -43,11 +44,12 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     @Override
     public Point getPosition() {
         // TODO Auto-generated method stub
-        return null;
+        return super.getPosition();
     }
 
     public Point2f getJavaPosition() {
-        return position;
+        Point point = super.getPosition();
+        return new Point2f((float) point.getX(), (float) point.getZ());
     }
 
     public /*Status*/void getStatus() {
