@@ -1,11 +1,9 @@
 package mdsd.model;
 
-import java.awt.geom.Line2D;
-
 public class Environment {
     private Area[] physicalAreas;  // E.g. rooms
     private Area[] logicalAreas;   // E.g. the coverage of a Wi-Fi router
-    private Line2D.Double[] obstacles;    // E.g. walls
+    private Obstacle[] obstacles;  // E.g. walls
 
     /**
      * Creates an Environment object from pre-defined areas and obstacles.
@@ -14,7 +12,8 @@ public class Environment {
      * @param logicalAreas Describes e.g. the coverage of a Wi-Fi router.
      * @param obstacles Describes e.g. walls.
      */
-    public Environment(Area[] physicalAreas, Area[] logicalAreas, Line2D.Double[] obstacles) {
+    public Environment(
+            Area[] physicalAreas, Area[] logicalAreas, Obstacle[] obstacles) {
         this.physicalAreas = physicalAreas;
         this.logicalAreas  = logicalAreas;
         this.obstacles     = obstacles;
@@ -66,15 +65,17 @@ public class Environment {
      *
      * @return An array containing all the obstacles.
      */
-    public Line2D.Double[] getObstacles() {
+    public Obstacle[] getObstacles() {
         int length = obstacles.length;
-        Line2D.Double[] obstaclesCopy = new Line2D.Double[length];
+        Obstacle[] obstaclesCopy = new Obstacle[length];
 
         for (int i = 0; i < length; ++i) {
-            obstaclesCopy[i] = new Line2D.Double(
-                obstacles[i].getX1(), obstacles[i].getY1(),
-                obstacles[i].getX2(), obstacles[i].getY2()
-            );
+            obstaclesCopy[i] = new Obstacle(obstacles[i]);
+
+            //obstaclesCopy[i] = new Line2D.Double(
+                //obstacles[i].getX1(), obstacles[i].getY1(),
+                //obstacles[i].getX2(), obstacles[i].getY2()
+            //);
         }
 
         return obstaclesCopy;
