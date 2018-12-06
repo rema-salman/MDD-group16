@@ -20,11 +20,6 @@ public class Environment {
     }
 
     /**
-     * Creates an empty Environment object.
-     */
-    public Environment() { }
-
-    /**
      * Returns a copy of the physical areas that make up the environment.
      *
      * @return An array containing all the physical areas.
@@ -71,11 +66,6 @@ public class Environment {
 
         for (int i = 0; i < length; ++i) {
             obstaclesCopy[i] = new Obstacle(obstacles[i]);
-
-            //obstaclesCopy[i] = new Line2D.Double(
-                //obstacles[i].getX1(), obstacles[i].getY1(),
-                //obstacles[i].getX2(), obstacles[i].getY2()
-            //);
         }
 
         return obstaclesCopy;
