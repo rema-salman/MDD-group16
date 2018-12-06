@@ -1,5 +1,6 @@
 package mdsd.controller;
 
+import mdsd.model.Environment;
 import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
 import project.Point;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 
 public class Robot extends AbstractRobotSimulator implements IControllableRover {
     private int id;
+    private int rewardPoints;
     private static int idCount = 0;
     private Mission mission;
     private Point2f[] path;
@@ -52,9 +54,9 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return new Point2f((float) point.getX(), (float) point.getZ());
     }
 
-    public /*Status*/void getStatus() {
+    public /* Status */void getStatus() {
         // TODO Auto-generated method stub
-        return /*null*/;
+        return /* null */;
     }
 
     @Override
@@ -116,4 +118,27 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         }
         return false;
     }
+
+    @Override
+    public int getRewardPoints() {
+        return rewardPoints;
+
+    }
+
+    @Override
+    /**
+     * 
+     * @param points
+     */
+    public void addRewardPoints(int newRewardPoints) {
+        rewardPoints += newRewardPoints;
+    }
+
+    public Environment inEnvironment;
+
+    public Environment getEnvironment() {
+        return this.inEnvironment;
+
+    }
+
 }
