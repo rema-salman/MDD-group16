@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 
+import mdsd.model.Environment;
+
 /**
  * Class representing a graph of points in a plane, contains function to
  * calculate the shortest path between nodes in this graph.
@@ -14,7 +16,96 @@ import java.util.PriorityQueue;
  *
  */
 public class GraphOfPoints {
-	Node[] nodes;
+	Node[][] gridNodes;
+
+	/**
+	 * Creates empty graph.
+	 */
+	public GraphOfPoints() {
+
+	}
+
+	/**
+	 * Creates a graph where each node represents a tile in a square grid. Tiles
+	 * which would intersect with obstacles in the given environment are
+	 * ignored. Each node has edges connecting to its adjacent tiles.
+	 * 
+	 * @param environment
+	 * @param size
+	 * @param tileSize
+	 */
+	public GraphOfPoints(Environment environment, int widthInTiles, float tileSize) {
+		gridNodes = environmentToNodes(environment, widthInTiles, tileSize);
+	}
+
+	private Node[][] environmentToNodes(Environment environment, int widthInTiles, float tileSize) {
+		//Index if true if something is occupying the space in a given tile.
+		boolean[][] grid = createOccupiedGrid(environment, widthInTiles, tileSize);
+		Node[][] nodes = new Node[widthInTiles][widthInTiles];
+
+		//Initialize all nodes with their respective point in the environment.
+		for (int x = 0; x < widthInTiles; x++) {
+			for (int y = 0; y < widthInTiles; y++) {
+				Point tileCoordinate = new Point(widthInTiles * x-(widthInTiles / 2), widthInTiles * y-(widthInTiles / 2));
+				nodes[x][y] = new Node(tileCoordinate);
+			}
+		}
+
+		//Connect to adjacent nodes, if they are in bounds
+		//and they are not occupied by something.
+		float diagonalCost = (float) (Math.sqrt(2) * tileSize);
+		for (int x = 0; x < widthInTiles; x++) {
+			for (int y = 0; y < widthInTiles; y++) {
+				if (!grid[x][y]) {
+					if (x > 1) {
+						if (!grid[x - 1][y])
+							nodes[x][y].edges.add(new Edge(tileSize, nodes[x - 1][y]));
+						if (y > 1)
+							if (!grid[x - 1][y - 1])
+								nodes[x][y].edges.add(new Edge(diagonalCost, nodes[x - 1][y - 1]));
+						if (y < widthInTiles - 1)
+							if (!grid[x - 1][y + 1])
+								nodes[x][y].edges.add(new Edge(diagonalCost, nodes[x - 1][y + 1]));
+					}
+					if (x < widthInTiles - 1) {
+						if (!grid[x + 1][y])
+							nodes[x][y].edges.add(new Edge(tileSize, nodes[x + 1][y]));
+						if (y > 1)
+							if (!grid[x + 1][y - 1])
+								nodes[x][y].edges.add(new Edge(diagonalCost, nodes[x + 1][y - 1]));
+						if (y < widthInTiles - 1)
+							if (!grid[x + 1][y + 1])
+								nodes[x][y].edges.add(new Edge(diagonalCost, nodes[x + 1][y + 1]));
+					}
+					if (y > 1)
+						if (!grid[x][y - 1])
+							nodes[x][y].edges.add(new Edge(tileSize, nodes[x][y - 1]));
+					if (y < widthInTiles - 1)
+						if (!grid[x][y + 1])
+							nodes[x][y].edges.add(new Edge(tileSize, nodes[x][y + 1]));
+				}
+			}
+		}
+		return nodes;
+	}
+
+	/**
+	 * Given a point, returns the node(tile) in this graph that corresponds with
+	 * that point.
+	 * 
+	 * @param p
+	 * @return
+	 */
+	public Node pointToNode(Point p) {
+		//TODO: Implement
+		return null;
+	}
+
+	private boolean[][] createOccupiedGrid(Environment environment, int widthInTiles, float tileSize) {
+		boolean[][] grid = new boolean[widthInTiles][widthInTiles];
+		//TODO: Check for collision with objects in environment, set those booleans to true
+		return grid;
+	}
 
 	/**
 	 * Given two nodes returns the shortest path using A*, with euclidian
@@ -192,10 +283,10 @@ public class GraphOfPoints {
 	}
 
 	public static class Edge {
-		private int cost;
+		private float cost;
 		private Node to;
 
-		public Edge(int cost, Node to) {
+		public Edge(float cost, Node to) {
 			this.cost = cost;
 			this.to = to;
 		}
