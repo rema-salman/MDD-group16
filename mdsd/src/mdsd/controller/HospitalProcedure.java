@@ -1,8 +1,7 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
 import javax.vecmath.Point2f;
-
-import Area.Area;
 import mdsd.model.Environment;
 
 public class HospitalProcedure implements IProcedure {

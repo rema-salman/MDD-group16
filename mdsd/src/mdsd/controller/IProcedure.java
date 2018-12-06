@@ -2,7 +2,7 @@ package mdsd.controller;
 
 import javax.vecmath.Point2f;
 
-import Area.Area;
+import mdsd.model.Area;
 
 public interface IProcedure {
 

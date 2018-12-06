@@ -1,11 +1,11 @@
 package mdsd.controller;
 
 import mdsd.model.Environment;
-
+import mdsd.model.Area;
 import java.util.ArrayList;
 import java.util.List;
 
-import Area.Area;
+
 
 public class MainController implements Observer {
     private List<IControllableRover> rovers;
