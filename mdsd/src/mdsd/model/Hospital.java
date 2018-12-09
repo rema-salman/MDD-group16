@@ -9,6 +9,9 @@ import javax.vecmath.Point2f;
 
 import mdsd.controller.Robot;
 import project.Point;
+import simbad.sim.HorizontalWall;
+import simbad.sim.VerticalWall;
+import simbad.sim.Wall;
 
 public class Hospital extends EnvironmentAdoptee {
 
@@ -104,10 +107,27 @@ public class Hospital extends EnvironmentAdoptee {
         super.addWall(3f, -2.25f, 2.25f, this, c1, false);
         super.addWall(-3f, -2.25f, 2.25f, this, c1, true);
         super.addWall(-3f, -2.25f, 2.25f, this, c1, false);
+        
+        for (Obstacle ob : this.getObstacles()) {
+            if (ob.horizontal) {
+                super.addWall(ob.x, ob.y, ob.length, this, c1, true);
+            } else {
+                super.addWall(ob.x, ob.y, ob.length, this, c1, false);
+            }
+        }
+
         super.addWall(0f, 6.0f, 4.0f, this, c2, true);
         super.addWall(0f, -6.0f, -4.0f, this, c2, true);
         super.addWall(0f, 6f, 4.0f, this, c2, false);
         super.addWall(0f, -6f, -4.0f, this, c2, false);
+        
+        for (Obstacle ob : this.getObstacles()) {
+            if (ob.horizontal) {
+                super.addWall(ob.x, ob.y, ob.length, this, c2, true);
+            } else {
+                super.addWall(ob.x, ob.y, ob.length, this, c2, false);
+            }
+        }
 
         Robot rover1 = new Robot(new Point(5, -5), "Rover 1");
         Robot rover2 = new Robot(new Point(5, 5), "Rover 2");
