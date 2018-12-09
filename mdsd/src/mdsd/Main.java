@@ -5,6 +5,8 @@ import mdsd.controller.IControllableRover;
 import mdsd.controller.MainController;
 import mdsd.controller.Robot;
 import mdsd.model.Environment;
+import mdsd.model.EnvironmentAdoptee;
+import mdsd.model.Hospital;
 import mdsd.model.Obstacle;
 import mdsd.view.GUI;
 import project.AbstractSimulatorMonitor;
@@ -22,30 +24,20 @@ import mdsd.controller.Robot;
 @SuppressWarnings("unused")
 public class Main {
 
-    static Environment e = new Environment();
-    static EnvironmentDescription ed;
+
     static MainController mc = MainController.getInstance(); //new MainController();
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
-
-        Set<Robot> robots = new HashSet<>();
-        Robot robot1 = new Robot(new Point(0, 0), "Robot 1");
-        Robot robot2 = new Robot(new Point(1, 3), "Robot 2");
-
-        robots.add(robot1);
-        robots.add(robot2);
-
-        ed = getEnvironment();
-
-        // adding the robots to the environment 
-        ed.add(robot1);
-        ed.add(robot2);
+       
+       
+        Environment e = new Hospital();
+        Set<Robot> robots = e.getRovers();  
 
         List<IControllableRover> rovers = new ArrayList<>(robots);
         mc.addRovers(rovers);
 
-        AbstractSimulatorMonitor controller = new SimulatorMonitor(robots, ed);
+        AbstractSimulatorMonitor controller = new SimulatorMonitor(robots,  (EnvironmentDescription)e);
 
         Application.launch(GUI.class);
     }
@@ -57,7 +49,7 @@ public class Main {
      */
     public static EnvironmentDescription getEnvironment() {
         Color color = Color.GRAY;
-        Environment env = mc.getEnvironment();
+        EnvironmentAdoptee env = mc.getEnvironment();
         EnvironmentDescription envDesc = new EnvironmentDescription();
 
         for (Obstacle ob : env.getObstacles()) {

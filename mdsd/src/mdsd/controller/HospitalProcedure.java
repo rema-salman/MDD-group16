@@ -1,8 +1,13 @@
 package mdsd.controller;
 
 import mdsd.model.Area;
+import mdsd.model.ConsultingRoom;
+import mdsd.model.EatingArea;
+
 import javax.vecmath.Point2f;
-import mdsd.model.Environment;
+import mdsd.model.EnvironmentAdoptee;
+import mdsd.model.SurgeryRoom;
+import mdsd.model.WiFi;
 
 public class HospitalProcedure implements IProcedure {
 
@@ -13,7 +18,7 @@ public class HospitalProcedure implements IProcedure {
 
     @Override
     public void calculateRewards(Robot rover) {
-        Environment rovEnv = rover.getEnvironment();
+        EnvironmentAdoptee rovEnv = rover.getEnvironment();
 
         if (rovEnv == null)
             return;
@@ -21,27 +26,27 @@ public class HospitalProcedure implements IProcedure {
             return;
         if (rovEnv.getLogicalAreas() == null)
             return;
-//        for (Area a : rovEnv.getAreas()) {
-//            if (a == null)
-//                return;
-//            if (a.contains(rover.getJavaPosition())) {
-//                if (a.getClass().equals(ConsultingRoom.class)) {
-//                    rover.addRewardPoints(10);
-//                }
-//
-//                if (a.getClass().equals(SurgeryRoom.class)) {
-//                    rover.addRewardPoints(20);
-//                }
-//
-//                if (a.getClass().equals(WiFi.class)) {
-//                    rover.addRewardPoints(10);
-//                }
-//
-//                if (a.getClass().equals(EatingArea.class)) {
-//                    rover.addRewardPoints(10);
-//                }
-//            }
-//        }
+        for (Area a : rovEnv.getAreas()) {
+            if (a == null)
+                return;
+            if (a.contains(rover.getJavaPosition())) {
+                if (a.getClass().equals(ConsultingRoom.class)) {
+                    rover.addRewardPoints(10);
+                }
+
+                if (a.getClass().equals(SurgeryRoom.class)) {
+                    rover.addRewardPoints(20);
+                }
+
+                if (a.getClass().equals(WiFi.class)) {
+                    rover.addRewardPoints(10);
+                }
+
+                if (a.getClass().equals(EatingArea.class)) {
+                    rover.addRewardPoints(10);
+                }
+            }
+        }
 
     }
 
