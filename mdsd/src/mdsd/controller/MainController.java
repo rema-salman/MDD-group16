@@ -1,21 +1,22 @@
 package mdsd.controller;
 
+import mdsd.model.EnvironmentAdoptee;
 import mdsd.model.Area;
-import mdsd.model.Environment;
-
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 public class MainController implements Observer {
     private List<IControllableRover> rovers;
-    private Environment environment;
+    private EnvironmentAdoptee environment;
     private ScoreCalculator scoreCalculator;
     //private Procedure procedure;
     private static MainController mainController = null;
 
     private MainController() {
         rovers = new ArrayList<>();
-        environment = new Environment();
+        environment = new EnvironmentAdoptee();
         scoreCalculator = new ScoreCalculator();
     }
 
@@ -49,7 +50,7 @@ public class MainController implements Observer {
     }
 
     // TODO, return copy?
-    public Environment getEnvironment() {
+    public EnvironmentAdoptee getEnvironment() {
         return environment;
     }
 

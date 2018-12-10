@@ -46,4 +46,17 @@ public interface IControllableRover extends Observable {
     boolean isFaulty();
 
     int getId();
+
+    /*
+     * gets the rover's reward points
+     */
+    int getRewardPoints();
+
+    /*
+     * Adds new reward points to the existent ones
+     * 
+     * @param newRewardPoints
+     */
+
+    void addRewardPoints(int newRewardPoints);
 }
