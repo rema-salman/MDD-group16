@@ -1,10 +1,11 @@
 package mdsd.controller;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
+
+import javax.vecmath.Point2f;
 
 import mdsd.model.EnvironmentAdoptee;
 
@@ -46,7 +47,7 @@ public class GraphOfPoints {
 		//Initialize all nodes with their respective point in the environment.
 		for (int x = 0; x < widthInTiles; x++) {
 			for (int y = 0; y < widthInTiles; y++) {
-				Point tileCoordinate = new Point(widthInTiles * x-(widthInTiles / 2), widthInTiles * y-(widthInTiles / 2));
+				Point2f tileCoordinate = new Point2f(widthInTiles * x-(widthInTiles / 2), widthInTiles * y-(widthInTiles / 2));
 				nodes[x][y] = new Node(tileCoordinate);
 			}
 		}
@@ -96,7 +97,7 @@ public class GraphOfPoints {
 	 * @param p
 	 * @return
 	 */
-	public Node pointToNode(Point p) {
+	public Node pointToNode(Point2f p) {
 		//TODO: Implement
 		return null;
 	}
@@ -173,8 +174,8 @@ public class GraphOfPoints {
 	 *            List of NodeWithCost,
 	 * @return
 	 */
-	public Point[] NodesWithCostToPointArray(List<NodeWithCost> l) {
-		Point[] points = new Point[l.size()];
+	public Point2f[] NodesWithCostToPointArray(List<NodeWithCost> l) {
+		Point2f[] points = new Point2f[l.size()];
 		for (int i = 0; i < l.size(); i++) {
 			points[i] = l.get(i).node.point;
 		}
@@ -274,10 +275,10 @@ public class GraphOfPoints {
 	}
 
 	public static class Node {
-		public Point point;
+		public Point2f point;
 		public List<Edge> edges = new ArrayList<Edge>();
 
-		public Node(Point point) {
+		public Node(Point2f point) {
 			this.point = point;
 		}
 	}
