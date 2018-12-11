@@ -10,53 +10,59 @@ import javax.vecmath.Point2f;
  */
 public interface IControllableRover extends Observable {
 
-    /*
-     * Set a new mission for the rover to execute.
-     */
-    void setMission(Mission mission);
+	/*
+	 * Set a new mission for the rover to execute.
+	 */
+	void setMission(Mission mission);
 
-    /*
-     * Get the current mission of the rover.
-     */
-    Mission getMission();
+	/**
+	 * "Main loop" function for the rover, updates rover with data from
+	 * simulator.
+	 */
+	void update();
 
-    /*
-     * Get the current position for the rover.
-     */
-    Point2f getJavaPosition();
+	/*
+	 * Get the current mission of the rover.
+	 */
+	Mission getMission();
 
-    /*
-     * Start executing the current mission, if there is any.
-     */
-    void start();
+	/*
+	 * Get the current position for the rover.
+	 */
+	Point2f getJavaPosition();
 
-    /*
-     * Stop whatever the rover is doing.
-     */
-    void stop();
+	/*
+	 * Start executing the current mission, if there is any.
+	 */
+	void start();
 
-    /*
-     * Get a description of all faults of the rover, if any.
-     */
-    String[] getFaults();
+	/*
+	 * Stop whatever the rover is doing.
+	 */
+	void stop();
 
-    /*
-     * Check if the rover is faulty or not.
-     */
-    boolean isFaulty();
+	/*
+	 * Get a description of all faults of the rover, if any.
+	 */
+	String[] getFaults();
 
-    int getId();
+	/*
+	 * Check if the rover is faulty or not.
+	 */
+	boolean isFaulty();
 
-    /*
-     * gets the rover's reward points
-     */
-    int getRewardPoints();
+	int getId();
 
-    /*
-     * Adds new reward points to the existent ones
-     * 
-     * @param newRewardPoints
-     */
+	/*
+	 * gets the rover's reward points
+	 */
+	int getRewardPoints();
 
-    void addRewardPoints(int newRewardPoints);
+	/*
+	 * Adds new reward points to the existent ones
+	 * 
+	 * @param newRewardPoints
+	 */
+
+	void addRewardPoints(int newRewardPoints);
 }

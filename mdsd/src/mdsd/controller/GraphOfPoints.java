@@ -130,7 +130,7 @@ public class GraphOfPoints {
 	 * @return List of the nodes to visit in order to travel from start to
 	 *         target.
 	 */
-	public List<NodeWithCost> shortestPath(Node start, Node target) {
+	public static List<NodeWithCost> shortestPath(Node start, Node target) {
 		List<NodeWithCost> closedSet = new ArrayList<>();
 		//List<Node> openSet = new ArrayList<Node>();
 		PriorityQueue<NodeWithCost> openSet = new PriorityQueue<>();
@@ -189,7 +189,7 @@ public class GraphOfPoints {
 	 *            List of NodeWithCost,
 	 * @return
 	 */
-	public Point2f[] NodesWithCostToPointArray(List<NodeWithCost> l) {
+	public static Point2f[] NodesWithCostToPointArray(List<NodeWithCost> l) {
 		Point2f[] points = new Point2f[l.size()];
 		for (int i = 0; i < l.size(); i++) {
 			points[i] = l.get(i).node.point;
@@ -210,7 +210,7 @@ public class GraphOfPoints {
 	 *            function should send in an empty list here.
 	 * @return The
 	 */
-	private List<NodeWithCost> reconstructPath(NodeWithCost n, List<NodeWithCost> l) {
+	private static List<NodeWithCost> reconstructPath(NodeWithCost n, List<NodeWithCost> l) {
 		if (n == null)
 			throw new NullPointerException(); //Shouldn't happen unless initial call has n == null
 
