@@ -6,7 +6,6 @@ import javax.vecmath.Point2f;
 /**
  * A rover that can be controlled by an operator.
  *
- * @author bondi
  */
 public interface IControllableRover extends Observable {
 

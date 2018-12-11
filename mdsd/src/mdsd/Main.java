@@ -29,27 +29,29 @@ import javax.vecmath.Point2f;
 @SuppressWarnings("unused")
 public class Main {
 
-	static MainController mc = MainController.getInstance(); // new MainController();
+    static MainController mc = MainController.getInstance();
 
-	@SuppressWarnings("unused")
-	public static void main(String[] args) {
+    @SuppressWarnings("unused")
+    public static void main(String[] args) {
 
-		//       TODO: maybe the user can use an environment if hospitalEnv or uniEnv
-		// getUserChoiceOfEnv can be a boolean flag according to a checkbox or something
-		//        if (mc.getUserChoiceOfEnv) {
-		Environment hospitalEnv = new Hospital();
-		Set<Robot> hospitalEnvRobots = hospitalEnv.getRovers();
+//       TODO: maybe the user can use an environment if hospitalEnv or uniEnv
+        // getUserChoiceOfEnv can be a boolean flag according to a checkbox or something
+//        if (mc.getUserChoiceOfEnv) {
+        Environment hospitalEnv = new Hospital();
+        Set<IControllableRover> rovers = hospitalEnv.getRovers();
+        mc.addRovers(rovers);
 
-		List<IControllableRover> rovers = new ArrayList<>(hospitalEnvRobots);
-		mc.addRovers(rovers);
-
-		AbstractSimulatorMonitor controller = new SimulatorMonitor(hospitalEnvRobots,
-				(EnvironmentDescription) hospitalEnv);
+        Set<Robot> robots = new HashSet<>();
+        for (IControllableRover rover : rovers) {
+            robots.add((Robot) rover);
+        }
+        AbstractSimulatorMonitor<Robot> controller = new SimulatorMonitor(
+                robots, (EnvironmentDescription) hospitalEnv);
 
 		//} else {
 		// Environment uniEnv = new University();
-		//        Set<Robot> uniEnvRobots = uniEnv.getRovers(); 
-		//        
+		//        Set<Robot> uniEnvRobots = uniEnv.getRovers();
+		//
 		//        List<IControllableRover> rovers = new ArrayList<>(uniEnvRobots);
 		//        mc.addRovers(rovers);
 		//
@@ -116,23 +118,23 @@ public class Main {
 		r.get(0).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(
 				GraphOfPoints.shortestPath(middle, nwCorner))));
 		r.get(0).start();
-	
+
 		//se
 		r.get(1).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(
 				GraphOfPoints.shortestPath(middle, seCorner))));
 		r.get(1).start();
-	
+
 		//sw
 		r.get(2).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(
 				GraphOfPoints.shortestPath(middle, swCorner))));
 		r.get(2).start();
-		
+
 		//ne
 		r.get(3).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(
 				GraphOfPoints.shortestPath(neCorner, seCorner))));
 		r.get(3).start();
-	
-		
+
+
 		mc.loopForever();
 	}
 }
