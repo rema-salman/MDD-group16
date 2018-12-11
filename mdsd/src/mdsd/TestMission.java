@@ -48,12 +48,16 @@ public class TestMission {
         robots.add(robot4);
 
 
-        AbstractSimulatorMonitor controller = new SimulatorMonitor(robots, e);
+        AbstractSimulatorMonitor<Robot> controller = new SimulatorMonitor(robots, e);
 
         robot1.setDestination(new Point(-7.5, -8));
         robot2.setDestination(new Point(-4.5, -2));
         robot3.setDestination(new Point(3, -3));
         robot4.setDestination(new Point(7.5, -8));
+        robot1.start();
+        robot2.start();
+        robot3.start();
+        robot4.start();
 
         try {
             Thread.sleep(4000);
@@ -63,6 +67,8 @@ public class TestMission {
         }
         robot4.setDestination(new Point(7.5, 8));
         robot1.setDestination(new Point(-7.5, 8));
+        robot4.start();
+        robot1.start();
 
         try {
             Thread.sleep(3000);
@@ -72,6 +78,8 @@ public class TestMission {
         }
         robot2.setDestination(new Point(3, -3));
         robot3.setDestination(new Point(3, 9));
+        robot2.start();
+        robot3.start();
 
         try {
             Thread.sleep(7000);
@@ -89,6 +97,8 @@ public class TestMission {
         }
         robot1.setDestination(new Point(-3, 8));
         robot4.setDestination(new Point(3, 8));
+        robot1.start();
+        robot4.start();
 
         try {
             Thread.sleep(5000);
@@ -98,6 +108,8 @@ public class TestMission {
         }
         robot1.setDestination(new Point(-3, 3));
         robot4.setDestination(new Point(4, 4));
+        robot1.start();
+        robot4.start();
 
         try {
             Thread.sleep(7000);
@@ -107,6 +119,8 @@ public class TestMission {
         }
         robot1.setDestination(new Point(-3, -8));
         robot4.setDestination(new Point(-3, 3));
+        robot1.start();
+        robot4.start();
 
         try {
             Thread.sleep(7000);
@@ -116,9 +130,6 @@ public class TestMission {
         }
 
         robot4.setDestination(new Point(-3, 8));
-        // robot1.start();
-
-
+        robot4.start();
     }
-
 }
