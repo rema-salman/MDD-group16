@@ -1,7 +1,9 @@
 package mdsd.controller;
 
-import mdsd.model.EnvironmentAdoptee;
+import mdsd.model.Hospital;
 import mdsd.model.Area;
+import mdsd.model.Environment;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +11,14 @@ import java.util.List;
 
 public class MainController implements Observer {
     private List<IControllableRover> rovers;
-    private EnvironmentAdoptee environment;
+    private Environment environment;
     private ScoreCalculator scoreCalculator;
     //private Procedure procedure;
     private static MainController mainController = null;
 
     private MainController() {
         rovers = new ArrayList<>();
-        environment = new EnvironmentAdoptee();
+        environment = new Environment();
         scoreCalculator = new ScoreCalculator();
     }
 
@@ -49,8 +51,7 @@ public class MainController implements Observer {
         return scoreCalculator.score;
     }
 
-    // TODO, return copy?
-    public EnvironmentAdoptee getEnvironment() {
+    public Environment getEnvironment() {
         return environment;
     }
 

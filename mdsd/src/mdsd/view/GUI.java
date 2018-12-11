@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mdsd.controller.IControllableRover;
 import mdsd.controller.MainController;
-import mdsd.model.EnvironmentAdoptee;
+import mdsd.model.Environment;
 
 import javax.vecmath.Point2f;
 import java.awt.*;
@@ -44,7 +44,7 @@ public class GUI extends Application {
 
     private GraphicsContext gc;
     private ArrayList<IControllableRover> robots;
-    private EnvironmentAdoptee environment;
+    private Environment environment;
     private List<Line2D.Double> obstacles;
     private float w;
     private float h;

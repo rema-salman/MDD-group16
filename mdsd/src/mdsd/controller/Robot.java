@@ -1,6 +1,6 @@
 package mdsd.controller;
 
-import mdsd.model.EnvironmentAdoptee;
+import mdsd.model.Environment;
 import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
 import project.Point;
@@ -134,9 +134,9 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         rewardPoints += newRewardPoints;
     }
 
-    public EnvironmentAdoptee inEnvironment;
+    public Environment inEnvironment;
 
-    public EnvironmentAdoptee getEnvironment() {
+    public Environment getEnvironment() {
         return this.inEnvironment;
 
     }
