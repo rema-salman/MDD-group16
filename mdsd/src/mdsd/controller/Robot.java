@@ -15,15 +15,16 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private Mission mission;
     private Point2f[] path;
     private ArrayList<Observer> observers;
-
-    public Robot(Point2f position, String name) {
-        super(new project.Point(position.getX(), position.getY()), name);
-        id = idCount++;
-    }
+    private Point destination;
 
     public Robot(Point position, String name) {
         super(position, name);
+        this.destination = position;
         id = idCount++;
+    }
+
+    public Robot(Point2f position, String name) {
+        this(new project.Point(position.getX(), position.getY()), name);
     }
 
     @Override
@@ -61,14 +62,12 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     @Override
     public void start() {
-        // TODO Auto-generated method stub
-
+        setDestination(destination);
     }
 
     @Override
     public void stop() {
-        // TODO Auto-generated method stub
-
+        setDestination(getPosition());
     }
 
     @Override
@@ -104,7 +103,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     }
 
     public void setDestination(Point2f dest) {
-        setDestination(new project.Point(dest.getX(), dest.getY()));
+        destination = new project.Point(dest.getX(), dest.getY());
     }
 
     @Override
