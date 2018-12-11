@@ -22,7 +22,7 @@ import java.util.Set;
 @SuppressWarnings("unused")
 public class Main {
 
-    static MainController mc = MainController.getInstance(); // new MainController();
+    static MainController mc = MainController.getInstance();
 
     @SuppressWarnings("unused")
     public static void main(String[] args) {
@@ -31,13 +31,15 @@ public class Main {
         // getUserChoiceOfEnv can be a boolean flag according to a checkbox or something
 //        if (mc.getUserChoiceOfEnv) {
         Environment hospitalEnv = new Hospital();
-        Set<Robot> hospitalEnvRobots = hospitalEnv.getRovers();
-
-        List<IControllableRover> rovers = new ArrayList<>(hospitalEnvRobots);
+        Set<IControllableRover> rovers = hospitalEnv.getRovers();
         mc.addRovers(rovers);
 
-        AbstractSimulatorMonitor controller = new SimulatorMonitor(hospitalEnvRobots,
-                (EnvironmentDescription) hospitalEnv);
+        Set<Robot> robots = new HashSet<>();
+        for (IControllableRover rover : rovers) {
+            robots.add((Robot) rover);
+        }
+        AbstractSimulatorMonitor<Robot> controller = new SimulatorMonitor(
+                robots, (EnvironmentDescription) hospitalEnv);
 
 //} else {
         // Environment uniEnv = new University();

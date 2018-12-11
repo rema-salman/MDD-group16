@@ -1,12 +1,14 @@
 package mdsd.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.awt.Color;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 
-import mdsd.controller.Robot;
+import mdsd.controller.IControllableRover;
 import simbad.sim.EnvironmentDescription;
 import simbad.sim.HorizontalBoundary;
 import simbad.sim.HorizontalWall;
@@ -18,7 +20,7 @@ public class Environment extends EnvironmentDescription {
     private List<Area> physicalAreas;  // E.g. rooms
     private List<Area> logicalAreas;   // E.g. the coverage of a Wi-Fi router
     private List<Obstacle> obstacles;  // E.g. walls
-    protected List<Robot> rovers;
+    protected Set<IControllableRover> rovers;
     protected Mission[] missions;
 
     /**
@@ -34,7 +36,7 @@ public class Environment extends EnvironmentDescription {
         this.physicalAreas = physicalAreas;
         this.logicalAreas = logicalAreas;
         this.obstacles = obstacles;
-        this.rovers = new ArrayList<>();
+        this.rovers = new HashSet<IControllableRover>();
         this.missions = new Mission[4];  // Why 4? How does this work?
     }
 
@@ -46,7 +48,7 @@ public class Environment extends EnvironmentDescription {
         physicalAreas = new ArrayList<>();
         logicalAreas  = new ArrayList<>();
         obstacles     = new ArrayList<>();
-        rovers        = new ArrayList<>();
+        rovers        = new HashSet<IControllableRover>();
         this.missions = new Mission[4];  // Why 4? How does this work?
     }
 
@@ -105,7 +107,7 @@ public class Environment extends EnvironmentDescription {
         return areas;
     }
 
-    public List<Robot> getRovers() {
+    public Set<IControllableRover> getRovers() {
         return rovers;
     }
 

@@ -5,19 +5,22 @@ import mdsd.model.Area;
 import mdsd.model.Environment;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 
 
 public class MainController implements Observer {
-    private List<IControllableRover> rovers;
+    private Hospital hospital;
+
+    private Set<IControllableRover> rovers;
     private Environment environment;
     private ScoreCalculator scoreCalculator;
     //private Procedure procedure;
     private static MainController mainController = null;
 
     private MainController() {
-        rovers = new ArrayList<>();
+        rovers = new HashSet<IControllableRover>();
         environment = new Environment();
         scoreCalculator = new ScoreCalculator();
     }
@@ -29,7 +32,7 @@ public class MainController implements Observer {
         return mainController;
     }
 
-    public void addRovers(List<IControllableRover> rovers) {
+    public void addRovers(Set<IControllableRover> rovers) {
         this.rovers.addAll(rovers);
     }
 
@@ -66,6 +69,7 @@ public class MainController implements Observer {
         if (rovers == null) {
             return list;
         }
+
         for (IControllableRover r : rovers) {
             if (r != null) {
                 list.add(r);
@@ -74,32 +78,27 @@ public class MainController implements Observer {
         return list;
     }
 
-    // TODO
     public void stopRover(IControllableRover rover) {
         rover.stop();
     }
 
     public void stop() {
-        if (rovers == null) {
-            return;
-        }
-        for (IControllableRover r : rovers) {
-            if (r == null) {
-                continue;
+        if (rovers != null) {
+            for (IControllableRover r : rovers) {
+                if (r != null) {  // Why would they be null?
+                    r.stop();
+                }
             }
-            r.stop();
         }
     }
 
     public void start() {
-        if (rovers == null) {
-            return;
-        }
-        for (IControllableRover r : rovers) {
-            if (r == null) {
-                continue;
+        if (rovers != null) {
+            for (IControllableRover r : rovers) {
+                if (r != null) {  // Why would they be null?
+                    r.start();
+                }
             }
-            r.start();
         }
     }
 
@@ -109,17 +108,20 @@ public class MainController implements Observer {
     }
 
     protected class ScoreCalculator implements Runnable {
-        private IProcedure[] procedures;
-        public IProcedure activeProcedure;
+        private Procedure procedureA;
+        private Procedure procedureB;
+        public int activeProcedure;
         public int score = 0;
         public boolean running = true;
 
-        private void changeProcedure(IProcedure procedure) {
-            this.activeProcedure = procedure;
-        }
-
-        private void scoreLoop() {
-
+        public ScoreCalculator() {
+            int[] rewards = {10, 10};
+            List<List<Area>> areas = new ArrayList<>();
+            List<Area> consultingRoomArea = new ArrayList<>();
+            consultingRoomArea.add(hospital.getConsultingRoom());
+            areas.add(consultingRoomArea);
+            areas.add(hospital.getSurgeryRooms());
+            procedureA = new Procedure(rovers, areas, rewards);
         }
 
         public void run() {
