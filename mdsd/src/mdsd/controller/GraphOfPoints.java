@@ -1,14 +1,13 @@
 package mdsd.controller;
 
+import mdsd.model.Environment;
+
+import javax.vecmath.Point2f;
+import java.awt.Point;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
-
-import javax.vecmath.Point2f;
-
-import mdsd.model.EnvironmentAdoptee;
 
 /**
  * Class representing a graph of points in a plane, contains function to
@@ -36,13 +35,11 @@ public class GraphOfPoints {
 	 * @param size
 	 * @param tileSize
 	 */
-	public GraphOfPoints(EnvironmentAdoptee environment, int widthInTiles,
-			float tileSize) {
+	public GraphOfPoints(Environment environment, int widthInTiles, float tileSize) {
 		gridNodes = environmentToNodes(environment, widthInTiles, tileSize);
 	}
 
-	private Node[][] environmentToNodes(EnvironmentAdoptee environment, int widthInTiles,
-			float tileSize) {
+	private Node[][] environmentToNodes(Environment environment, int widthInTiles, float tileSize) {
 		//Index if true if something is occupying the space in a given tile.
 		boolean[][] grid = createOccupiedGrid(environment, widthInTiles, tileSize);
 		Node[][] nodes = new Node[widthInTiles][widthInTiles];
@@ -111,8 +108,7 @@ public class GraphOfPoints {
 		return null;
 	}
 
-	private boolean[][] createOccupiedGrid(EnvironmentAdoptee environment,
-			int widthInTiles, float tileSize) {
+	private boolean[][] createOccupiedGrid(Environment environment, int widthInTiles, float tileSize) {
 		boolean[][] grid = new boolean[widthInTiles][widthInTiles];
 		//TODO: Check for collision with objects in environment, set those booleans to true
 		return grid;

@@ -8,7 +8,7 @@ import mdsd.controller.IControllableRover;
 import mdsd.controller.MainController;
 import mdsd.controller.Robot;
 import mdsd.model.Environment;
-import mdsd.model.EnvironmentAdoptee;
+import mdsd.model.Environment;
 import mdsd.model.Hospital;
 import mdsd.model.Mission;
 import mdsd.model.University;

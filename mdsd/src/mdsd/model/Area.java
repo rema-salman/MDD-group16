@@ -1,12 +1,12 @@
 package mdsd.model;
 
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Shape;
 import java.util.Set;
 
 import javax.vecmath.Point2f;
 
+@SuppressWarnings("serial")
 public class Area extends Polygon {
     /**
      * These shapes define the area, upon calling contains to check if a point is

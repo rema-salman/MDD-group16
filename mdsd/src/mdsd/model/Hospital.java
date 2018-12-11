@@ -3,22 +3,20 @@ package mdsd.model;
 import java.awt.Color;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.vecmath.Point2f;
 
 import mdsd.controller.Robot;
 import project.Point;
-import simbad.sim.HorizontalWall;
-import simbad.sim.VerticalWall;
-import simbad.sim.Wall;
 
-public class Hospital extends EnvironmentAdoptee {
+public class Hospital extends Environment {
+    Area consultingRoom;
+    List<Area> surgeryRooms;
 
     public Hospital() {
         super();
-        this.rovers = new HashSet<>();
-        this.missions = new Mission[4];
         Color c1 = Color.BLUE;
         Color c2 = Color.RED;
 
@@ -39,11 +37,12 @@ public class Hospital extends EnvironmentAdoptee {
         Point2f p15 = new Point2f(6, 0);
         Point2f p16 = new Point2f(6, -6);
 
-        SurgeryDivision sd1 = new SurgeryDivision(
-                new HashSet<>(Arrays.asList(p1, p2, p3, p10, p9, p6, p5, p4, p8, p7)));
-        SurgeryDivision sd2 = new SurgeryDivision(
-                new HashSet<>(Arrays.asList(p7, p8, p11, p12, p13, p9, p10, p16, p15, p14)));
-        EmergencyDivision ed = new EmergencyDivision(new HashSet<>(Arrays.asList(p4, p5, p6, p9, p13, p12, p11, p8)));
+        Division surgeryDivision1 = new Division(new HashSet<>(Arrays.asList(
+                p1, p2, p3, p10, p9, p6, p5, p4, p8, p7)));
+        Division surgeryDivision2 = new Division(new HashSet<>(Arrays.asList(
+                p7, p8, p11, p12, p13, p9, p10, p16, p15, p14)));
+        Division emergencyDivision = new Division(new HashSet<>(Arrays.asList(
+                p4, p5, p6, p9, p13, p12, p11, p8)));
 
         Set<Point2f> sRoom1 = new HashSet<>();
         sRoom1.add(p1);
@@ -52,8 +51,9 @@ public class Hospital extends EnvironmentAdoptee {
         sRoom1.add(p4);
         sRoom1.add(p8);
         sRoom1.add(p7);
-        Area a1 = new SurgeryRoom(sRoom1, sd1);
-        this.addArea(a1);
+        Area surgeryRoom1 = new Area(sRoom1);
+        surgeryDivision1.addRoom(surgeryRoom1);
+        this.addArea(surgeryRoom1, true);
 
         Set<Point2f> sRoom2 = new HashSet<>();
         sRoom2.add(p2);
@@ -62,8 +62,9 @@ public class Hospital extends EnvironmentAdoptee {
         sRoom2.add(p9);
         sRoom1.add(p6);
         sRoom1.add(p5);
-        Area a2 = new SurgeryRoom(sRoom2, sd1);
-        this.addArea(a2);
+        Area surgeryRoom2 = new Area(sRoom2);
+        surgeryDivision1.addRoom(surgeryRoom2);
+        this.addArea(surgeryRoom2, true);
 
         Set<Point2f> sRoom3 = new HashSet<>();
         sRoom3.add(p7);
@@ -72,8 +73,9 @@ public class Hospital extends EnvironmentAdoptee {
         sRoom3.add(p12);
         sRoom1.add(p15);
         sRoom1.add(p14);
-        Area a3 = new SurgeryRoom(sRoom3, sd2);
-        this.addArea(a3);
+        Area surgeryRoom3 = new Area(sRoom3);
+        surgeryDivision2.addRoom(surgeryRoom3);
+        this.addArea(surgeryRoom3, true);
 
         Set<Point2f> sRoom4 = new HashSet<>();
         sRoom4.add(p9);
@@ -82,40 +84,50 @@ public class Hospital extends EnvironmentAdoptee {
         sRoom4.add(p15);
         sRoom1.add(p12);
         sRoom1.add(p13);
-        Area a4 = new SurgeryRoom(sRoom4, sd2);
-        this.addArea(a4);
+        Area surgeryRoom4 = new Area(sRoom4);
+        surgeryDivision2.addRoom(surgeryRoom4);
+        this.addArea(surgeryRoom4, true);
 
         Set<Point2f> cRoom1 = new HashSet<>();
         cRoom1.add(p4);
         cRoom1.add(p6);
         cRoom1.add(p11);
         cRoom1.add(p13);
-        Area a5 = new ConsultingRoom(cRoom1, ed);
-        this.addArea(a5);
+        consultingRoom = new Area(cRoom1);
+        emergencyDivision.addRoom(consultingRoom);
+        this.addArea(consultingRoom, true);
 
-        super.addBoundry(-6.0f, -6.0f, 6.0f, this, c2, true);
-        super.addBoundry(6.0f, -6.0f, 6.0f, this, c2, true);
-        super.addBoundry(6.0f, -6.0f, -3.5f, this, c2, false);
-        super.addBoundry(6.0f, -2.5f, 2.5f, this, c2, false);
-        super.addBoundry(6.0f, 3.5f, 6.0f, this, c2, false);
-        super.addBoundry(-6.0f, -6.0f, -3.5f, this, c2, false);
-        super.addBoundry(-6.0f, -2.5f, 2.5f, this, c2, false);
-        super.addBoundry(-6.0f, 3.5f, 6.0f, this, c2, false);
+        super.addBoundary(-6.0f, -6.0f,  6.0f, c2, true);
+        super.addBoundary( 6.0f, -6.0f,  6.0f, c2, true);
+        super.addBoundary( 6.0f, -6.0f, -3.5f, c2, false);
+        super.addBoundary( 6.0f, -2.5f,  2.5f, c2, false);
+        super.addBoundary( 6.0f,  3.5f,  6.0f, c2, false);
+        super.addBoundary(-6.0f, -6.0f, -3.5f, c2, false);
+        super.addBoundary(-6.0f, -2.5f,  2.5f, c2, false);
+        super.addBoundary(-6.0f,  3.5f,  6.0f, c2, false);
 
         // create four rooms with doors
-        super.addWall(3f, -2.25f, 2.25f, this, c1, true);
-        super.addWall(3f, -2.25f, 2.25f, this, c1, false);
-        super.addWall(-3f, -2.25f, 2.25f, this, c1, true);
-        super.addWall(-3f, -2.25f, 2.25f, this, c1, false);
+        super.addWall( 3f, -2.25f, 2.25f, c1, true);
+        super.addWall( 3f, -2.25f, 2.25f, c1, false);
+        super.addWall(-3f, -2.25f, 2.25f, c1, true);
+        super.addWall(-3f, -2.25f, 2.25f, c1, false);
         
-        super.addWall(0f, 6.0f, 4.0f, this, c2, true);
-        super.addWall(0f, -6.0f, -4.0f, this, c2, true);
-        super.addWall(0f, 6f, 4.0f, this, c2, false);
-        super.addWall(0f, -6f, -4.0f, this, c2, false);
+        for (Obstacle ob : this.getObstacles()) {
+            super.addWall(ob.x, ob.y, ob.length, c1, ob.horizontal);
+        }
+
+        super.addWall(0f,  6.0f,  4.0f, c2, true);
+        super.addWall(0f, -6.0f, -4.0f, c2, true);
+        super.addWall(0f,  6.0f,  4.0f, c2, false);
+        super.addWall(0f, -6.0f, -4.0f, c2, false);
         
-        Robot rover1 = new Robot(new Point(5, -5), "Rover 1");
-        Robot rover2 = new Robot(new Point(5, 5), "Rover 2");
-        Robot rover3 = new Robot(new Point(-5, 5), "Rover 3");
+        for (Obstacle ob : this.getObstacles()) {
+            super.addWall(ob.x, ob.y, ob.length, c2, ob.horizontal);
+        }
+
+        Robot rover1 = new Robot(new Point( 5, -5), "Rover 1");
+        Robot rover2 = new Robot(new Point( 5,  5), "Rover 2");
+        Robot rover3 = new Robot(new Point(-5,  5), "Rover 3");
         Robot rover4 = new Robot(new Point(-5, -5), "Rover 4");
         rovers.add(rover1);
         rovers.add(rover2);
@@ -124,4 +136,11 @@ public class Hospital extends EnvironmentAdoptee {
 
     }
 
+    public Area getConsultingRoom() {
+        return consultingRoom;
+    }
+
+    public List<Area> getSurgeryRooms() {
+        return surgeryRooms;
+    }
 }
