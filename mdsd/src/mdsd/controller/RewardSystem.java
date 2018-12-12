@@ -47,7 +47,7 @@ public class RewardSystem implements ScoreCalculator, Runnable {
 
             boolean changeProcedure = false;
             for (IControllableRover rover : rovers) {
-                Area roverArea = rover.getArea();
+                Area roverArea = rover.getRoom();
                 if (activeProcedure == procedureA) {
                     if (logicalAreas.contains(roverArea)) {
                         changeProcedure = true;
