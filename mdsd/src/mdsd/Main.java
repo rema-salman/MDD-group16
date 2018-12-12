@@ -54,7 +54,7 @@ public class Main {
                 robots, (EnvironmentDescription) hospitalEnv);
 
 
-        int[] rewards = {10, 20};
+        //int[] rewards = {10, 20};
 
         List<List<Area>> areasA = new ArrayList<>();
         List<Area> consultingRoomArea = new ArrayList<>();
@@ -66,8 +66,8 @@ public class Main {
         areasB.add(hospitalEnv.getWifiZones());
         areasB.add(hospitalEnv.getEatingAreas());
 
-        Procedure procedureA = new Procedure(rovers, areasA, rewards);
-        Procedure procedureB = new Procedure(rovers, areasB, rewards);
+        Procedure procedureA = new Procedure(rovers, areasA);//, rewards);
+        Procedure procedureB = new Procedure(rovers, areasB);//, rewards);
         ScoreCalculator sc = new RewardSystem(rovers, procedureA, procedureB,
                 hospitalEnv.getPhysicalAreas(), hospitalEnv.getLogicalAreas());
 

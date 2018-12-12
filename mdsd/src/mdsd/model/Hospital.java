@@ -54,7 +54,7 @@ public class Hospital extends Environment {
         sRoom1.add(p4);
         sRoom1.add(p8);
         sRoom1.add(p7);
-        Area surgeryRoom1 = new Area(sRoom1);
+        Area surgeryRoom1 = new Area(sRoom1, 20);
         surgeryDivision1.addRoom(surgeryRoom1);
         this.addArea(surgeryRoom1, true);
 
@@ -65,7 +65,7 @@ public class Hospital extends Environment {
         sRoom2.add(p9);
         sRoom1.add(p6);
         sRoom1.add(p5);
-        Area surgeryRoom2 = new Area(sRoom2);
+        Area surgeryRoom2 = new Area(sRoom2, 20);
         surgeryDivision1.addRoom(surgeryRoom2);
         this.addArea(surgeryRoom2, true);
 
@@ -76,7 +76,7 @@ public class Hospital extends Environment {
         sRoom3.add(p12);
         sRoom1.add(p15);
         sRoom1.add(p14);
-        Area surgeryRoom3 = new Area(sRoom3);
+        Area surgeryRoom3 = new Area(sRoom3, 20);
         surgeryDivision2.addRoom(surgeryRoom3);
         this.addArea(surgeryRoom3, true);
 
@@ -87,7 +87,7 @@ public class Hospital extends Environment {
         sRoom4.add(p15);
         sRoom1.add(p12);
         sRoom1.add(p13);
-        Area surgeryRoom4 = new Area(sRoom4);
+        Area surgeryRoom4 = new Area(sRoom4, 20);
         surgeryDivision2.addRoom(surgeryRoom4);
         this.addArea(surgeryRoom4, true);
 
@@ -96,7 +96,7 @@ public class Hospital extends Environment {
         cRoom1.add(p6);
         cRoom1.add(p11);
         cRoom1.add(p13);
-        consultingRoom = new Area(cRoom1);
+        consultingRoom = new Area(cRoom1, 10);
         emergencyDivision.addRoom(consultingRoom);
         this.addArea(consultingRoom, true);
 

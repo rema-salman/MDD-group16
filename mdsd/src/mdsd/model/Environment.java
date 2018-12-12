@@ -61,8 +61,8 @@ public class Environment extends EnvironmentDescription {
         List<Area> physicalAreasCopy = new ArrayList<>();
 
         for (Area area : physicalAreas) {
-            physicalAreasCopy.add(new Area(area.getShapes().clone(),
-                                           area.getAntiShapes().clone()));
+            physicalAreasCopy.add(new Area(area.getShapes(),
+                                           area.getAntiShapes()));
         }
 
         return physicalAreasCopy;
