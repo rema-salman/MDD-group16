@@ -55,15 +55,14 @@ public class Environment extends EnvironmentDescription {
     /**
      * Returns a copy of the physical areas that make up the environment.
      *
-     * @return An array containing all the physical areas.
+     * @return An ArrayList containing all the physical areas.
      */
-    public Area[] getPhysicalAreas() {
-        int length = physicalAreas.size();
-        Area[] physicalAreasCopy = new Area[length];
+    public List<Area> getPhysicalAreas() {
+        List<Area> physicalAreasCopy = new ArrayList<>();
 
-        for (int i = 0; i < length; ++i) {
-            physicalAreasCopy[i] = new Area(physicalAreas.get(i).getShapes().clone(),
-                    physicalAreas.get(i).getAntiShapes().clone());
+        for (Area area : physicalAreas) {
+            physicalAreasCopy.add(new Area(area.getShapes().clone(),
+                                           area.getAntiShapes().clone()));
         }
 
         return physicalAreasCopy;
