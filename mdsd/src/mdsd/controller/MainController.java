@@ -94,15 +94,7 @@ public class MainController implements Observer {
     // TODO
     public List<IControllableRover> getRovers() {
         List<IControllableRover> list = new ArrayList<>();
-        if (rovers == null) {
-            return list;
-        }
-
-        for (IControllableRover r : rovers) {
-            if (r != null) {
-                list.add(r);
-            }
-        }
+        list.addAll(rovers);
         return list;
     }
 
@@ -111,22 +103,14 @@ public class MainController implements Observer {
     }
 
     public void stop() {
-        if (rovers != null) {
-            for (IControllableRover r : rovers) {
-                if (r != null) {  // Why would they be null?
-                    r.stop();
-                }
-            }
+        for (IControllableRover r : rovers) {
+            r.stop();
         }
     }
 
     public void start() {
-        if (rovers != null) {
-            for (IControllableRover r : rovers) {
-                if (r != null) {  // Why would they be null?
-                    r.start();
-                }
-            }
+        for (IControllableRover r : rovers) {
+            r.start();
         }
     }
 
