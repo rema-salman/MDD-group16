@@ -153,7 +153,7 @@ public class Main {
 		middle.edges.add(new Edge(7f, swCorner));
 		middle.edges.add(new Edge(7f, nwCorner));
 
-		List<IControllableRover> r = mc.getRovers();
+		List<IControllableRover> r = mc.getRoverList();
 		//nw
 		r.get(0).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(
 				GraphOfPoints.shortestPath(middle, nwCorner))));

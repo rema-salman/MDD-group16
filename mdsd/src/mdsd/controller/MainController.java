@@ -94,8 +94,7 @@ public class MainController implements Observer {
 
     }
 
-    // TODO
-    public List<IControllableRover> getRovers() {
+    public List<IControllableRover> getRoverList() {
         List<IControllableRover> list = new ArrayList<>();
         list.addAll(rovers);
         return list;

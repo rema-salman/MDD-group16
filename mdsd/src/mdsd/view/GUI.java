@@ -268,7 +268,7 @@ public class GUI extends Application {
      */
     private void updateGUI() {
         drawEnvironment();
-        List<IControllableRover> roverList = mainController.getRovers();
+        List<IControllableRover> roverList = mainController.getRoverList();
         for (IControllableRover r : roverList) {
             final float halfX = w / 2.0f;
             final float halfY = h / 2.0f;
