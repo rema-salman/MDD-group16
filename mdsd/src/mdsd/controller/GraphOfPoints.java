@@ -1,10 +1,12 @@
 package mdsd.controller;
 
-import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
+
+import javax.vecmath.Point2f;
 
 import mdsd.model.Environment;
 
@@ -34,11 +36,14 @@ public class GraphOfPoints {
 	 * @param size
 	 * @param tileSize
 	 */
-	public GraphOfPoints(Environment environment, int widthInTiles, float tileSize) {
+	public GraphOfPoints(Environment environment,
+	        int widthInTiles, float tileSize) {
 		gridNodes = environmentToNodes(environment, widthInTiles, tileSize);
 	}
 
-	private Node[][] environmentToNodes(Environment environment, int widthInTiles, float tileSize) {
+	private Node[][] environmentToNodes(Environment environment,
+	        int widthInTiles, float tileSize) {
+
 		//Index if true if something is occupying the space in a given tile.
 		boolean[][] grid = createOccupiedGrid(environment, widthInTiles, tileSize);
 		Node[][] nodes = new Node[widthInTiles][widthInTiles];
@@ -46,7 +51,9 @@ public class GraphOfPoints {
 		//Initialize all nodes with their respective point in the environment.
 		for (int x = 0; x < widthInTiles; x++) {
 			for (int y = 0; y < widthInTiles; y++) {
-				Point tileCoordinate = new Point(widthInTiles * x-(widthInTiles / 2), widthInTiles * y-(widthInTiles / 2));
+				Point2f tileCoordinate = new Point2f(
+						widthInTiles * x - (widthInTiles / 2),
+						widthInTiles * y - (widthInTiles / 2));
 				nodes[x][y] = new Node(tileCoordinate);
 			}
 		}
@@ -62,20 +69,24 @@ public class GraphOfPoints {
 							nodes[x][y].edges.add(new Edge(tileSize, nodes[x - 1][y]));
 						if (y > 1)
 							if (!grid[x - 1][y - 1])
-								nodes[x][y].edges.add(new Edge(diagonalCost, nodes[x - 1][y - 1]));
+								nodes[x][y].edges
+										.add(new Edge(diagonalCost, nodes[x - 1][y - 1]));
 						if (y < widthInTiles - 1)
 							if (!grid[x - 1][y + 1])
-								nodes[x][y].edges.add(new Edge(diagonalCost, nodes[x - 1][y + 1]));
+								nodes[x][y].edges
+										.add(new Edge(diagonalCost, nodes[x - 1][y + 1]));
 					}
 					if (x < widthInTiles - 1) {
 						if (!grid[x + 1][y])
 							nodes[x][y].edges.add(new Edge(tileSize, nodes[x + 1][y]));
 						if (y > 1)
 							if (!grid[x + 1][y - 1])
-								nodes[x][y].edges.add(new Edge(diagonalCost, nodes[x + 1][y - 1]));
+								nodes[x][y].edges
+										.add(new Edge(diagonalCost, nodes[x + 1][y - 1]));
 						if (y < widthInTiles - 1)
 							if (!grid[x + 1][y + 1])
-								nodes[x][y].edges.add(new Edge(diagonalCost, nodes[x + 1][y + 1]));
+								nodes[x][y].edges
+										.add(new Edge(diagonalCost, nodes[x + 1][y + 1]));
 					}
 					if (y > 1)
 						if (!grid[x][y - 1])
@@ -96,12 +107,13 @@ public class GraphOfPoints {
 	 * @param p
 	 * @return
 	 */
-	public Node pointToNode(Point p) {
+	public Node pointToNode(Point2f p) {
 		//TODO: Implement
 		return null;
 	}
 
-	private boolean[][] createOccupiedGrid(Environment environment, int widthInTiles, float tileSize) {
+	private boolean[][] createOccupiedGrid(Environment environment,
+			int widthInTiles, float tileSize) {
 		boolean[][] grid = new boolean[widthInTiles][widthInTiles];
 		//TODO: Check for collision with objects in environment, set those booleans to true
 		return grid;
@@ -128,9 +140,12 @@ public class GraphOfPoints {
 
 		while (!openSet.isEmpty()) {
 			NodeWithCost current = openSet.poll();
-			if (current.node == target)
-				return reconstructPath(current, new ArrayList<NodeWithCost>());
-
+			if (current.node == target) {
+				List<NodeWithCost> out = reconstructPath(current,
+						new ArrayList<NodeWithCost>());
+				Collections.reverse(out); //Because reconstruction starts at the end.
+				return out;
+			}
 			closedSet.add(current);
 
 			for (Edge edge : current.node.edges) {
@@ -147,14 +162,16 @@ public class GraphOfPoints {
 							if (currentIter.baseCost >= tentativeBaseCost) {
 								//This reorders the priority queue.
 								openSet.remove(neighbor);
-								openSet.add(new NodeWithCost(neighbor, target, tentativeBaseCost, current));
+								openSet.add(new NodeWithCost(neighbor, target,
+										tentativeBaseCost, current));
 								openSetContains = true;
 								break;
 							}
 						}
 					}
 					if (!openSetContains) {
-						openSet.add(new NodeWithCost(neighbor, target, tentativeBaseCost, current));
+						openSet.add(new NodeWithCost(neighbor, target, tentativeBaseCost,
+								current));
 					}
 
 				}
@@ -173,8 +190,8 @@ public class GraphOfPoints {
 	 *            List of NodeWithCost,
 	 * @return
 	 */
-	public Point[] NodesWithCostToPointArray(List<NodeWithCost> l) {
-		Point[] points = new Point[l.size()];
+	public Point2f[] NodesWithCostToPointArray(List<NodeWithCost> l) {
+		Point2f[] points = new Point2f[l.size()];
 		for (int i = 0; i < l.size(); i++) {
 			points[i] = l.get(i).node.point;
 		}
@@ -243,7 +260,8 @@ public class GraphOfPoints {
 			this.euclidianCost = euclidianDistance(node, target);
 		}
 
-		private NodeWithCost(Node node, Node target, Float baseCost, NodeWithCost cameFrom) {
+		private NodeWithCost(Node node, Node target, Float baseCost,
+				NodeWithCost cameFrom) {
 			this.baseCost = baseCost;
 			this.node = node;
 			this.euclidianCost = euclidianDistance(node, target);
@@ -274,10 +292,10 @@ public class GraphOfPoints {
 	}
 
 	public static class Node {
-		public Point point;
+		public Point2f point;
 		public List<Edge> edges = new ArrayList<Edge>();
 
-		public Node(Point point) {
+		public Node(Point2f point) {
 			this.point = point;
 		}
 	}
