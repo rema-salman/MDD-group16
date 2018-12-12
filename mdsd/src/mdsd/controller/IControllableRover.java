@@ -1,5 +1,6 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
 import mdsd.model.Mission;
 import javax.vecmath.Point2f;
 
@@ -56,6 +57,7 @@ public interface IControllableRover extends Observable {
      * 
      * @param newRewardPoints
      */
-
     void addRewardPoints(int newRewardPoints);
+
+    Area getArea();
 }

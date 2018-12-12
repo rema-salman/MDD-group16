@@ -1,38 +1,38 @@
 package mdsd.controller;
 
+import java.util.List;
 import java.util.Set;
 
-public class Procedure extends Thread {
-    private Set<Robot> rovers;
-    private IProcedure procedure;
+import javax.vecmath.Point2f;
 
-    public Procedure(Set<Robot> rovers, IProcedure procedure) {
+import mdsd.model.Area;
+
+public class Procedure {
+    private Set<IControllableRover> rovers;
+    private List<List<Area>> areaLists;
+    private int[] rewards;
+
+    public Procedure(Set<IControllableRover> rovers,
+                     List<List<Area>> areaLists, int[] rewards) {
         this.rovers = rovers;
-        this.procedure = procedure;
+        this.areaLists.addAll(areaLists);
+        this.rewards = rewards;
     }
 
-    @Override
-    public void run() {
-        System.out.println("Procedure started");
+    public int calculateReward() {
+        int reward = 0;
 
-        while (true) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            for (Robot rover : rovers) {
-                procedure.calculateRewards(rover);
-                
-                // TODO: connect this with GUI, we need to display each rover's reward points 
-                //rover.getRewardPoints();
+        for (IControllableRover rover : rovers) {
+            Point2f pos = rover.getJavaPosition();
+            for (List<Area> areas : areaLists) {
+                for (int i = 0; i < areas.size(); ++i) {
+                    if (areas.get(i).contains(pos)) {
+                        reward += rewards[i];
+                    }
+                }
             }
         }
 
-    }
-    
-    public void changeProcedureType(IProcedure newProcedure) {
-        this.procedure = newProcedure;
+        return reward;
     }
 }

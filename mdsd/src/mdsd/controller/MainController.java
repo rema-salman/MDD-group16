@@ -1,6 +1,5 @@
 package mdsd.controller;
 
-import mdsd.model.Hospital;
 import mdsd.model.Area;
 import mdsd.model.Environment;
 
@@ -11,18 +10,14 @@ import java.util.Set;
 
 
 public class MainController implements Observer {
-    private Hospital hospital;
-
     private Set<IControllableRover> rovers;
     private Environment environment;
     private ScoreCalculator scoreCalculator;
-    //private Procedure procedure;
     private static MainController mainController = null;
 
     private MainController() {
-        rovers = new HashSet<IControllableRover>();
-        environment = new Environment();
-        scoreCalculator = new ScoreCalculator();
+        this.rovers = new HashSet<IControllableRover>();
+        this.environment = new Environment();
     }
 
     public static MainController getInstance() {
@@ -46,12 +41,8 @@ public class MainController implements Observer {
 
     }
 
-    // TODO
     public int getScore() {
-        if (scoreCalculator == null) {
-            return 0;
-        }
-        return scoreCalculator.score;
+        return (scoreCalculator == null ? 0 : scoreCalculator.getScore());
     }
 
     public Environment getEnvironment() {
@@ -107,34 +98,7 @@ public class MainController implements Observer {
         // TODO
     }
 
-    protected class ScoreCalculator implements Runnable {
-        private Procedure procedureA;
-        private Procedure procedureB;
-        public int activeProcedure;
-        public int score = 0;
-        public boolean running = true;
-
-        public ScoreCalculator() {
-            int[] rewards = {10, 10};
-            List<List<Area>> areas = new ArrayList<>();
-            List<Area> consultingRoomArea = new ArrayList<>();
-            consultingRoomArea.add(hospital.getConsultingRoom());
-            areas.add(consultingRoomArea);
-            areas.add(hospital.getSurgeryRooms());
-            procedureA = new Procedure(rovers, areas, rewards);
-        }
-
-        public void run() {
-            while (running) {
-
-                // score += activeProcedure.calculateScore();
-
-                try {
-                    this.wait(20000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void setScoreCalculator(ScoreCalculator sc) {
+        this.scoreCalculator = sc;
     }
 }

@@ -1,5 +1,6 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
 import mdsd.model.Environment;
 import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
@@ -16,6 +17,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private Point2f[] path;
     private ArrayList<Observer> observers;
     private Point destination;
+    private Area currentArea;
 
     public Robot(Point position, String name) {
         super(position, name);
@@ -140,4 +142,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     }
 
+    public Area getArea() {
+        return currentArea;
+    }
 }
