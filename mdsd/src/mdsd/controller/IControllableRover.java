@@ -47,17 +47,7 @@ public interface IControllableRover extends Observable {
 
     int getId();
 
-    /*
-     * gets the rover's reward points
-     */
-    int getRewardPoints();
+    public void setRoom(Area newArea);
 
-    /*
-     * Adds new reward points to the existent ones
-     * 
-     * @param newRewardPoints
-     */
-    void addRewardPoints(int newRewardPoints);
-
-    Area getArea();
+    public Area getRoom();
 }

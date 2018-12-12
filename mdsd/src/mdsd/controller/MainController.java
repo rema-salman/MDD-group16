@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.vecmath.Point2f;
+
 
 public class MainController implements Observer {
     private Set<IControllableRover> rovers;
@@ -32,8 +34,32 @@ public class MainController implements Observer {
      */
     public void loopForever() {
         while (true) {
+            // Update rover areas
             for (IControllableRover rover : rovers) {
-                rover.update();
+                Point2f roverPos = rover.getJavaPosition();
+                if (!rover.getRoom().contains(roverPos)) {
+                    Runnable roverUpdate = () -> {
+                        rover.stop();
+
+                        for (Area room : environment.getPhysicalAreas()) {
+                            if (room.contains(roverPos)) {
+                                rover.setRoom(room);
+                                break;
+                            }
+                        }
+
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                        rover.start();
+                    };
+
+                    Thread roverUpdateThread = new Thread(roverUpdate);
+                    roverUpdateThread.start();
+                }
             }
         }
     }
