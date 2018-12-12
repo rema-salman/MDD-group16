@@ -1,5 +1,6 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
 import mdsd.model.Mission;
 import javax.vecmath.Point2f;
 
@@ -9,10 +10,10 @@ import javax.vecmath.Point2f;
  */
 public interface IControllableRover extends Observable {
 
-	/*
-	 * Set a new mission for the rover to execute.
-	 */
-	void setMission(Mission mission);
+    /*
+     * Set a new mission for the rover to execute.
+     */
+    void setMission(Mission mission);
 
 	/**
 	 * "Main loop" function for the rover, updates rover with data from
@@ -25,43 +26,44 @@ public interface IControllableRover extends Observable {
 	 */
 	Mission getMission();
 
-	/*
-	 * Get the current position for the rover.
-	 */
-	Point2f getJavaPosition();
+    /*
+     * Get the current position for the rover.
+     */
+    Point2f getJavaPosition();
 
-	/*
-	 * Start executing the current mission, if there is any.
-	 */
-	void start();
+    /*
+     * Start executing the current mission, if there is any.
+     */
+    void start();
 
-	/*
-	 * Stop whatever the rover is doing.
-	 */
-	void stop();
+    /*
+     * Stop whatever the rover is doing.
+     */
+    void stop();
 
-	/*
-	 * Get a description of all faults of the rover, if any.
-	 */
-	String[] getFaults();
+    /*
+     * Get a description of all faults of the rover, if any.
+     */
+    String[] getFaults();
 
-	/*
-	 * Check if the rover is faulty or not.
-	 */
-	boolean isFaulty();
+    /*
+     * Check if the rover is faulty or not.
+     */
+    boolean isFaulty();
 
-	int getId();
+    int getId();
 
-	/*
-	 * gets the rover's reward points
-	 */
-	int getRewardPoints();
+    /*
+     * gets the rover's reward points
+     */
+    int getRewardPoints();
 
-	/*
-	 * Adds new reward points to the existent ones
-	 * 
-	 * @param newRewardPoints
-	 */
+    /*
+     * Adds new reward points to the existent ones
+     * 
+     * @param newRewardPoints
+     */
+    void addRewardPoints(int newRewardPoints);
 
-	void addRewardPoints(int newRewardPoints);
+    Area getArea();
 }

@@ -1,5 +1,6 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
 import mdsd.model.Environment;
 import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
@@ -9,28 +10,29 @@ import javax.vecmath.Point2f;
 import java.util.ArrayList;
 
 public class Robot extends AbstractRobotSimulator implements IControllableRover {
-	private int id;
-	private int rewardPoints;
-	private static int idCount = 0;
-	private Mission mission;
-	private Point2f[] path;
-	private ArrayList<Observer> observers;
-	private Point destination;
+    private int id;
+    private int rewardPoints;
+    private static int idCount = 0;
+    private Mission mission;
+    private Point2f[] path;
+    private ArrayList<Observer> observers;
+    private Point destination;
+    private Area currentArea;
 
-	public Robot(Point position, String name) {
-		super(position, name);
-		this.destination = position;
-		id = idCount++;
-	}
+    public Robot(Point position, String name) {
+        super(position, name);
+        this.destination = position;
+        id = idCount++;
+    }
 
-	public Robot(Point2f position, String name) {
-		this(new project.Point(position.getX(), position.getY()), name);
-	}
+    public Robot(Point2f position, String name) {
+        this(new project.Point(position.getX(), position.getY()), name);
+    }
 
-	@Override
-	public String toString() {
-		return "Robot " + this.getName();
-	}
+    @Override
+    public String toString() {
+        return "Robot " + this.getName();
+    }
 
 	@Override
 	public void setMission(Mission mission) {
@@ -74,15 +76,15 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return /* null */;
     }
 
-	@Override
-	public void start() {
-		setDestination(destination);
-	}
+    @Override
+    public void start() {
+        setDestination(destination);
+    }
 
-	@Override
-	public void stop() {
-		setDestination(getPosition());
-	}
+    @Override
+    public void stop() {
+        setDestination(getPosition());
+    }
 
     @Override
     public String[] getFaults() {
@@ -116,9 +118,9 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         // TODO
     }
 
-	public void setDestination(Point2f dest) {
-		destination = new project.Point(dest.getX(), dest.getY());
-	}
+    public void setDestination(Point2f dest) {
+        destination = new project.Point(dest.getX(), dest.getY());
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -154,4 +156,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     }
 
+    public Area getArea() {
+        return currentArea;
+    }
 }

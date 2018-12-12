@@ -1,6 +1,7 @@
 package mdsd.model;
 
 import java.awt.Color;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -14,6 +15,8 @@ import project.Point;
 public class Hospital extends Environment {
     Area consultingRoom;
     List<Area> surgeryRooms;
+    List<Area> wifiZones;
+    List<Area> eatingAreas;
 
     public Hospital() {
         super();
@@ -134,6 +137,8 @@ public class Hospital extends Environment {
         rovers.add(rover3);
         rovers.add(rover4);
 
+        this.wifiZones   = new ArrayList<>();
+        this.eatingAreas = new ArrayList<>();
     }
 
     public Area getConsultingRoom() {
@@ -142,5 +147,13 @@ public class Hospital extends Environment {
 
     public List<Area> getSurgeryRooms() {
         return surgeryRooms;
+    }
+
+    public List<Area> getWifiZones() {
+        return wifiZones;
+    }
+
+    public List<Area> getEatingAreas() {
+        return eatingAreas;
     }
 }
