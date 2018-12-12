@@ -26,6 +26,17 @@ public class MainController implements Observer {
         }
         return mainController;
     }
+    
+    /**
+     * Main loop for the MainController.
+     */
+    public void loopForever() {
+        while (true) {
+            for (IControllableRover rover : rovers) {
+                rover.update();
+            }
+        }
+    }
 
     public void addRovers(Set<IControllableRover> rovers) {
         this.rovers.addAll(rovers);

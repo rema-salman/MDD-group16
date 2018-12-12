@@ -114,7 +114,7 @@ public class Hospital extends Environment {
         super.addWall( 3f, -2.25f, 2.25f, c1, false);
         super.addWall(-3f, -2.25f, 2.25f, c1, true);
         super.addWall(-3f, -2.25f, 2.25f, c1, false);
-        
+
         for (Obstacle ob : this.getObstacles()) {
             super.addWall(ob.x, ob.y, ob.length, c1, ob.horizontal);
         }
@@ -123,7 +123,7 @@ public class Hospital extends Environment {
         super.addWall(0f, -6.0f, -4.0f, c2, true);
         super.addWall(0f,  6.0f,  4.0f, c2, false);
         super.addWall(0f, -6.0f, -4.0f, c2, false);
-        
+
         for (Obstacle ob : this.getObstacles()) {
             super.addWall(ob.x, ob.y, ob.length, c2, ob.horizontal);
         }
@@ -132,6 +132,7 @@ public class Hospital extends Environment {
         Robot rover2 = new Robot(new Point( 5,  5), "Rover 2");
         Robot rover3 = new Robot(new Point(-5,  5), "Rover 3");
         Robot rover4 = new Robot(new Point(-5, -5), "Rover 4");
+
         rovers.add(rover1);
         rovers.add(rover2);
         rovers.add(rover3);
