@@ -40,10 +40,10 @@ public class MainController implements Observer {
 					Point2f roverPos = rover.getJavaPosition();
 					if (rover.getRoom() == null || !rover.getRoom().contains(roverPos)) {
 						Runnable roverUpdate = () -> {
-							rover.stop();
 
 							for (Area room : environment.getPhysicalAreas()) {
 								if (room.contains(roverPos)) {
+									rover.stop();
 									rover.setRoom(room);
 									try {
 										Thread.sleep(2000);
@@ -51,11 +51,11 @@ public class MainController implements Observer {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
+									rover.start();
 									break;
 								}
 							}
 
-							rover.start();
 						};
 
 						Thread roverUpdateThread = new Thread(roverUpdate);
