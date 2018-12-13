@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.awt.Color;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
 
 import mdsd.controller.IControllableRover;
 import simbad.sim.EnvironmentDescription;
@@ -61,8 +59,7 @@ public class Environment extends EnvironmentDescription {
         List<Area> physicalAreasCopy = new ArrayList<>();
 
         for (Area area : physicalAreas) {
-            physicalAreasCopy.add(new Area(area.getShapes().clone(),
-                                           area.getAntiShapes().clone()));
+            physicalAreasCopy.add(new Area(area.getShapes()));
         }
 
         return physicalAreasCopy;
@@ -77,8 +74,7 @@ public class Environment extends EnvironmentDescription {
         List<Area> logicalAreasCopy = new ArrayList<>();
 
         for (Area area : logicalAreas) {
-            logicalAreasCopy.add(new Area(area.getShapes(),
-                                          area.getAntiShapes()));
+            logicalAreasCopy.add(new Area(area.getShapes()));
         }
 
         return logicalAreasCopy;
@@ -143,8 +139,13 @@ public class Environment extends EnvironmentDescription {
     }
 
     public void addArea(Area area, boolean physical) {
-        Color c = Color.GRAY;
-        physicalAreas.add(area);
+        //Color c = Color.GRAY;
+        if (physical) {
+            physicalAreas.add(area);
+        } else {
+            logicalAreas.add(area);
+        }
+        /*
         for (Shape shape : area.getShapes()) {
             Rectangle2D bounds = shape.getBounds2D();
             float x = (float) bounds.getX();
@@ -158,6 +159,7 @@ public class Environment extends EnvironmentDescription {
                 addWall(x, y, height, c, false);
             }
         }
+        */
     }
 
     public void addPhysicalArea(Area area) {
