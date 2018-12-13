@@ -16,6 +16,9 @@ public class Division extends Area {
     }
 
     public void addRoom(Area room) {
+        for (Point2f point : room.getShapes()) {
+            this.addPoint((int) point.getX(), (int) point.getY());
+        }
         rooms.add(room);
     }
 }
