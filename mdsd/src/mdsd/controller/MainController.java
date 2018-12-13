@@ -36,6 +36,7 @@ public class MainController implements Observer {
             while (true) {
                 // Update rover areas
                 for (IControllableRover rover : rovers) {
+                	rover.update();
                     Point2f roverPos = rover.getJavaPosition();
                     if (rover.getRoom() == null || !rover.getRoom().contains(roverPos)) {
                         Runnable roverUpdate = () -> {
