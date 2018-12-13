@@ -1,7 +1,9 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
 import mdsd.model.Environment;
 import mdsd.model.Mission;
+
 import project.AbstractRobotSimulator;
 import project.Point;
 
@@ -10,12 +12,12 @@ import java.util.ArrayList;
 
 public class Robot extends AbstractRobotSimulator implements IControllableRover {
     private int id;
-    private int rewardPoints;
     private static int idCount = 0;
     private Mission mission;
     private Point2f[] path;
     private ArrayList<Observer> observers;
     private Point destination;
+    private Area currentRoom;
 
     public Robot(Point position, String name) {
         super(position, name);
@@ -32,11 +34,13 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return "Robot " + this.getName();
     }
 
-    @Override
-    public void setMission(Mission mission) {
-        // TODO Auto-generated method stub
-
-    }
+	@Override
+	public void setMission(Mission mission) {
+		this.mission = mission;
+		if (mission != null) {
+			setDestination(mission.getNextPoint());
+		}
+	}
 
     @Override
     public Mission getMission() {
@@ -50,10 +54,22 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return super.getPosition();
     }
 
-    public Point2f getJavaPosition() {
-        Point point = super.getPosition();
-        return new Point2f((float) point.getX(), (float) point.getZ());
-    }
+	public void update() {
+		if (mission != null) {
+			if (this.isAtPosition(destination)) {
+				Point2f newPoint = mission.getNextPoint();
+				if (newPoint != null) {
+					setDestination(newPoint);
+					start();
+				}
+			}
+		}
+	}
+
+	public Point2f getJavaPosition() {
+		Point point = super.getPosition();
+		return new Point2f((float) point.getX(), (float) point.getZ());
+	}
 
     public /* Status */void getStatus() {
         // TODO Auto-generated method stub
@@ -108,36 +124,24 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (obj instanceof Robot) {
+        if (obj != null && obj instanceof Robot) {
             Robot r2 = (Robot) obj;
             return this.id == r2.id;
         }
         return false;
     }
 
-    @Override
-    public int getRewardPoints() {
-        return rewardPoints;
-
-    }
-
-    @Override
-    /**
-     * 
-     * @param points
-     */
-    public void addRewardPoints(int newRewardPoints) {
-        rewardPoints += newRewardPoints;
-    }
-
     public Environment inEnvironment;
 
     public Environment getEnvironment() {
         return this.inEnvironment;
-
     }
 
+    public void setRoom(Area newRoom) {
+        currentRoom = newRoom;
+    }
+
+    public Area getRoom() {
+        return currentRoom;
+    }
 }

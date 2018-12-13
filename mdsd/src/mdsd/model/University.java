@@ -31,7 +31,7 @@ public class University extends Environment {
         roomA.add(p5);
         roomA.add(p4);
         Area a1 = new Area(roomA);
-        this.addArea(a1, true);
+        this.addPhysicalArea(a1);
 
         Set<Point2f> roomB = new HashSet<>();
         roomB.add(p2);
@@ -39,7 +39,7 @@ public class University extends Environment {
         roomB.add(p6);
         roomB.add(p5);
         Area a2 = new Area(roomB);
-        this.addArea(a2, true);
+        this.addPhysicalArea(a2);
 
         Set<Point2f> roomC = new HashSet<>();
         roomC.add(p4);
@@ -47,7 +47,7 @@ public class University extends Environment {
         roomC.add(p8);
         roomC.add(p7);
         Area a3 = new Area(roomC);
-        this.addArea(a3, true);
+        this.addPhysicalArea(a3);
 
         Set<Point2f> roomD = new HashSet<>();
         roomD.add(p5);
@@ -55,7 +55,7 @@ public class University extends Environment {
         roomD.add(p9);
         roomD.add(p8);
         Area a4 = new Area(roomD);
-        this.addArea(a4, true);
+        this.addPhysicalArea(a4);
 
         super.addBoundary(-5.0f, -5.0f,  5.0f, c, true);
         super.addBoundary( 5.0f, -5.0f,  5.0f, c, true);

@@ -1,9 +1,10 @@
 package mdsd.model;
 
 import java.awt.Polygon;
-import java.util.Set;
 
 import javax.vecmath.Point2f;
+
+import java.util.Set;
 
 @SuppressWarnings("serial")
 public class Area extends Polygon {
@@ -11,20 +12,23 @@ public class Area extends Polygon {
      * This set of points describe the boundaries of the Area.
      */
     Set<Point2f> areaShapes;
-    
-    public Area(Set<Point2f> areaShapes) {
+
+    private int reward;
+
+    public Area(Set<Point2f> areaShapes, int reward) {
         this.setShapes(areaShapes);
         for(Point2f p : areaShapes) {
             this.addPoint((int)(p.getX()), (int)(p.getY()));
-        }     
+        }
+        this.reward = reward;
+    }
+
+    public Area(Set<Point2f> areaShapes) {
+        this(areaShapes, 0);
     }
 
     public void setShapes(Set<Point2f> areaShapes) {
         this.areaShapes = areaShapes;
-    }
-
-    public Set<Point2f> getShapes() {
-        return areaShapes;
     }
 
     /**
@@ -35,5 +39,13 @@ public class Area extends Polygon {
      */
     public boolean contains(Point2f p) {
         return super.contains(p.getX(), p.getY());
+    }
+
+    public Set<Point2f> getShapes() {
+        return areaShapes;
+    }
+
+    public int getReward() {
+        return reward;
     }
 }

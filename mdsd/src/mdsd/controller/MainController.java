@@ -1,8 +1,9 @@
 package mdsd.controller;
 
-import mdsd.model.Hospital;
 import mdsd.model.Area;
 import mdsd.model.Environment;
+
+import javax.vecmath.Point2f;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -11,18 +12,14 @@ import java.util.Set;
 
 
 public class MainController implements Observer {
-    private Hospital hospital;
-
     private Set<IControllableRover> rovers;
     private Environment environment;
     private ScoreCalculator scoreCalculator;
-    //private Procedure procedure;
     private static MainController mainController = null;
 
     private MainController() {
-        rovers = new HashSet<IControllableRover>();
-        environment = new Environment();
-        scoreCalculator = new ScoreCalculator();
+        this.rovers = new HashSet<IControllableRover>();
+        this.environment = new Environment();
     }
 
     public static MainController getInstance() {
@@ -30,6 +27,49 @@ public class MainController implements Observer {
             mainController = new MainController();
         }
         return mainController;
+    }
+
+    /**
+     * Main loop for the MainController.
+     */
+    public void loopForever() {
+        try {
+
+            while (true) {
+                // Update rover areas
+                for (IControllableRover rover : rovers) {
+                	rover.update();
+                    Point2f roverPos = rover.getJavaPosition();
+                    if (rover.getRoom() == null || !rover.getRoom().contains(roverPos)) {
+                        Runnable roverUpdate = () -> {
+
+                            for (Area room : environment.getPhysicalAreas()) {
+                                if (room.contains(roverPos)) {
+                                    rover.stop();
+                                    rover.setRoom(room);
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        // TODO Auto-generated catch block
+                                        e.printStackTrace();
+                                    } finally {
+                                        rover.start();
+                                    }
+                                    break;
+                                }
+                            }
+
+                        };
+
+                        Thread roverUpdateThread = new Thread(roverUpdate);
+                        roverUpdateThread.start();
+                    }
+                }
+                Thread.sleep(16);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addRovers(Set<IControllableRover> rovers) {
@@ -46,12 +86,8 @@ public class MainController implements Observer {
 
     }
 
-    // TODO
     public int getScore() {
-        if (scoreCalculator == null) {
-            return 0;
-        }
-        return scoreCalculator.score;
+        return (scoreCalculator == null ? 0 : scoreCalculator.getScore());
     }
 
     public Environment getEnvironment() {
@@ -63,18 +99,9 @@ public class MainController implements Observer {
 
     }
 
-    // TODO
-    public List<IControllableRover> getRovers() {
+    public List<IControllableRover> getRoverList() {
         List<IControllableRover> list = new ArrayList<>();
-        if (rovers == null) {
-            return list;
-        }
-
-        for (IControllableRover r : rovers) {
-            if (r != null) {
-                list.add(r);
-            }
-        }
+        list.addAll(rovers);
         return list;
     }
 
@@ -83,22 +110,14 @@ public class MainController implements Observer {
     }
 
     public void stop() {
-        if (rovers != null) {
-            for (IControllableRover r : rovers) {
-                if (r != null) {  // Why would they be null?
-                    r.stop();
-                }
-            }
+        for (IControllableRover r : rovers) {
+            r.stop();
         }
     }
 
     public void start() {
-        if (rovers != null) {
-            for (IControllableRover r : rovers) {
-                if (r != null) {  // Why would they be null?
-                    r.start();
-                }
-            }
+        for (IControllableRover r : rovers) {
+            r.start();
         }
     }
 
@@ -107,34 +126,7 @@ public class MainController implements Observer {
         // TODO
     }
 
-    protected class ScoreCalculator implements Runnable {
-        private Procedure procedureA;
-        private Procedure procedureB;
-        public int activeProcedure;
-        public int score = 0;
-        public boolean running = true;
-
-        public ScoreCalculator() {
-            int[] rewards = {10, 10};
-            List<List<Area>> areas = new ArrayList<>();
-            List<Area> consultingRoomArea = new ArrayList<>();
-            consultingRoomArea.add(hospital.getConsultingRoom());
-            areas.add(consultingRoomArea);
-            areas.add(hospital.getSurgeryRooms());
-            procedureA = new Procedure(rovers, areas, rewards);
-        }
-
-        public void run() {
-            while (running) {
-
-                // score += activeProcedure.calculateScore();
-
-                try {
-                    this.wait(20000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void setScoreCalculator(ScoreCalculator sc) {
+        this.scoreCalculator = sc;
     }
 }

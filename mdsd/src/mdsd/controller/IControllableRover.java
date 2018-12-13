@@ -1,5 +1,6 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
 import mdsd.model.Mission;
 import javax.vecmath.Point2f;
 
@@ -14,10 +15,16 @@ public interface IControllableRover extends Observable {
      */
     void setMission(Mission mission);
 
-    /*
-     * Get the current mission of the rover.
-     */
-    Mission getMission();
+	/**
+	 * "Main loop" function for the rover, updates rover with data from
+	 * simulator.
+	 */
+	void update();
+
+	/*
+	 * Get the current mission of the rover.
+	 */
+	Mission getMission();
 
     /*
      * Get the current position for the rover.
@@ -46,16 +53,7 @@ public interface IControllableRover extends Observable {
 
     int getId();
 
-    /*
-     * gets the rover's reward points
-     */
-    int getRewardPoints();
+    public void setRoom(Area newArea);
 
-    /*
-     * Adds new reward points to the existent ones
-     * 
-     * @param newRewardPoints
-     */
-
-    void addRewardPoints(int newRewardPoints);
+    public Area getRoom();
 }

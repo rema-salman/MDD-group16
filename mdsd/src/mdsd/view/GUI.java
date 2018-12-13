@@ -76,7 +76,7 @@ public class GUI extends Application {
         robots = new ArrayList<>();
 
 
-        try {
+        /*try {
             Line2D.Double[] obstaclesArr = environment.getObstacles();
             if (obstaclesArr != null) {
                 for (Line2D.Double line : obstaclesArr) {
@@ -87,7 +87,7 @@ public class GUI extends Application {
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
-        }
+        }*/
 
         setScaling();
         drawEnvironment();
@@ -268,7 +268,7 @@ public class GUI extends Application {
      */
     private void updateGUI() {
         drawEnvironment();
-        List<IControllableRover> roverList = mainController.getRovers();
+        List<IControllableRover> roverList = mainController.getRoverList();
         for (IControllableRover r : roverList) {
             final float halfX = w / 2.0f;
             final float halfY = h / 2.0f;

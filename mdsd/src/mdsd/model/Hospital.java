@@ -1,22 +1,24 @@
 package mdsd.model;
 
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import javax.vecmath.Point2f;
-
 import mdsd.controller.Robot;
 import project.Point;
+
+import javax.vecmath.Point2f;
+import java.awt.*;
+import java.util.*;
+import java.util.List;
 
 public class Hospital extends Environment {
     Area consultingRoom;
     List<Area> surgeryRooms;
+    List<Area> wifiZones;
+    List<Area> eatingAreas;
 
     public Hospital() {
         super();
+        surgeryRooms = new ArrayList<>();
+        wifiZones    = new ArrayList<>();
+        eatingAreas  = new ArrayList<>();
         Color c1 = Color.BLUE;
         Color c2 = Color.RED;
 
@@ -51,9 +53,10 @@ public class Hospital extends Environment {
         sRoom1.add(p4);
         sRoom1.add(p8);
         sRoom1.add(p7);
-        Area surgeryRoom1 = new Area(sRoom1);
+        Area surgeryRoom1 = new Area(sRoom1, 20);
         surgeryDivision1.addRoom(surgeryRoom1);
-        this.addArea(surgeryRoom1, true);
+        this.addPhysicalArea(surgeryRoom1);
+        surgeryRooms.add(surgeryRoom1);
 
         Set<Point2f> sRoom2 = new HashSet<>();
         sRoom2.add(p2);
@@ -62,9 +65,10 @@ public class Hospital extends Environment {
         sRoom2.add(p9);
         sRoom1.add(p6);
         sRoom1.add(p5);
-        Area surgeryRoom2 = new Area(sRoom2);
+        Area surgeryRoom2 = new Area(sRoom2, 20);
         surgeryDivision1.addRoom(surgeryRoom2);
-        this.addArea(surgeryRoom2, true);
+        this.addPhysicalArea(surgeryRoom2);
+        surgeryRooms.add(surgeryRoom2);
 
         Set<Point2f> sRoom3 = new HashSet<>();
         sRoom3.add(p7);
@@ -73,9 +77,10 @@ public class Hospital extends Environment {
         sRoom3.add(p12);
         sRoom1.add(p15);
         sRoom1.add(p14);
-        Area surgeryRoom3 = new Area(sRoom3);
+        Area surgeryRoom3 = new Area(sRoom3, 20);
         surgeryDivision2.addRoom(surgeryRoom3);
-        this.addArea(surgeryRoom3, true);
+        this.addPhysicalArea(surgeryRoom3);
+        surgeryRooms.add(surgeryRoom3);
 
         Set<Point2f> sRoom4 = new HashSet<>();
         sRoom4.add(p9);
@@ -84,18 +89,19 @@ public class Hospital extends Environment {
         sRoom4.add(p15);
         sRoom1.add(p12);
         sRoom1.add(p13);
-        Area surgeryRoom4 = new Area(sRoom4);
+        Area surgeryRoom4 = new Area(sRoom4, 20);
         surgeryDivision2.addRoom(surgeryRoom4);
-        this.addArea(surgeryRoom4, true);
+        this.addPhysicalArea(surgeryRoom4);
+        surgeryRooms.add(surgeryRoom4);
 
         Set<Point2f> cRoom1 = new HashSet<>();
         cRoom1.add(p4);
         cRoom1.add(p6);
         cRoom1.add(p11);
         cRoom1.add(p13);
-        consultingRoom = new Area(cRoom1);
+        consultingRoom = new Area(cRoom1, 10);
         emergencyDivision.addRoom(consultingRoom);
-        this.addArea(consultingRoom, true);
+        this.addPhysicalArea(consultingRoom);
 
         super.addBoundary(-6.0f, -6.0f,  6.0f, c2, true);
         super.addBoundary( 6.0f, -6.0f,  6.0f, c2, true);
@@ -111,19 +117,11 @@ public class Hospital extends Environment {
         super.addWall( 3f, -2.25f, 2.25f, c1, false);
         super.addWall(-3f, -2.25f, 2.25f, c1, true);
         super.addWall(-3f, -2.25f, 2.25f, c1, false);
-        
-        for (Obstacle ob : this.getObstacles()) {
-            super.addWall(ob.x, ob.y, ob.length, c1, ob.horizontal);
-        }
 
         super.addWall(0f,  6.0f,  4.0f, c2, true);
         super.addWall(0f, -6.0f, -4.0f, c2, true);
         super.addWall(0f,  6.0f,  4.0f, c2, false);
         super.addWall(0f, -6.0f, -4.0f, c2, false);
-        
-        for (Obstacle ob : this.getObstacles()) {
-            super.addWall(ob.x, ob.y, ob.length, c2, ob.horizontal);
-        }
 
         Robot rover1 = new Robot(new Point( 5, -5), "Rover 1");
         Robot rover2 = new Robot(new Point( 5,  5), "Rover 2");
@@ -134,6 +132,8 @@ public class Hospital extends Environment {
         rovers.add(rover3);
         rovers.add(rover4);
 
+        this.wifiZones   = new ArrayList<>();
+        this.eatingAreas = new ArrayList<>();
     }
 
     public Area getConsultingRoom() {
@@ -142,5 +142,13 @@ public class Hospital extends Environment {
 
     public List<Area> getSurgeryRooms() {
         return surgeryRooms;
+    }
+
+    public List<Area> getWifiZones() {
+        return wifiZones;
+    }
+
+    public List<Area> getEatingAreas() {
+        return eatingAreas;
     }
 }

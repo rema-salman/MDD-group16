@@ -1,38 +1,42 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
+
+import javax.vecmath.Point2f;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-public class Procedure extends Thread {
-    private Set<Robot> rovers;
-    private IProcedure procedure;
+public class Procedure {
+    private Set<IControllableRover> rovers;
+    private List<List<Area>> areaLists;
+    //private int[] rewards;
 
-    public Procedure(Set<Robot> rovers, IProcedure procedure) {
+    public Procedure(Set<IControllableRover> rovers,
+                     List<List<Area>> areaLists) {//, int[] rewards) {
         this.rovers = rovers;
-        this.procedure = procedure;
+        this.areaLists = new ArrayList<>();
+        this.areaLists.addAll(areaLists);
+        //this.rewards = rewards;
     }
 
-    @Override
-    public void run() {
-        System.out.println("Procedure started");
+    public int calculateReward() {
+        int reward = 0;
 
-        while (true) {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-            for (Robot rover : rovers) {
-                procedure.calculateRewards(rover);
-                
-                // TODO: connect this with GUI, we need to display each rover's reward points 
-                //rover.getRewardPoints();
+        for (IControllableRover rover : rovers) {
+            Point2f pos = rover.getJavaPosition();
+            for (List<Area> areas : areaLists) {
+                //for (int i = 0; i < areas.size(); ++i) {
+                //if (areas.get(i).contains(pos)) {
+                //reward += rewards[i];
+                for (Area area : areas) {
+                    if (area.contains(pos)) {
+                        reward += area.getReward();
+                    }
+                }
             }
         }
 
-    }
-    
-    public void changeProcedureType(IProcedure newProcedure) {
-        this.procedure = newProcedure;
+        return reward;
     }
 }
