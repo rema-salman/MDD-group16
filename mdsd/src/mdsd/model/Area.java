@@ -1,10 +1,13 @@
 package mdsd.model;
 
+import java.awt.Polygon;
 import java.awt.Shape;
+import java.util.Set;
 
 import javax.vecmath.Point2f;
 
-public class Area {
+@SuppressWarnings("serial")
+public class Area extends Polygon {
     /**
      * These shapes define the area, upon calling contains to check if a point is
      * inside the area these shapes define the area as a whole. If the point is
@@ -18,10 +21,22 @@ public class Area {
      * anti shape then it is considered to not be inside of the area.
      */
     private Shape[] antiShapes;
+    Set<Point2f> areaShapes;
     
     public Area(Shape[] shapes, Shape[] antiShapes) {
         this.shapes = shapes;
         this.antiShapes = antiShapes;
+    }
+
+    public Area(Set<Point2f> areaShapes) {
+        this.setShapes(areaShapes);
+        for(Point2f p : areaShapes) {
+            this.addPoint((int)(p.getX()), (int)(p.getY()));
+        }     
+    }
+    
+    public void setShapes(Set<Point2f> areaShapes) {
+        this.areaShapes = areaShapes;
     }
 
     /**
@@ -43,10 +58,12 @@ public class Area {
         return false;
     }
 
+    // TODO: Check if actually deep copy
     public Shape[] getShapes() {
         return shapes.clone();
     }
 
+    // TODO: Check if actually deep copy
     public Shape[] getAntiShapes() {
         return antiShapes.clone();
     }
