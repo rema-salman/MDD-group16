@@ -1,9 +1,9 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
+
 import java.util.List;
 import java.util.Set;
-
-import mdsd.model.Area;
 
 public class RewardSystem implements ScoreCalculator, Runnable {
     private Set<IControllableRover> rovers;
@@ -67,7 +67,7 @@ public class RewardSystem implements ScoreCalculator, Runnable {
             }
 
             try {
-                this.wait(20000);
+                Thread.sleep(20000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

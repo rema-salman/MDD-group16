@@ -1,11 +1,11 @@
 package mdsd.controller;
 
-import java.util.List;
-import java.util.Set;
+import mdsd.model.Area;
 
 import javax.vecmath.Point2f;
-
-import mdsd.model.Area;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 public class Procedure {
     private Set<IControllableRover> rovers;
@@ -15,6 +15,7 @@ public class Procedure {
     public Procedure(Set<IControllableRover> rovers,
                      List<List<Area>> areaLists) {//, int[] rewards) {
         this.rovers = rovers;
+        this.areaLists = new ArrayList<>();
         this.areaLists.addAll(areaLists);
         //this.rewards = rewards;
     }
@@ -26,8 +27,8 @@ public class Procedure {
             Point2f pos = rover.getJavaPosition();
             for (List<Area> areas : areaLists) {
                 //for (int i = 0; i < areas.size(); ++i) {
-                    //if (areas.get(i).contains(pos)) {
-                        //reward += rewards[i];
+                //if (areas.get(i).contains(pos)) {
+                //reward += rewards[i];
                 for (Area area : areas) {
                     if (area.contains(pos)) {
                         reward += area.getReward();
