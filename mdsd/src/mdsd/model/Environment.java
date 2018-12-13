@@ -1,19 +1,14 @@
 package mdsd.model;
 
+import mdsd.controller.IControllableRover;
+import simbad.sim.*;
+
+import java.awt.*;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.awt.Color;
-import java.awt.Shape;
-import java.awt.geom.Rectangle2D;
-
-import mdsd.controller.IControllableRover;
-import simbad.sim.EnvironmentDescription;
-import simbad.sim.HorizontalBoundary;
-import simbad.sim.HorizontalWall;
-import simbad.sim.VerticalBoundary;
-import simbad.sim.VerticalWall;
 
 public class Environment extends EnvironmentDescription {
     //private List<Division> divisions;  // Should divisions be part of Environment or not?
@@ -119,12 +114,12 @@ public class Environment extends EnvironmentDescription {
             Color c, boolean horiz) {
         if (horiz) {
             //new HorizontalBoundary(p1, p2, xy2,
-            new HorizontalBoundary(p1, p2, p1+len,
-                    (EnvironmentDescription) this, c);
+            new HorizontalBoundary(p1, p2, len,
+                    this, c);
         } else {
             //new VerticalBoundary(p1, p2, xy2,
-            new VerticalBoundary(p1, p2, p2+len,
-                    (EnvironmentDescription) this, c);
+            new VerticalBoundary(p1, p2, len,
+                    this, c);
         }
     }
 
@@ -132,10 +127,10 @@ public class Environment extends EnvironmentDescription {
     public void addWall(float p1, float p2, float len, Color c, boolean horiz) {
         if (horiz) {
             //new HorizontalWall(p1, p2, xy2, (EnvironmentDescription)this, c);
-            new HorizontalWall(p1, p2, p1+len, (EnvironmentDescription) this, c);
+            new HorizontalWall(p1, p2, len, this, c);
         } else {
             //new VerticalWall(p1, p2, xy2, (EnvironmentDescription) this, c);
-            new VerticalWall(p1, p2, p2+len, (EnvironmentDescription) this, c);
+            new VerticalWall(p1, p2, len, this, c);
         }
 
         //obstacles.add(new Obstacle(p1, p2, xy2, horiz));

@@ -76,7 +76,7 @@ public class GUI extends Application {
         robots = new ArrayList<>();
 
 
-        try {
+        /*try {
             Line2D.Double[] obstaclesArr = environment.getObstacles();
             if (obstaclesArr != null) {
                 for (Line2D.Double line : obstaclesArr) {
@@ -87,7 +87,7 @@ public class GUI extends Application {
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
-        }
+        }*/
 
         setScaling();
         drawEnvironment();
