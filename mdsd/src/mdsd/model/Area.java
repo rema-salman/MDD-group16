@@ -1,11 +1,10 @@
 package mdsd.model;
 
-import java.awt.Polygon;
-import java.awt.Shape;
+import javax.vecmath.Point2f;
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import javax.vecmath.Point2f;
 
 @SuppressWarnings("serial")
 public class Area extends Polygon {
@@ -43,6 +42,7 @@ public class Area extends Polygon {
             this.addPoint((int)(p.getX()), (int)(p.getY()));
         }
         this.reward = reward;
+        this.shapes = new ArrayList<>();
     }
 
     public Area(Set<Point2f> areaShapes) {
