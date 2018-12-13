@@ -30,7 +30,8 @@ public class Main {
 		Hospital hospitalEnv = new Hospital();
 		Set<IControllableRover> rovers = hospitalEnv.getRovers();
 		mc.addRovers(rovers);
-
+		mc.setEnvironment(hospitalEnv);
+		
 		Set<Robot> robots = new HashSet<>();
 		for (IControllableRover rover : rovers) {
 			robots.add((Robot) rover);

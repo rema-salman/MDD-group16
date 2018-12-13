@@ -26,6 +26,10 @@ public class MainController implements Observer {
         }
         return mainController;
     }
+    public void setEnvironment(Environment environment)
+    {
+    	this.environment = environment;
+    }
 
     /**
      * Main loop for the MainController.
@@ -41,7 +45,7 @@ public class MainController implements Observer {
                     if (rover.getRoom() == null || !rover.getRoom().contains(roverPos)) {
                         Runnable roverUpdate = () -> {
 
-                            for (Area room : environment.getPhysicalAreas()) {
+                            for (Area room : environment.getAreas()) {
                                 if (room.contains(roverPos)) {
                                     rover.stop();
                                     rover.setRoom(room);
