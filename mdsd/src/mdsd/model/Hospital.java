@@ -127,6 +127,7 @@ public class Hospital extends Environment {
         Robot rover2 = new Robot(new Point( 5,  5), "Rover 2");
         Robot rover3 = new Robot(new Point(-5,  5), "Rover 3");
         Robot rover4 = new Robot(new Point(-5, -5), "Rover 4");
+
         rovers.add(rover1);
         rovers.add(rover2);
         rovers.add(rover3);

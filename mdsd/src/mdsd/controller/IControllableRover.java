@@ -15,16 +15,10 @@ public interface IControllableRover extends Observable {
      */
     void setMission(Mission mission);
 
-	/**
-	 * "Main loop" function for the rover, updates rover with data from
-	 * simulator.
-	 */
-	void update();
-
-	/*
-	 * Get the current mission of the rover.
-	 */
-	Mission getMission();
+    /*
+     * Get the current mission of the rover.
+     */
+    Mission getMission();
 
     /*
      * Get the current position for the rover.
