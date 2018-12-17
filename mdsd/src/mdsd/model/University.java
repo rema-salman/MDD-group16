@@ -1,13 +1,12 @@
 package mdsd.model;
 
-import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.vecmath.Point2f;
-
 import mdsd.controller.Robot;
 import project.Point;
+
+import javax.vecmath.Point2f;
+import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class University extends Environment {
 
@@ -57,29 +56,33 @@ public class University extends Environment {
         Area a4 = new Area(roomD);
         this.addArea(a4, true);
 
-        super.addBoundary(-5.0f, -5.0f,  5.0f, c, true);
-        super.addBoundary( 5.0f, -5.0f,  5.0f, c, true);
-        super.addBoundary( 5.0f, -5.0f, -3.0f, c, false);
-        super.addBoundary( 5.0f, -2.0f,  2.0f, c, false);
-        super.addBoundary( 5.0f,  3.0f,  5.0f, c, false);
-        super.addBoundary(-5.0f, -5.0f, -3.0f, c, false);
-        super.addBoundary(-5.0f, -2.0f,  2.0f, c, false);
-        super.addBoundary(-5.0f,  3.0f,  5.0f, c, false);
+        super.addHorizontalBoundary(-5.0f, -5.0f, 5.0f, c);
+        super.addHorizontalBoundary(5.0f, -5.0f, 5.0f, c);
+        super.addVerticalBoundary(5.0f, -5.0f, -3.0f, c);
+        super.addVerticalBoundary(5.0f, -2.0f, 2.0f, c);
+        super.addVerticalBoundary(5.0f, 3.0f, 5.0f, c);
+        super.addVerticalBoundary(-5.0f, -5.0f, -3.0f, c);
+        super.addVerticalBoundary(-5.0f, -2.0f, 2.0f, c);
+        super.addVerticalBoundary(-5.0f, 3.0f, 5.0f, c);
 
         // create four rooms with doors
-        super.addWall(0f, -2.0f,  2.0f, c, true);
-        super.addWall(0f, -2.0f,  2.0f, c, false);
-        super.addWall(0f,  5.0f,  3.0f, c, true);
-        super.addWall(0f, -5.0f, -3.0f, c, true);
-        super.addWall(0f,  5.0f,  3.0f, c, false);
-        super.addWall(0f, -5.0f, -3.0f, c, false);
-        
+        super.addHorizontalWall(0f, -2.0f, 2.0f, c);
+        super.addVerticalWall(0f, -2.0f, 2.0f, c);
+        super.addHorizontalWall(0f, 5.0f, 3.0f, c);
+        super.addHorizontalWall(0f, -5.0f, -3.0f, c);
+        super.addVerticalWall(0f, 5.0f, 3.0f, c);
+        super.addVerticalWall(0f, -5.0f, -3.0f, c);
+
         // horizontal -> (yPos, xStart, xEnd)
         // vertical   -> (xPos, yStart, yEnd)
         for (Obstacle ob : this.getObstacles()) {
-            super.addWall(ob.x, ob.y, ob.length, c, ob.horizontal);
+            if (ob.horizontal) {
+                super.addHorizontalWall(ob.x, ob.y, ob.length, c);
+            } else {
+                super.addVerticalWall(ob.x, ob.y, ob.length, c);
+            }
         }
-        
+
         //adding the initial robots' positions inside the environment 
         Robot rover1 = new Robot(new Point(2.5, -7), "Rover 1");
         Robot rover2 = new Robot(new Point(2.5, 7), "Rover 2");

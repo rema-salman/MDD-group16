@@ -5,14 +5,14 @@ import project.Point;
 
 import javax.vecmath.Point2f;
 import java.awt.*;
-import java.util.*;
 import java.util.List;
+import java.util.*;
 
 public class Hospital extends Environment {
-    Area consultingRoom;
-    List<Area> surgeryRooms;
-    List<Area> wifiZones;
-    List<Area> eatingAreas;
+    private Area consultingRoom;
+    private List<Area> surgeryRooms;
+    private List<Area> wifiZones;
+    private List<Area> eatingAreas;
 
     public Hospital() {
         super();
@@ -103,38 +103,37 @@ public class Hospital extends Environment {
         emergencyDivision.addRoom(consultingRoom);
         this.addArea(consultingRoom, true);
 
-        super.addBoundary(-6.0f, -6.0f,  6.0f, c2, true);
-        super.addBoundary( 6.0f, -6.0f,  6.0f, c2, true);
-        super.addBoundary( 6.0f, -6.0f, -3.5f, c2, false);
-        super.addBoundary( 6.0f, -2.5f,  2.5f, c2, false);
-        super.addBoundary( 6.0f,  3.5f,  6.0f, c2, false);
-        super.addBoundary(-6.0f, -6.0f, -3.5f, c2, false);
-        super.addBoundary(-6.0f, -2.5f,  2.5f, c2, false);
-        super.addBoundary(-6.0f,  3.5f,  6.0f, c2, false);
+        super.addHorizontalBoundary(-6.0f, -6.0f, 6.0f, c2);
+        super.addHorizontalBoundary(6.0f, -6.0f, 6.0f, c2);
+        super.addVerticalBoundary(6.0f, -6.0f, -3.5f, c2);
+        super.addVerticalBoundary(6.0f, -2.5f, 2.5f, c2);
+        super.addVerticalBoundary(6.0f, 3.5f, 6.0f, c2);
+        super.addVerticalBoundary(-6.0f, -6.0f, -3.5f, c2);
+        super.addVerticalBoundary(-6.0f, -2.5f, 2.5f, c2);
+        super.addVerticalBoundary(-6.0f, 3.5f, 6.0f, c2);
 
         // create four rooms with doors
-        super.addWall( 3f, -2.25f, 2.25f, c1, true);
-        super.addWall( 3f, -2.25f, 2.25f, c1, false);
-        super.addWall(-3f, -2.25f, 2.25f, c1, true);
-        super.addWall(-3f, -2.25f, 2.25f, c1, false);
+        super.addHorizontalWall(3f, -2.25f, 2.25f, c1);
+        super.addVerticalWall(3f, -2.25f, 2.25f, c1);
+        super.addHorizontalWall(-3f, -2.25f, 2.25f, c1);
+        super.addVerticalWall(-3f, -2.25f, 2.25f, c1);
+
+        super.addHorizontalWall(0f, 6.0f, 4.0f, c2);
+        super.addHorizontalWall(0f, -6.0f, -4.0f, c2);
+        super.addVerticalWall(0f, 6.0f, 4.0f, c2);
+        super.addVerticalWall(0f, -6.0f, -4.0f, c2);
 
 
-        super.addWall(0f,  6.0f,  4.0f, c2, true);
-        super.addWall(0f, -6.0f, -4.0f, c2, true);
-        super.addWall(0f,  6.0f,  4.0f, c2, false);
-        super.addWall(0f, -6.0f, -4.0f, c2, false);
-
-
-        Robot rover1 = new Robot(new Point( 5, -5), "Rover 1");
-        Robot rover2 = new Robot(new Point( 5,  5), "Rover 2");
-        Robot rover3 = new Robot(new Point(-5,  5), "Rover 3");
+        Robot rover1 = new Robot(new Point(5, -5), "Rover 1");
+        Robot rover2 = new Robot(new Point(5, 5), "Rover 2");
+        Robot rover3 = new Robot(new Point(-5, 5), "Rover 3");
         Robot rover4 = new Robot(new Point(-5, -5), "Rover 4");
         rovers.add(rover1);
         rovers.add(rover2);
         rovers.add(rover3);
         rovers.add(rover4);
 
-        this.wifiZones   = new ArrayList<>();
+        this.wifiZones = new ArrayList<>();
         this.eatingAreas = new ArrayList<>();
     }
 

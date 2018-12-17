@@ -1,11 +1,9 @@
 package mdsd.model;
 
-import javax.vecmath.Point2d;
 import javax.vecmath.Point2f;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -41,8 +39,8 @@ public class Area extends Polygon {
 
     public Area(Set<Point2f> areaShapes, int reward) {
         this.setShapes(areaShapes);
-        for(Point2f p : areaShapes) {
-            this.addPoint((int)(p.getX()), (int)(p.getY()));
+        for (Point2f p : areaShapes) {
+            this.addPoint((int) (p.getX()), (int) (p.getY()));
         }
         this.reward = reward;
         this.shapes = new ArrayList<>();
@@ -51,7 +49,7 @@ public class Area extends Polygon {
     public Area(Set<Point2f> areaShapes) {
         this(areaShapes, 0);
     }
-    
+
     public void setShapes(Set<Point2f> areaShapes) {
         this.areaShapes = areaShapes;
     }
@@ -64,20 +62,20 @@ public class Area extends Polygon {
      * @return True if the point is inside the area.
      */
     public boolean contains(Point2f p) {
-      /**  float x = p.getX();
-        float y = p.getY();
-        for (Shape shape : shapes) {
-            if (shape.contains(x, y)) {
-                for (Shape antiShape : antiShapes) {					--This is all unused since the areas suddenly use a set of points.
-                    if (antiShape.contains(x, y)) {						
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }*/
-    	
-    	return this.contains(new Point2D.Float(p.x, p.y));
+        /**  float x = p.getX();
+         float y = p.getY();
+         for (Shape shape : shapes) {
+         if (shape.contains(x, y)) {
+         for (Shape antiShape : antiShapes) {					--This is all unused since the areas suddenly use a set of points.
+         if (antiShape.contains(x, y)) {
+         return false;
+         }
+         }
+         return true;
+         }
+         }*/
+
+        return super.contains(new Point2D.Float(p.x, p.y));
     }
 
     public List<Shape> getShapes() {

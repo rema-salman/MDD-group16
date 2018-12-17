@@ -9,7 +9,7 @@ public class RewardSystem implements ScoreCalculator, Runnable {
     private Set<IControllableRover> rovers;
     private List<Area> physicalAreas;  // E.g. rooms
     private List<Area> logicalAreas;   // E.g. the coverage of a Wi-Fi router
-    
+
     private Procedure procedureA;
     private Procedure procedureB;
     public Procedure activeProcedure;
@@ -24,18 +24,18 @@ public class RewardSystem implements ScoreCalculator, Runnable {
         this.procedureB = procedureB;
         this.activeProcedure = procedureA;
         this.physicalAreas = physicalAreas;
-        this.logicalAreas  = logicalAreas;
+        this.logicalAreas = logicalAreas;
     }
-    
+
     public int calculateScore() {
-        
+
         return 0;
     }
-    
+
     public int getScore() {
         return score;
     }
-    
+
     public void stop() {
         this.running = false;
     }

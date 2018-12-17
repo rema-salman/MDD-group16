@@ -5,7 +5,7 @@ import project.AbstractSimulatorMonitor;
 import project.Point;
 import simbad.sim.*;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 

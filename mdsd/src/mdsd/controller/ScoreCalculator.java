@@ -1,6 +1,7 @@
 package mdsd.controller;
 
-public interface ScoreCalculator {    
-    public int calculateScore();
-    public int getScore();
+public interface ScoreCalculator {
+    int calculateScore();
+
+    int getScore();
 }

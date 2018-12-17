@@ -26,9 +26,9 @@ public class MainController implements Observer {
         }
         return mainController;
     }
-    public void setEnvironment(Environment environment)
-    {
-    	this.environment = environment;
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
     }
 
     /**
@@ -40,7 +40,7 @@ public class MainController implements Observer {
             while (true) {
                 // Update rover areas
                 for (IControllableRover rover : rovers) {
-                	rover.update();
+                    rover.update();
                     Point2f roverPos = rover.getJavaPosition();
                     if (rover.getRoom() == null || !rover.getRoom().contains(roverPos)) {
                         Runnable roverUpdate = () -> {

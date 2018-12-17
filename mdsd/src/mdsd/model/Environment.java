@@ -15,8 +15,8 @@ public class Environment extends EnvironmentDescription {
     private List<Area> physicalAreas;  // E.g. rooms
     private List<Area> logicalAreas;   // E.g. the coverage of a Wi-Fi router
     private List<Obstacle> obstacles;  // E.g. walls
-    protected Set<IControllableRover> rovers;
-    protected Mission[] missions;
+    Set<IControllableRover> rovers;
+    private List<Mission> missions;
 
     /**
      * Creates an Environment object from pre-defined areas and obstacles.
@@ -31,8 +31,8 @@ public class Environment extends EnvironmentDescription {
         this.physicalAreas = physicalAreas;
         this.logicalAreas = logicalAreas;
         this.obstacles = obstacles;
-        this.rovers = new HashSet<IControllableRover>();
-        this.missions = new Mission[4];  // Why 4? How does this work?
+        this.rovers = new HashSet<>();
+        this.missions = new ArrayList<>();
     }
 
     /**
@@ -41,10 +41,10 @@ public class Environment extends EnvironmentDescription {
     public Environment() {
         super();
         physicalAreas = new ArrayList<>();
-        logicalAreas  = new ArrayList<>();
-        obstacles     = new ArrayList<>();
-        rovers        = new HashSet<IControllableRover>();
-        this.missions = new Mission[4];  // Why 4? How does this work?
+        logicalAreas = new ArrayList<>();
+        obstacles = new ArrayList<>();
+        rovers = new HashSet<>();
+        this.missions = new ArrayList<>();
     }
 
     /**
@@ -53,14 +53,7 @@ public class Environment extends EnvironmentDescription {
      * @return An ArrayList containing all the physical areas.
      */
     public List<Area> getPhysicalAreas() {
-        List<Area> physicalAreasCopy = new ArrayList<>();
-
-        for (Area area : physicalAreas) {
-            physicalAreasCopy.add(new Area(area.getShapes(),
-                                           area.getAntiShapes()));
-        }
-
-        return physicalAreasCopy;
+        return getAreasCopy(physicalAreas);
     }
 
     /**
@@ -69,14 +62,18 @@ public class Environment extends EnvironmentDescription {
      * @return An ArrayList containing all the logical areas.
      */
     public List<Area> getLogicalAreas() {
-        List<Area> logicalAreasCopy = new ArrayList<>();
+        return getAreasCopy(logicalAreas);
+    }
 
-        for (Area area : logicalAreas) {
-            logicalAreasCopy.add(new Area(area.getShapes(),
-                                          area.getAntiShapes()));
+    private List<Area> getAreasCopy(List<Area> areas) {
+        List<Area> physicalAreasCopy = new ArrayList<>();
+
+        for (Area area : areas) {
+            physicalAreasCopy.add(new Area(area.getShapes(),
+                    area.getAntiShapes()));
         }
 
-        return logicalAreasCopy;
+        return physicalAreasCopy;
     }
 
     /**
@@ -105,36 +102,75 @@ public class Environment extends EnvironmentDescription {
         return rovers;
     }
 
-    public Mission[] getMissions() {
+    public List<Mission> getMissions() {
         return missions;
     }
 
-    //public void addBoundary(float p1, float p2, float xy2,
-    public void addBoundary(float p1, float p2, float len,
-            Color c, boolean horiz) {
-        if (horiz) {
-            //new HorizontalBoundary(p1, p2, xy2,
-            new HorizontalBoundary(p1, p2, len,
-                    this, c);
+    public void addHorizontalBoundary(float p1x, float p1y, float p2y, Color c) {
+        addHorizontalObstacle(p1x, p1y, p2y, c);
+        new HorizontalBoundary(p1x, p1y, p2y, this, c);
+    }
+
+    public void addVerticalBoundary(float p1y, float p1x, float p2x, Color c) {
+        addVerticalObstacle(p1y, p1x, p2x, c);
+        new VerticalBoundary(p1y, p1x, p2x, this, c);
+    }
+
+    public void addHorizontalWall(float p1x, float p1y, float p2y, Color c) {
+        addHorizontalObstacle(p1x, p1y, p2y, c);
+        new HorizontalWall(p1x, p1y, p2y, this, c);
+    }
+
+    public void addVerticalWall(float p1y, float p1x, float p2x, Color c) {
+        addVerticalObstacle(p1y, p1x, p2x, c);
+        new VerticalWall(p1y, p1x, p2x, this, c);
+    }
+
+    private void addHorizontalObstacle(float p1x, float p1y, float p2y, Color c) {
+        if (p1y > p2y) {
+            obstacles.add(new Obstacle(p1x, p2y, Math.abs(p1y - p2y), false, c));
         } else {
-            //new VerticalBoundary(p1, p2, xy2,
-            new VerticalBoundary(p1, p2, len,
-                    this, c);
+            obstacles.add(new Obstacle(p1x, p1y, Math.abs(p1y - p2y), false, c));
         }
     }
 
-    //public void addWall(float p1, float p2, float xy2, Color c, boolean horiz) {
-    public void addWall(float p1, float p2, float len, Color c, boolean horiz) {
-        if (horiz) {
-            //new HorizontalWall(p1, p2, xy2, (EnvironmentDescription)this, c);
-            new HorizontalWall(p1, p2, len, this, c);
+    private void addVerticalObstacle(float p1y, float p1x, float p2x, Color c) {
+        if (p1x > p2x) {
+            obstacles.add(new Obstacle(p2x, p1y, Math.abs(p1x - p2x), true, c));
         } else {
-            //new VerticalWall(p1, p2, xy2, (EnvironmentDescription) this, c);
-            new VerticalWall(p1, p2, len, this, c);
+            obstacles.add(new Obstacle(p1x, p1y, Math.abs(p1x - p2x), true, c));
         }
+    }
 
-        //obstacles.add(new Obstacle(p1, p2, xy2, horiz));
-        obstacles.add(new Obstacle(p1, p2, len, horiz));
+    public float getWidth() {
+        float xMin = 1000;
+        float xMax = -1000;
+        for (Obstacle o : obstacles) {
+            float x1 = o.x;
+            float x2 = o.x;
+            if (x1 < xMin) {
+                xMin = x1;
+            }
+            if (x2 > xMax) {
+                xMax = x2;
+            }
+        }
+        return Math.abs(xMax - xMin);
+    }
+
+    public float getHeight() {
+        float yMin = 1000;
+        float yMax = -1000;
+        for (Obstacle o : obstacles) {
+            float y1 = o.y;
+            if (y1 < yMin) {
+                yMin = y1;
+            }
+            if (y1 > yMax) {
+                yMax = y1;
+            }
+        }
+        return Math.abs(yMax - yMin);
     }
 
     public void addArea(Area area, boolean physical) {
@@ -144,13 +180,14 @@ public class Environment extends EnvironmentDescription {
             Rectangle2D bounds = shape.getBounds2D();
             float x = (float) bounds.getX();
             float y = (float) bounds.getY();
-            float width  = (float) bounds.getWidth();
+            float width = (float) bounds.getWidth();
             float height = (float) bounds.getHeight();
-            addBoundary(x, y, width,  c, true);
-            addBoundary(x, y, height, c, false);
             if (physical) {
-                addWall(x, y, width,  c, true);
-                addWall(x, y, height, c, false);
+                addHorizontalWall(x, y, width, c);
+                addVerticalWall(x, y, height, c);
+            } else {
+                addHorizontalBoundary(x, y, width, c);
+                addVerticalBoundary(x, y, height, c);
             }
         }
     }

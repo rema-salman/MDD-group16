@@ -1,9 +1,9 @@
 package mdsd.model;
 
+import javax.vecmath.Point2f;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import javax.vecmath.Point2f;
 
 public class Division {
     public List<Area> rooms;

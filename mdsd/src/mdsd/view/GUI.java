@@ -18,10 +18,10 @@ import javafx.stage.Stage;
 import mdsd.controller.IControllableRover;
 import mdsd.controller.MainController;
 import mdsd.model.Environment;
+import mdsd.model.Obstacle;
 
 import javax.vecmath.Point2f;
 import java.awt.*;
-import java.awt.geom.Line2D;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +45,11 @@ public class GUI extends Application {
     private GraphicsContext gc;
     private ArrayList<IControllableRover> robots;
     private Environment environment;
-    private List<Line2D.Double> obstacles;
+    private List<Obstacle> obstacles;
     private float w;
     private float h;
+    private float halfX;
+    private float halfY;
     private float scaleX;
     private float scaleY;
 
@@ -67,27 +69,17 @@ public class GUI extends Application {
         primaryStage.show();
 
         gc = canvasMap.getGraphicsContext2D();
-        w = canvasMap.widthProperty().floatValue();
-        h = canvasMap.heightProperty().floatValue();
+        w = canvasMap.widthProperty().floatValue(); // 460
+        h = canvasMap.heightProperty().floatValue(); // 412
+        halfX = w / 2f;
+        halfY = h / 2f;
 
         mainController = MainController.getInstance();
         environment = mainController.getEnvironment();
         obstacles = new ArrayList<>();
         robots = new ArrayList<>();
 
-
-        /*try {
-            Line2D.Double[] obstaclesArr = environment.getObstacles();
-            if (obstaclesArr != null) {
-                for (Line2D.Double line : obstaclesArr) {
-                    if (line != null) {
-                        obstacles.add(line);
-                    }
-                }
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }*/
+        obstacles.addAll(environment.getObstacles());
 
         setScaling();
         drawEnvironment();
@@ -99,75 +91,47 @@ public class GUI extends Application {
      * Scales the environment to fit in the canvas
      */
     private void setScaling() {
-        double xMin = 50; // TODO
-        double xMax = -50;
-        double yMin = 50;
-        double yMax = -50;
-        for (Line2D.Double obstacle : obstacles) {
-            if (obstacle.x1 > xMax) {
-                xMax = obstacle.x1;
-            }
-            if (obstacle.x2 > xMax) {
-                xMax = obstacle.x2;
-            }
-            if (obstacle.x1 < xMin) {
-                xMin = obstacle.x1;
-            }
-            if (obstacle.x2 < xMin) {
-                xMin = obstacle.x2;
-            }
-            if (obstacle.y1 > yMax) {
-                yMax = obstacle.y1;
-            }
-            if (obstacle.y2 > yMax) {
-                yMax = obstacle.y2;
-            }
-            if (obstacle.y1 < yMin) {
-                yMin = obstacle.y1;
-            }
-            if (obstacle.y2 < yMin) {
-                yMin = obstacle.y2;
-            }
-        }
+        final float envW = mainController.getEnvironment().getWidth() + 1;
+        final float envH = mainController.getEnvironment().getHeight() + 1;
 
-        final float envW = (float) (xMax - xMin);
-        final float envH = (float) (yMax - yMin);
+        System.out.println("Environment: envW: " + envW + ", envH: " + envH);
 
         scaleX = Math.abs(w / envW);
         scaleY = Math.abs(h / envH);
+
+        System.out.println("Scaling: scaleX: " + scaleX + ", scaleY: " + scaleY);
     }
 
     /**
      * Draws the environment
      */
     private void drawEnvironment() {
-        // TODO draw from environment
-
-        // The environment from the mission
-        // TODO remove
-        gc.setFill(Color.BLACK);
         gc.clearRect(0, 0, w, h);
-        // Center +
-        gc.fillRect(w / 2 - 1, w / 8 - 1 + w / 4, 2, w / 4);
-        gc.fillRect(w / 8 - 1 + w / 4, w / 2 - 1, w / 4, 2);
 
-        // Top and bottom lines
-        gc.fillRect(w / 8 - 1, w / 8 - 1, w - (w / 4), 2);
-        gc.fillRect(w / 8 - 1, (w * 7) / 8 - 1, w - (w / 4), 2);
+        for (Obstacle o : obstacles) {
+            java.awt.Color awtColor = o.color;
+            int r = awtColor.getRed();
+            int g = awtColor.getGreen();
+            int b = awtColor.getBlue();
+            int a = awtColor.getAlpha();
+            double opacity = a / 255.0;
 
-        // Side lines
-        gc.fillRect(w / 8 - 1, w / 8 - 1, 2, w / 8);
-        gc.fillRect(w / 8 - 1, (w * 6) / 8 - 1, 2, w / 8);
-        gc.fillRect((w * 7) / 8 - 1, w / 8 - 1, 2, w / 8);
-        gc.fillRect((w * 7) / 8 - 1, (w * 6) / 8 - 1, 2, w / 8);
+            javafx.scene.paint.Color fxColor = javafx.scene.paint.Color.rgb(r, g, b, opacity);
+            gc.setFill(fxColor);
 
-        // |- shapes
-        gc.fillRect(w / 8 - 1, w / 8 - 1 + w / 4, 2, w / 4);
-        gc.fillRect((w * 7) / 8 - 1, w / 8 - 1 + w / 4, 2, w / 4);
-        gc.fillRect(w / 8 - 1, w / 2 - 1, w / 8 - 1, 2);
-        gc.fillRect((w * 6) / 8 - 1, w / 2 - 1, w / 8 - 1, 2);
-        gc.fillRect(w / 2 - 1, w / 8 - 1, 2, w / 8 - 1);
-        gc.fillRect(w / 2 - 1, (w * 6) / 8 - 1, 2, w / 8 - 1);
+            float width = 5;
+            float height = 5;
+            float x = halfX + scaleX(o.x) - width / 2f;
+            float y = halfY + scaleY(o.y) - height / 2f;
+
+            if (o.horizontal) {
+                width = scaleX(o.length);
+            } else {
+                height = scaleY(o.length);
+            }
+
+            gc.fillRect(x, y, width, height);
+        }
     }
 
     private void setClickListeners() {
@@ -219,7 +183,8 @@ public class GUI extends Application {
         int xPos = (int) e.getX();
         int yPos = (int) e.getY();
         for (IControllableRover r : robots) {
-            Rectangle rect = new Rectangle((int) scaleX(r.getJavaPosition().x) - 5, (int) scaleY(r.getJavaPosition().y) - 5, 10, 10);
+            Rectangle rect = new Rectangle((int) (halfX + scaleX(r.getJavaPosition().x) - 5),
+                    (int) (halfY + scaleY(r.getJavaPosition().y) - 5), 10, 10);
             if (rect.contains(xPos, yPos)) {
                 updateInfo(r);
                 break;
@@ -270,12 +235,10 @@ public class GUI extends Application {
         drawEnvironment();
         List<IControllableRover> roverList = mainController.getRoverList();
         for (IControllableRover r : roverList) {
-            final float halfX = w / 2.0f;
-            final float halfY = h / 2.0f;
             final float x = halfX + scaleX(r.getJavaPosition().getX()) - 5;
             final float y = halfY + scaleY(r.getJavaPosition().getY()) - 5;
             gc.setFill(Color.GREEN);
-            gc.fillRect(x, y, 10, 10); // Draw
+            gc.fillOval(x, y, 15, 15); // Draw
 
             if (!robots.contains(r)) {
                 try {

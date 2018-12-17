@@ -33,13 +33,13 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return "Robot " + this.getName();
     }
 
-	@Override
-	public void setMission(Mission mission) {
-		this.mission = mission;
-		if (mission != null) {
-			setDestination(mission.getNextPoint());
-		}
-	}
+    @Override
+    public void setMission(Mission mission) {
+        this.mission = mission;
+        if (mission != null) {
+            setDestination(mission.getNextPoint());
+        }
+    }
 
     @Override
     public Mission getMission() {
@@ -53,22 +53,22 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return super.getPosition();
     }
 
-	public void update() {
-		if (mission != null) {
-			if (this.isAtPosition(destination)) {
-				Point2f newPoint = mission.getNextPoint();
-				if (newPoint != null) {
-					setDestination(newPoint);
-					start();
-				}
-			}
-		}
-	}
+    public void update() {
+        if (mission != null) {
+            if (this.isAtPosition(destination)) {
+                Point2f newPoint = mission.getNextPoint();
+                if (newPoint != null) {
+                    setDestination(newPoint);
+                    start();
+                }
+            }
+        }
+    }
 
-	public Point2f getJavaPosition() {
-		Point point = super.getPosition();
-		return new Point2f((float) point.getX(), (float) point.getZ());
-	}
+    public Point2f getJavaPosition() {
+        Point point = super.getPosition();
+        return new Point2f((float) point.getX(), (float) point.getZ());
+    }
 
     public /* Status */void getStatus() {
         // TODO Auto-generated method stub
