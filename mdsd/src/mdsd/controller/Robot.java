@@ -8,6 +8,7 @@ import project.Point;
 
 import javax.vecmath.Point2f;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Robot extends AbstractRobotSimulator implements IControllableRover {
     private int id;
@@ -16,16 +17,23 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private Point2f[] path;
     private ArrayList<Observer> observers;
     private Point destination;
-    private Area currentRoom;
+    private List<Area> currentRooms;
+    private Environment environment;
+    private boolean stopped;
 
-    public Robot(Point position, String name) {
+    public Robot(Point position, String name, Environment environment) {
         super(position, name);
         this.destination = position;
-        id = idCount++;
+        this.environment = environment;
+        currentRooms = new ArrayList<>();
+        stopped = false;
+        synchronized (this) {
+            id = idCount++;
+        }
     }
 
-    public Robot(Point2f position, String name) {
-        this(new project.Point(position.getX(), position.getY()), name);
+    public Robot(Point2f position, String name, Environment environment) {
+        this(new project.Point(position.getX(), position.getY()), name, environment);
     }
 
     @Override
@@ -43,13 +51,11 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     @Override
     public Mission getMission() {
-        // TODO Auto-generated method stub
-        return null;
+        return mission;
     }
 
     @Override
     public Point getPosition() {
-        // TODO Auto-generated method stub
         return super.getPosition();
     }
 
@@ -65,6 +71,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         }
     }
 
+    @Override
     public Point2f getJavaPosition() {
         Point point = super.getPosition();
         return new Point2f((float) point.getX(), (float) point.getZ());
@@ -77,11 +84,16 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     @Override
     public void start() {
+        stopped = false;
         setDestination(destination);
     }
 
+    /**
+     * Stops the rover until start() is called
+     */
     @Override
     public void stop() {
+        stopped = true;
         setDestination(getPosition());
     }
 
@@ -123,24 +135,63 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null && obj instanceof Robot) {
+        if (obj instanceof Robot) {
             Robot r2 = (Robot) obj;
             return this.id == r2.id;
         }
         return false;
     }
 
-    public Environment inEnvironment;
-
-    public Environment getEnvironment() {
-        return this.inEnvironment;
+    @Override
+    public List<Area> getRooms() {
+        return currentRooms;
     }
 
-    public void setRoom(Area newRoom) {
-        currentRoom = newRoom;
-    }
+    @Override
+    public void run() {
+        new Thread(() -> {
+            while (true) {
+                update();
+                Point2f roverPos = getJavaPosition();
+                List<Area> lastRooms = new ArrayList<>(currentRooms);
+                boolean newRoom = false;
 
-    public Area getRoom() {
-        return currentRoom;
+                for (Area area : environment.getAreas()) { // Check all areas if a new has been entered or left
+                    if (area.contains(roverPos)) {
+                        if (!lastRooms.contains(area)) {
+                            // Entered a new room
+                            currentRooms.add(area);
+                            newRoom = true;
+                        }
+                    } else {
+                        if (lastRooms.contains(area)) {
+                            // Left a room
+                            currentRooms.remove(area);
+                        }
+                    }
+                }
+                if (newRoom) { // If entered a new room
+                    setDestination(getPosition()); // Stop without setting the stopped boolean
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    while (stopped) { // If the stop button was pressed in the GUI, wait until start is pressed
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    start();
+                }
+                try {
+                    Thread.sleep(16);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 }

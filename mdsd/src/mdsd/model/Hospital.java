@@ -123,11 +123,10 @@ public class Hospital extends Environment {
         super.addVerticalWall(0f, 6.0f, 4.0f, c2);
         super.addVerticalWall(0f, -6.0f, -4.0f, c2);
 
-
-        Robot rover1 = new Robot(new Point(5, -5), "Rover 1");
-        Robot rover2 = new Robot(new Point(5, 5), "Rover 2");
-        Robot rover3 = new Robot(new Point(-5, 5), "Rover 3");
-        Robot rover4 = new Robot(new Point(-5, -5), "Rover 4");
+        Robot rover1 = new Robot(new Point(5, -5), "Rover 1", this);
+        Robot rover2 = new Robot(new Point(5, 5), "Rover 2", this);
+        Robot rover3 = new Robot(new Point(-5, 5), "Rover 3", this);
+        Robot rover4 = new Robot(new Point(-5, -5), "Rover 4", this);
         rovers.add(rover1);
         rovers.add(rover2);
         rovers.add(rover3);

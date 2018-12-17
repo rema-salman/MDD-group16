@@ -37,10 +37,10 @@ public class TestMission {
         AbstractWall roomWall6 = new HorizontalWall(0f, 4f, 6f, e, color);
 
         Set<Robot> robots = new HashSet<>();
-        Robot robot1 = new Robot(new Point(-6, -8), "Robot 1");
-        Robot robot2 = new Robot(new Point(-3, -8), "Robot 2");
-        Robot robot3 = new Robot(new Point(3, -8), "Robot 3");
-        Robot robot4 = new Robot(new Point(6, -8), "Robot 4");
+        Robot robot1 = new Robot(new Point(-6, -8), "Robot 1", null); // TODO add environment
+        Robot robot2 = new Robot(new Point(-3, -8), "Robot 2", null);
+        Robot robot3 = new Robot(new Point(3, -8), "Robot 3", null);
+        Robot robot4 = new Robot(new Point(6, -8), "Robot 4", null);
 
         robots.add(robot1);
         robots.add(robot2);
@@ -62,7 +62,6 @@ public class TestMission {
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot4.setDestination(new Point(7.5, 8));
@@ -73,7 +72,6 @@ public class TestMission {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot2.setDestination(new Point(3, -3));
@@ -84,7 +82,6 @@ public class TestMission {
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot2.setDestination(new Point(3, -8));
@@ -92,7 +89,6 @@ public class TestMission {
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot1.setDestination(new Point(-3, 8));
@@ -103,7 +99,6 @@ public class TestMission {
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot1.setDestination(new Point(-3, 3));

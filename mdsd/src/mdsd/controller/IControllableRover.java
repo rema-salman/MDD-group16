@@ -4,6 +4,7 @@ import mdsd.model.Area;
 import mdsd.model.Mission;
 
 import javax.vecmath.Point2f;
+import java.util.List;
 
 /**
  * A rover that can be controlled by an operator.
@@ -53,7 +54,7 @@ public interface IControllableRover extends Observable {
 
     int getId();
 
-    void setRoom(Area newArea);
+    List<Area> getRooms();
 
-    Area getRoom();
+    void run();
 }

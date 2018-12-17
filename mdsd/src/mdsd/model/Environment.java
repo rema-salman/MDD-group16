@@ -175,7 +175,11 @@ public class Environment extends EnvironmentDescription {
 
     public void addArea(Area area, boolean physical) {
         Color c = Color.GRAY;
-        physicalAreas.add(area);
+        if (physical) {
+            physicalAreas.add(area);
+        } else {
+            logicalAreas.add(area);
+        }
         for (Shape shape : area.getShapes()) {
             Rectangle2D bounds = shape.getBounds2D();
             float x = (float) bounds.getX();

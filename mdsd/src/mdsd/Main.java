@@ -70,18 +70,6 @@ public class Main {
         //        Application.launch(GUI.class);
         //    }}
 
-        //} else {
-        // Environment uniEnv = new University();
-        //        Set<Robot> uniEnvRobots = uniEnv.getRovers();
-        //
-        //        List<IControllableRover> rovers = new ArrayList<>(uniEnvRobots);
-        //        mc.addRovers(rovers);
-        //
-        //        AbstractSimulatorMonitor controller = new SimulatorMonitor(uniEnvRobots,  (EnvironmentDescription)uniEnv);
-        //
-        //        Application.launch(GUI.class);
-        //    }}
-
         //Temporary implementation of the graph used for navigation.
         Node nwCorner = new Node(new Point2f(-5, 5));
         Node neCorner = new Node(new Point2f(-5, -5));
@@ -127,24 +115,23 @@ public class Main {
 
         List<IControllableRover> r = mc.getRoverList();
         //nw
-        r.get(0).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(
-                GraphOfPoints.shortestPath(middle, nwCorner))));
+        r.get(0).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, nwCorner))));
         r.get(0).start();
 
         //se
-        r.get(1).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(
-                GraphOfPoints.shortestPath(middle, seCorner))));
+        r.get(1).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, seCorner))));
         r.get(1).start();
 
         //sw
-        r.get(2).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(
-                GraphOfPoints.shortestPath(middle, swCorner))));
+        r.get(2).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, swCorner))));
         r.get(2).start();
 
-        //This try catch is a temporary solution because of the crashes on some computers
+        for (IControllableRover rover : rovers) {
+            rover.run();
+        }
 
-        new Thread(() -> mc.loopForever()).start();
         try {
+            //This try catch is a temporary solution because of the crashes on some computers
             Application.launch(GUI.class);
         } catch (Exception e) {
             e.printStackTrace();

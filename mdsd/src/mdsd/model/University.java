@@ -84,10 +84,10 @@ public class University extends Environment {
         }
 
         //adding the initial robots' positions inside the environment 
-        Robot rover1 = new Robot(new Point(2.5, -7), "Rover 1");
-        Robot rover2 = new Robot(new Point(2.5, 7), "Rover 2");
-        Robot rover3 = new Robot(new Point(-2.5, 7), "Rover 3");
-        Robot rover4 = new Robot(new Point(-2.5, -7), "Rover 4");
+        Robot rover1 = new Robot(new Point(2.5, -7), "Rover 1", this);
+        Robot rover2 = new Robot(new Point(2.5, 7), "Rover 2", this);
+        Robot rover3 = new Robot(new Point(-2.5, 7), "Rover 3", this);
+        Robot rover4 = new Robot(new Point(-2.5, -7), "Rover 4", this);
         rovers.add(rover1);
         rovers.add(rover2);
         rovers.add(rover3);

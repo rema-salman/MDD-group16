@@ -26,11 +26,16 @@ public class Area extends Polygon {
     Set<Point2f> areaShapes;
 
     private int reward;
+    private static int idCount = 0;
+    private final int id;
 
     public Area(List<Shape> shapes, List<Shape> antiShapes, int reward) {
         this.shapes = shapes;
         this.antiShapes = antiShapes;
         this.reward = reward;
+        synchronized (this) {
+            id = idCount++;
+        }
     }
 
     public Area(List<Shape> shapes, List<Shape> antiShapes) {
@@ -44,6 +49,9 @@ public class Area extends Polygon {
         }
         this.reward = reward;
         this.shapes = new ArrayList<>();
+        synchronized (this) {
+            id = idCount++;
+        }
     }
 
     public Area(Set<Point2f> areaShapes) {
@@ -88,5 +96,13 @@ public class Area extends Polygon {
 
     public int getReward() {
         return reward;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Area) {
+            return ((Area) obj).id == this.id;
+        }
+        return false;
     }
 }

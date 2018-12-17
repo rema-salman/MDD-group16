@@ -47,16 +47,18 @@ public class RewardSystem implements ScoreCalculator, Runnable {
 
             boolean changeProcedure = false;
             for (IControllableRover rover : rovers) {
-                Area roverArea = rover.getRoom();
-                if (activeProcedure == procedureA) {
-                    if (logicalAreas.contains(roverArea)) {
-                        changeProcedure = true;
-                        break;
-                    }
-                } else {
-                    if (physicalAreas.contains(roverArea)) {
-                        changeProcedure = true;
-                        break;
+                List<Area> roverAreas = rover.getRooms();
+                for (Area area : roverAreas) {
+                    if (activeProcedure == procedureA) {
+                        if (logicalAreas.contains(area)) {
+                            changeProcedure = true;
+                            break;
+                        }
+                    } else {
+                        if (physicalAreas.contains(area)) {
+                            changeProcedure = true;
+                            break;
+                        }
                     }
                 }
             }

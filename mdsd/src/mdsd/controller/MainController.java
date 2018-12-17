@@ -3,7 +3,6 @@ package mdsd.controller;
 import mdsd.model.Area;
 import mdsd.model.Environment;
 
-import javax.vecmath.Point2f;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +15,7 @@ public class MainController implements Observer {
     private static MainController mainController = null;
 
     private MainController() {
-        this.rovers = new HashSet<IControllableRover>();
+        this.rovers = new HashSet<>();
         this.environment = new Environment();
     }
 
@@ -31,12 +30,11 @@ public class MainController implements Observer {
         this.environment = environment;
     }
 
-    /**
+    /*
      * Main loop for the MainController.
      */
-    public void loopForever() {
+    /*public void loopForever() {
         try {
-
             while (true) {
                 // Update rover areas
                 for (IControllableRover rover : rovers) {
@@ -52,7 +50,6 @@ public class MainController implements Observer {
                                     try {
                                         Thread.sleep(2000);
                                     } catch (InterruptedException e) {
-                                        // TODO Auto-generated catch block
                                         e.printStackTrace();
                                     } finally {
                                         rover.start();
@@ -72,7 +69,7 @@ public class MainController implements Observer {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     public void addRovers(Set<IControllableRover> rovers) {
         this.rovers.addAll(rovers);
