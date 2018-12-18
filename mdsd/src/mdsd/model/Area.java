@@ -1,11 +1,14 @@
 package mdsd.model;
 
+import mdsd.controller.IControllableRover;
+
 import javax.vecmath.Point2f;
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 @SuppressWarnings("serial")
 public class Area extends Polygon {
@@ -29,10 +32,16 @@ public class Area extends Polygon {
     private static int idCount = 0;
     private final int id;
 
+    /**
+     * A thread safe FIFO queue for the rovers when they try to enter the area
+     */
+    private final ConcurrentLinkedQueue<IControllableRover> queueToEnter;
+
     public Area(List<Shape> shapes, List<Shape> antiShapes, int reward) {
         this.shapes = shapes;
         this.antiShapes = antiShapes;
         this.reward = reward;
+        queueToEnter = new ConcurrentLinkedQueue<>();
         synchronized (this) {
             id = idCount++;
         }
@@ -49,6 +58,7 @@ public class Area extends Polygon {
         }
         this.reward = reward;
         this.shapes = new ArrayList<>();
+        queueToEnter = new ConcurrentLinkedQueue<>();
         synchronized (this) {
             id = idCount++;
         }
@@ -96,6 +106,34 @@ public class Area extends Polygon {
 
     public int getReward() {
         return reward;
+    }
+
+    /**
+     * Enters the current area
+     *
+     * @param rover the rover to enter
+     */
+    public void enter(IControllableRover rover) {
+        queueToEnter.add(rover);
+    }
+
+    /**
+     * Leaves the current area
+     *
+     * @param rover the rover to leave
+     */
+    public void leave(IControllableRover rover) {
+        queueToEnter.remove(rover);
+    }
+
+    /**
+     * Checks if the given rover can enter the area
+     *
+     * @param rover the rover to check
+     * @return true if no other rover is in the area
+     */
+    public synchronized boolean canEnter(IControllableRover rover) {
+        return rover.equals(queueToEnter.peek());
     }
 
     @Override
