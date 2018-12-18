@@ -155,18 +155,27 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                 Point2f roverPos = getJavaPosition();
                 List<Area> lastRooms = new ArrayList<>(currentRooms);
                 boolean newRoom = false;
+                List<Area> newAreas = new ArrayList<>();
 
                 for (Area area : environment.getAreas()) { // Check all areas if a new has been entered or left
                     if (area.contains(roverPos)) {
                         if (!lastRooms.contains(area)) {
                             // Entered a new room
                             currentRooms.add(area);
+                            area.enter(this);
+                            for (Area area2 : environment.getAreas()) {
+                                if (!area2.equals(area)) { // Leave all old areas
+                                    area2.leave(this);
+                                }
+                            }
                             newRoom = true;
+                            newAreas.add(area);
                         }
                     } else {
                         if (lastRooms.contains(area)) {
                             // Left a room
                             currentRooms.remove(area);
+                            area.leave(this);
                         }
                     }
                 }
@@ -182,6 +191,16 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                             Thread.sleep(20);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
+                        }
+                    }
+                    while (!newAreas.isEmpty()) { // Wait for all the new areas to be empty of rovers
+                        newAreas.removeIf(area -> area.canEnter(this));
+                        if (!newAreas.isEmpty()) {
+                            try {
+                                Thread.sleep(200);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     start();
