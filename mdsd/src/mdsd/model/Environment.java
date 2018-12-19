@@ -5,16 +5,14 @@ import simbad.sim.*;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Environment extends EnvironmentDescription {
     //private List<Division> divisions;  // Should divisions be part of Environment or not?
     private List<Area> physicalAreas;  // E.g. rooms
     private List<Area> logicalAreas;   // E.g. the coverage of a Wi-Fi router
     private List<Obstacle> obstacles;  // E.g. walls
-    Set<IControllableRover> rovers;
+    List<IControllableRover> rovers;
     private List<Mission> missions;
 
     /**
@@ -24,13 +22,12 @@ public class Environment extends EnvironmentDescription {
      * @param logicalAreas  Describes e.g. the coverage of a Wi-Fi router.
      * @param obstacles     Describes e.g. walls.
      */
-    public Environment(List<Area> physicalAreas, List<Area> logicalAreas,
-                       List<Obstacle> obstacles) {
+    public Environment(List<Area> physicalAreas, List<Area> logicalAreas, List<Obstacle> obstacles) {
         super();
         this.physicalAreas = physicalAreas;
         this.logicalAreas = logicalAreas;
         this.obstacles = obstacles;
-        this.rovers = new HashSet<>();
+        this.rovers = new ArrayList<>();
         this.missions = new ArrayList<>();
     }
 
@@ -42,7 +39,7 @@ public class Environment extends EnvironmentDescription {
         physicalAreas = new ArrayList<>();
         logicalAreas = new ArrayList<>();
         obstacles = new ArrayList<>();
-        rovers = new HashSet<>();
+        rovers = new ArrayList<>();
         this.missions = new ArrayList<>();
     }
 
@@ -96,7 +93,7 @@ public class Environment extends EnvironmentDescription {
         return areas;
     }
 
-    public Set<IControllableRover> getRovers() {
+    public List<IControllableRover> getRovers() {
         return rovers;
     }
 

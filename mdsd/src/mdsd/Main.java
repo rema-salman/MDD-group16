@@ -27,7 +27,7 @@ public class Main {
         // getUserChoiceOfEnv can be a boolean flag according to a checkbox or something
         //        if (mc.getUserChoiceOfEnv) {
         Hospital hospitalEnv = new Hospital();
-        Set<IControllableRover> rovers = hospitalEnv.getRovers();
+        List<IControllableRover> rovers = hospitalEnv.getRovers();
         mc.addRovers(rovers);
         mc.setEnvironment(hospitalEnv);
 
@@ -35,8 +35,7 @@ public class Main {
         for (IControllableRover rover : rovers) {
             robots.add((Robot) rover);
         }
-        AbstractSimulatorMonitor<Robot> controller = new SimulatorMonitor(robots,
-                hospitalEnv);
+        AbstractSimulatorMonitor<Robot> controller = new SimulatorMonitor(robots, hospitalEnv);
 
         List<List<Area>> areasA = new ArrayList<>();
         List<Area> consultingRoomArea = new ArrayList<>();
@@ -71,13 +70,13 @@ public class Main {
         //    }}
 
         //Temporary implementation of the graph used for navigation.
-        Node nwCorner = new Node(new Point2f(-5, 5));
-        Node neCorner = new Node(new Point2f(-5, -5));
-        Node seCorner = new Node(new Point2f(5, -5));
-        Node swCorner = new Node(new Point2f(5, 5));
+        Node nwCorner = new Node(new Point2f(-5, -5));
+        Node neCorner = new Node(new Point2f(5, -5));
+        Node seCorner = new Node(new Point2f(5, 5));
+        Node swCorner = new Node(new Point2f(-5, 5));
 
-        Node nwIntersect = new Node(new Point2f(-4, 4));
-        Node neIntersect = new Node(new Point2f(-4, -4));
+        Node nwIntersect = new Node(new Point2f(-4, -4));
+        Node neIntersect = new Node(new Point2f(4, -4));
         Node seIntersect = new Node(new Point2f(4, -4));
         Node swIntersect = new Node(new Point2f(4, 4));
 
@@ -115,13 +114,16 @@ public class Main {
 
         List<IControllableRover> r = mc.getRoverList();
         //nw
-        r.get(0).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, nwCorner))));
+        r.get(0).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, neCorner))));
 
         //se
         r.get(1).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, seCorner))));
 
         //sw
         r.get(2).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, swCorner))));
+
+        //ne
+        r.get(3).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, nwCorner))));
 
         for (IControllableRover rover : rovers) {
             rover.run();
@@ -134,9 +136,5 @@ public class Main {
             e.printStackTrace();
             System.out.println("if javafx error: this is sort of normal");
         }
-        //ne
-//		r.get(3).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(		GraphOfPoints.shortestPath(neCorner, seCorner))));
-        //r.get(3).start();
-
     }
 }

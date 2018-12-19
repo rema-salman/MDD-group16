@@ -5,15 +5,13 @@ import mdsd.model.Area;
 import javax.vecmath.Point2f;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class Procedure {
-    private Set<IControllableRover> rovers;
+    private List<IControllableRover> rovers;
     private List<List<Area>> areaLists;
     //private int[] rewards;
 
-    public Procedure(Set<IControllableRover> rovers,
-                     List<List<Area>> areaLists) {//, int[] rewards) {
+    public Procedure(List<IControllableRover> rovers, List<List<Area>> areaLists) {//, int[] rewards) {
         this.rovers = rovers;
         this.areaLists = new ArrayList<>();
         this.areaLists.addAll(areaLists);

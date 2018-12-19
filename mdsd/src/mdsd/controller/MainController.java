@@ -4,18 +4,16 @@ import mdsd.model.Area;
 import mdsd.model.Environment;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class MainController implements Observer {
-    private Set<IControllableRover> rovers;
+    private List<IControllableRover> rovers;
     private Environment environment;
     private ScoreCalculator scoreCalculator;
     private static MainController mainController = null;
 
     private MainController() {
-        this.rovers = new HashSet<>();
+        this.rovers = new ArrayList<>();
         this.environment = new Environment();
     }
 
@@ -71,7 +69,7 @@ public class MainController implements Observer {
         }
     }*/
 
-    public void addRovers(Set<IControllableRover> rovers) {
+    public void addRovers(List<IControllableRover> rovers) {
         this.rovers.addAll(rovers);
     }
 

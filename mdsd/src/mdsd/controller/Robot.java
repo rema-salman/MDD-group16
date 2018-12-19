@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Robot extends AbstractRobotSimulator implements IControllableRover {
-    private int id;
+    private final int id;
     private static int idCount = 0;
     private Mission mission;
     private Point2f[] path;
@@ -29,10 +29,10 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         this.environment = environment;
         currentRooms = new ArrayList<>();
         stopped = false;
-        waitingForEnter = new AtomicBoolean(false);
         synchronized (this) {
-            id = idCount++;
+            this.id = idCount++;
         }
+        waitingForEnter = new AtomicBoolean(false);
     }
 
     public Robot(Point2f position, String name, Environment environment) {

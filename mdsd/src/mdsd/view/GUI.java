@@ -337,10 +337,10 @@ public class GUI extends Application {
 
         Platform.runLater(() -> {
                     listViewRobots.getItems().add(root);
-            Label id = (Label) root.lookup("#robotId");
-            Label name = (Label) root.lookup("#robotName");
-            id.setText(String.valueOf(robot.getId()));
-            name.setText(robot.toString());
+                    Label id = (Label) root.lookup("#robotId");
+                    Label name = (Label) root.lookup("#robotName");
+                    id.setText(String.valueOf(robot.getId()));
+                    name.setText(robot.toString());
                 }
         );
     }
