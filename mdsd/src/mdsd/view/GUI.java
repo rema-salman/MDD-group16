@@ -17,7 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mdsd.controller.IControllableRover;
 import mdsd.controller.MainController;
-import mdsd.model.Environment;
+import mdsd.controller.Robot;
+import mdsd.model.Area;
+import mdsd.model.Mission;
 import mdsd.model.Obstacle;
 
 import javax.vecmath.Point2f;
@@ -41,17 +43,17 @@ public class GUI extends Application {
     private ListView<VBox> listViewRobotInfo;
     @FXML
     private Label rewardPoints;
+    private VBox vBoxDetails;
 
     private GraphicsContext gc;
     private ArrayList<IControllableRover> robots;
-    private Environment environment;
-    private List<Obstacle> obstacles;
     private float w;
     private float h;
     private float halfX;
     private float halfY;
     private float scaleX;
     private float scaleY;
+    private int selectedRover;
 
     private static MainController mainController = null;
 
@@ -69,17 +71,16 @@ public class GUI extends Application {
         primaryStage.show();
 
         gc = canvasMap.getGraphicsContext2D();
+        gc.setStroke(Color.rgb(0, 0, 0, 0.4));
+        gc.setLineWidth(0.3);
         w = canvasMap.widthProperty().floatValue(); // 460
         h = canvasMap.heightProperty().floatValue(); // 412
         halfX = w / 2f;
         halfY = h / 2f;
 
         mainController = MainController.getInstance();
-        environment = mainController.getEnvironment();
-        obstacles = new ArrayList<>();
         robots = new ArrayList<>();
-
-        obstacles.addAll(environment.getObstacles());
+        selectedRover = -1;
 
         setScaling();
         drawEnvironment();
@@ -108,7 +109,12 @@ public class GUI extends Application {
     private void drawEnvironment() {
         gc.clearRect(0, 0, w, h);
 
-        for (Obstacle o : obstacles) {
+        gc.setFill(Color.rgb(120, 0, 0, 0.1));
+        drawArea(mainController.getEnvironment().getPhysicalAreas());
+        gc.setFill(Color.rgb(0, 120, 0, 0.1));
+        drawArea(mainController.getEnvironment().getLogicalAreas());
+
+        for (Obstacle o : mainController.getEnvironment().getObstacles()) {
             java.awt.Color awtColor = o.color;
             int r = awtColor.getRed();
             int g = awtColor.getGreen();
@@ -134,6 +140,70 @@ public class GUI extends Application {
         }
     }
 
+    private void drawArea(List<Area> areas) {
+        for (Area area : areas) {
+            List<Point2f> areaPoints = area.getAreaPoints();
+
+            double[] xPoints = new double[areaPoints.size()];
+            double[] yPoints = new double[areaPoints.size()];
+
+            for (int i = 0; i < xPoints.length; i++) {
+                xPoints[i] = halfX + scaleX(areaPoints.get(i).x);
+                yPoints[i] = halfY + scaleY(areaPoints.get(i).y);
+                if (i > 0) {
+                    gc.strokeLine(xPoints[i - 1], yPoints[i - 1], xPoints[i], yPoints[i]);
+                }
+            }
+            gc.strokeLine(xPoints[xPoints.length - 1], yPoints[xPoints.length - 1], xPoints[0], yPoints[0]);
+            gc.fillPolygon(xPoints, yPoints, xPoints.length);
+        }
+    }
+
+    /**
+     * Redraw the map and robot positions
+     */
+    private void updateGUI() {
+        drawEnvironment();
+        List<IControllableRover> roverList = mainController.getRoverList();
+        for (int i = 0; i < roverList.size(); i++) {
+            IControllableRover r = roverList.get(i);
+            final float width = 15f;
+            final float x = halfX + scaleX(r.getJavaPosition().getX()) - width / 2;
+            final float y = halfY + scaleY(r.getJavaPosition().getY()) - width / 2;
+
+            if (r.getStatus().stopped) {
+                gc.setFill(Color.INDIANRED);
+            } else {
+                gc.setFill(Color.GREEN);
+            }
+
+            gc.fillOval(x, y, width, width);
+
+            if (selectedRover == i) {
+                gc.setFill(Color.CYAN);
+                gc.fillOval(x + 2.5, y + 2.5, 10, 10);
+                updateInfo(r.getStatus());
+            }
+
+            if (!robots.contains(r)) {
+                try {
+                    addRobot(r);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        for (int i = 0; i < robots.size(); i++) {
+            if (!roverList.contains(robots.get(i))) {
+                removeRobot(robots.get(i), i);
+            }
+        }
+
+        int score = mainController.getScore();
+        Platform.runLater(() -> rewardPoints.setText(String.valueOf(score)));
+    }
+
     private void setClickListeners() {
         btnStartRobots.setOnAction(event -> startRobots());
         btnStopRobots.setOnAction(even -> stopRobots());
@@ -149,29 +219,55 @@ public class GUI extends Application {
         if (itemIndex == null) {
             return;
         }
-        IControllableRover robot = robots.get(itemIndex);
-
-        updateInfo(robot);
+        selectedRover = itemIndex;
     }
 
     /**
      * If a robot was clicked, show its details/status
      *
-     * @param robot the clicked robot
+     * @param robotStatus the status of the clicked robot
      */
-    private void updateInfo(IControllableRover robot) {
-        listViewRobotInfo.getItems().clear();
-        Point2f point = robot.getJavaPosition();
-        if (point == null) {
-            point = new Point2f(0, 0);
+    private void updateInfo(Robot.Status robotStatus) {
+        if (listViewRobotInfo.getItems().size() == 0) {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/RobotListItemDetails.fxml"));
+            try {
+                vBoxDetails = loader.load();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
         }
-        VBox vBox = new VBox(
-                new Label("Id: " + robot.getId()),
-                new Label("Name: " + robot.toString()),
-                new Label("Position: " + (int) point.x + ", " + (int) point.y));
-        // TODO
 
-        listViewRobotInfo.getItems().add(vBox);
+        Platform.runLater(() -> {
+                    if (listViewRobotInfo.getItems().size() == 0) {
+                        listViewRobotInfo.getItems().add(vBoxDetails);
+                    }
+                    Label id = (Label) vBoxDetails.lookup("#robotId");
+                    Label name = (Label) vBoxDetails.lookup("#robotName");
+                    Label position = (Label) vBoxDetails.lookup("#robotPosition");
+                    Label missionPoints = (Label) vBoxDetails.lookup("#robotMPoints");
+                    Label destination = (Label) vBoxDetails.lookup("#robotDestination");
+                    Label stopped = (Label) vBoxDetails.lookup("#robotStopped");
+                    id.setText(String.valueOf(robotStatus.id));
+                    name.setText(robotStatus.name);
+                    final Point2f point = robotStatus.position;
+                    position.setText(point.x + ", " + point.y);
+                    Mission mission = robotStatus.mission;
+                    Point2f dest = robotStatus.destination;
+                    if (mission != null) {
+                        missionPoints.setText(String.valueOf(mission.getNumberOfPoints()));
+                    } else {
+                        missionPoints.setText("-");
+
+                    }
+                    if (dest != null) {
+                        destination.setText(dest.x + ", " + dest.y);
+                    } else {
+                        destination.setText("-");
+                    }
+                    stopped.setText(String.valueOf(robotStatus.stopped));
+                }
+        );
     }
 
     /**
@@ -186,7 +282,7 @@ public class GUI extends Application {
             Rectangle rect = new Rectangle((int) (halfX + scaleX(r.getJavaPosition().x) - 5),
                     (int) (halfY + scaleY(r.getJavaPosition().y) - 5), 10, 10);
             if (rect.contains(xPos, yPos)) {
-                updateInfo(r);
+                selectedRover = robots.indexOf(r);
                 break;
             }
         }
@@ -229,37 +325,6 @@ public class GUI extends Application {
     }
 
     /**
-     * Redraw the map and robot positions
-     */
-    private void updateGUI() {
-        drawEnvironment();
-        List<IControllableRover> roverList = mainController.getRoverList();
-        for (IControllableRover r : roverList) {
-            final float x = halfX + scaleX(r.getJavaPosition().getX()) - 5;
-            final float y = halfY + scaleY(r.getJavaPosition().getY()) - 5;
-            gc.setFill(Color.GREEN);
-            gc.fillOval(x, y, 15, 15); // Draw
-
-            if (!robots.contains(r)) {
-                try {
-                    addRobot(r);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        for (int i = 0; i < robots.size(); i++) {
-            if (!roverList.contains(robots.get(i))) {
-                removeRobot(robots.get(i), i);
-            }
-        }
-
-        int score = mainController.getScore();
-        Platform.runLater(() -> rewardPoints.setText(String.valueOf(score)));
-    }
-
-    /**
      * Adds a robot to the list of robots
      *
      * @param robot the robot to add
@@ -272,14 +337,10 @@ public class GUI extends Application {
 
         Platform.runLater(() -> {
                     listViewRobots.getItems().add(root);
-            Label id = (Label) root.lookup("#robotId");
-                    Label position = (Label) root.lookup("#robotPosition");
-            id.setText(String.valueOf(robot.getId()));
-            Point2f point = robot.getJavaPosition();
-            if (point != null) {
-                position.setText(point.x + ", " + point.y);
-            }
-
+                    Label id = (Label) root.lookup("#robotId");
+                    Label name = (Label) root.lookup("#robotName");
+                    id.setText(String.valueOf(robot.getId()));
+                    name.setText(robot.toString());
                 }
         );
     }

@@ -4,18 +4,15 @@ import mdsd.controller.IControllableRover;
 import simbad.sim.*;
 
 import java.awt.*;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class Environment extends EnvironmentDescription {
     //private List<Division> divisions;  // Should divisions be part of Environment or not?
     private List<Area> physicalAreas;  // E.g. rooms
     private List<Area> logicalAreas;   // E.g. the coverage of a Wi-Fi router
     private List<Obstacle> obstacles;  // E.g. walls
-    Set<IControllableRover> rovers;
+    List<IControllableRover> rovers;
     private List<Mission> missions;
 
     /**
@@ -25,13 +22,12 @@ public class Environment extends EnvironmentDescription {
      * @param logicalAreas  Describes e.g. the coverage of a Wi-Fi router.
      * @param obstacles     Describes e.g. walls.
      */
-    public Environment(List<Area> physicalAreas, List<Area> logicalAreas,
-                       List<Obstacle> obstacles) {
+    public Environment(List<Area> physicalAreas, List<Area> logicalAreas, List<Obstacle> obstacles) {
         super();
         this.physicalAreas = physicalAreas;
         this.logicalAreas = logicalAreas;
         this.obstacles = obstacles;
-        this.rovers = new HashSet<>();
+        this.rovers = new ArrayList<>();
         this.missions = new ArrayList<>();
     }
 
@@ -43,7 +39,7 @@ public class Environment extends EnvironmentDescription {
         physicalAreas = new ArrayList<>();
         logicalAreas = new ArrayList<>();
         obstacles = new ArrayList<>();
-        rovers = new HashSet<>();
+        rovers = new ArrayList<>();
         this.missions = new ArrayList<>();
     }
 
@@ -66,14 +62,13 @@ public class Environment extends EnvironmentDescription {
     }
 
     private List<Area> getAreasCopy(List<Area> areas) {
-        List<Area> physicalAreasCopy = new ArrayList<>();
+        List<Area> areasCopy = new ArrayList<>();
 
         for (Area area : areas) {
-            physicalAreasCopy.add(new Area(area.getShapes(),
-                    area.getAntiShapes()));
+            areasCopy.add(new Area(area.getAreaPoints()));
         }
 
-        return physicalAreasCopy;
+        return areasCopy;
     }
 
     /**
@@ -98,7 +93,7 @@ public class Environment extends EnvironmentDescription {
         return areas;
     }
 
-    public Set<IControllableRover> getRovers() {
+    public List<IControllableRover> getRovers() {
         return rovers;
     }
 
@@ -180,7 +175,7 @@ public class Environment extends EnvironmentDescription {
         } else {
             logicalAreas.add(area);
         }
-        for (Shape shape : area.getShapes()) {
+        /*for (Shape shape : area.getShapes()) {
             Rectangle2D bounds = shape.getBounds2D();
             float x = (float) bounds.getX();
             float y = (float) bounds.getY();
@@ -193,7 +188,7 @@ public class Environment extends EnvironmentDescription {
                 addHorizontalBoundary(x, y, width, c);
                 addVerticalBoundary(x, y, height, c);
             }
-        }
+        }*/
     }
 
     public void addPhysicalArea(Area area) {
