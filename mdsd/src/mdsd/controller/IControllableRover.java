@@ -57,4 +57,7 @@ public interface IControllableRover extends Observable {
     List<Area> getRooms();
 
     void run();
+
+    Robot.Status getStatus();
+
 }

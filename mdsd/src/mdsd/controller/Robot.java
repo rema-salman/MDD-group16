@@ -38,7 +38,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     @Override
     public String toString() {
-        return "Robot " + this.getName();
+        return super.getName();
     }
 
     @Override
@@ -77,6 +77,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return new Point2f((float) point.getX(), (float) point.getZ());
     }
 
+    @Override
     public Status getStatus() {
         return new Status(this);
     }
@@ -213,23 +214,25 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         }).start();
     }
 
-    private class Status {
+    public class Status {
         public final int id;
+        public final String name;
         public final Mission mission;
-        public final ArrayList<Observer> observers;
-        public final Point destination;
-        public final List<Area> currentRooms;
-        public final Environment environment;
+        public final Point2f destination;
         public final boolean stopped;
+        public final Point2f position;
 
         private Status(Robot robot) {
             this.id = robot.id;
             this.mission = robot.mission;
-            this.observers = robot.observers;
-            this.destination = robot.destination;
-            this.currentRooms = robot.currentRooms;
-            this.environment = robot.environment;
+            if (robot.destination != null) {
+                this.destination = new Point2f((float) robot.destination.getX(), (float) robot.destination.getZ());
+            } else {
+                this.destination = null;
+            }
             this.stopped = robot.stopped;
+            this.position = robot.getJavaPosition();
+            this.name = robot.toString();
         }
     }
 
