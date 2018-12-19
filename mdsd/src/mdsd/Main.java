@@ -116,15 +116,12 @@ public class Main {
         List<IControllableRover> r = mc.getRoverList();
         //nw
         r.get(0).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, nwCorner))));
-        r.get(0).start();
 
         //se
         r.get(1).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, seCorner))));
-        r.get(1).start();
 
         //sw
         r.get(2).setMission(new Mission(GraphOfPoints.NodesWithCostToPointArray(GraphOfPoints.shortestPath(middle, swCorner))));
-        r.get(2).start();
 
         for (IControllableRover rover : rovers) {
             rover.run();
