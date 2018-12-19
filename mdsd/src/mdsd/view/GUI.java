@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import mdsd.controller.IControllableRover;
 import mdsd.controller.MainController;
-import mdsd.model.Environment;
+import mdsd.model.Area;
 import mdsd.model.Obstacle;
 
 import javax.vecmath.Point2f;
@@ -44,8 +44,6 @@ public class GUI extends Application {
 
     private GraphicsContext gc;
     private ArrayList<IControllableRover> robots;
-    private Environment environment;
-    private List<Obstacle> obstacles;
     private float w;
     private float h;
     private float halfX;
@@ -69,17 +67,15 @@ public class GUI extends Application {
         primaryStage.show();
 
         gc = canvasMap.getGraphicsContext2D();
+        gc.setStroke(Color.rgb(0, 0, 0, 0.4));
+        gc.setLineWidth(0.3);
         w = canvasMap.widthProperty().floatValue(); // 460
         h = canvasMap.heightProperty().floatValue(); // 412
         halfX = w / 2f;
         halfY = h / 2f;
 
         mainController = MainController.getInstance();
-        environment = mainController.getEnvironment();
-        obstacles = new ArrayList<>();
         robots = new ArrayList<>();
-
-        obstacles.addAll(environment.getObstacles());
 
         setScaling();
         drawEnvironment();
@@ -108,7 +104,12 @@ public class GUI extends Application {
     private void drawEnvironment() {
         gc.clearRect(0, 0, w, h);
 
-        for (Obstacle o : obstacles) {
+        gc.setFill(Color.rgb(120, 0, 0, 0.1));
+        drawArea(mainController.getEnvironment().getPhysicalAreas());
+        gc.setFill(Color.rgb(0, 120, 0, 0.1));
+        drawArea(mainController.getEnvironment().getLogicalAreas());
+
+        for (Obstacle o : mainController.getEnvironment().getObstacles()) {
             java.awt.Color awtColor = o.color;
             int r = awtColor.getRed();
             int g = awtColor.getGreen();
@@ -131,6 +132,25 @@ public class GUI extends Application {
             }
 
             gc.fillRect(x, y, width, height);
+        }
+    }
+
+    private void drawArea(List<Area> areas) {
+        for (Area area : areas) {
+            List<Point2f> areaPoints = area.getAreaPoints();
+
+            double[] xPoints = new double[areaPoints.size()];
+            double[] yPoints = new double[areaPoints.size()];
+
+            for (int i = 0; i < xPoints.length; i++) {
+                xPoints[i] = halfX + scaleX(areaPoints.get(i).x);
+                yPoints[i] = halfY + scaleY(areaPoints.get(i).y);
+                if (i > 0) {
+                    gc.strokeLine(xPoints[i - 1], yPoints[i - 1], xPoints[i], yPoints[i]);
+                }
+            }
+            gc.strokeLine(xPoints[xPoints.length - 1], yPoints[xPoints.length - 1], xPoints[0], yPoints[0]);
+            gc.fillPolygon(xPoints, yPoints, xPoints.length);
         }
     }
 

@@ -77,9 +77,8 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return new Point2f((float) point.getX(), (float) point.getZ());
     }
 
-    public /* Status */void getStatus() {
-        // TODO Auto-generated method stub
-        return /* null */;
+    public Status getStatus() {
+        return new Status(this);
     }
 
     @Override
@@ -213,4 +212,25 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
             }
         }).start();
     }
+
+    private class Status {
+        public final int id;
+        public final Mission mission;
+        public final ArrayList<Observer> observers;
+        public final Point destination;
+        public final List<Area> currentRooms;
+        public final Environment environment;
+        public final boolean stopped;
+
+        private Status(Robot robot) {
+            this.id = robot.id;
+            this.mission = robot.mission;
+            this.observers = robot.observers;
+            this.destination = robot.destination;
+            this.currentRooms = robot.currentRooms;
+            this.environment = robot.environment;
+            this.stopped = robot.stopped;
+        }
+    }
+
 }

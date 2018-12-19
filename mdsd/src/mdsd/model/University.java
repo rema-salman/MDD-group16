@@ -5,8 +5,8 @@ import project.Point;
 
 import javax.vecmath.Point2f;
 import java.awt.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class University extends Environment {
 
@@ -24,7 +24,7 @@ public class University extends Environment {
         Point2f p8 = new Point2f(5, 0);
         Point2f p9 = new Point2f(5, -5);
 
-        Set<Point2f> roomA = new HashSet<>();
+        List<Point2f> roomA = new ArrayList<>();
         roomA.add(p1);
         roomA.add(p2);
         roomA.add(p5);
@@ -32,7 +32,7 @@ public class University extends Environment {
         Area a1 = new Area(roomA);
         this.addArea(a1, true);
 
-        Set<Point2f> roomB = new HashSet<>();
+        List<Point2f> roomB = new ArrayList<>();
         roomB.add(p2);
         roomB.add(p3);
         roomB.add(p6);
@@ -40,7 +40,7 @@ public class University extends Environment {
         Area a2 = new Area(roomB);
         this.addArea(a2, true);
 
-        Set<Point2f> roomC = new HashSet<>();
+        List<Point2f> roomC = new ArrayList<>();
         roomC.add(p4);
         roomC.add(p5);
         roomC.add(p8);
@@ -48,7 +48,7 @@ public class University extends Environment {
         Area a3 = new Area(roomC);
         this.addArea(a3, true);
 
-        Set<Point2f> roomD = new HashSet<>();
+        List<Point2f> roomD = new ArrayList<>();
         roomD.add(p5);
         roomD.add(p6);
         roomD.add(p9);

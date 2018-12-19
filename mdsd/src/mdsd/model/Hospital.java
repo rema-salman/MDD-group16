@@ -5,8 +5,9 @@ import project.Point;
 
 import javax.vecmath.Point2f;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.*;
 
 public class Hospital extends Environment {
     private Area consultingRoom;
@@ -39,14 +40,14 @@ public class Hospital extends Environment {
         Point2f p15 = new Point2f(6, 0);
         Point2f p16 = new Point2f(6, -6);
 
-        Division surgeryDivision1 = new Division(new HashSet<>(Arrays.asList(
+        Division surgeryDivision1 = new Division(new ArrayList<>(Arrays.asList(
                 p1, p2, p3, p10, p9, p6, p5, p4, p8, p7)));
-        Division surgeryDivision2 = new Division(new HashSet<>(Arrays.asList(
+        Division surgeryDivision2 = new Division(new ArrayList<>(Arrays.asList(
                 p7, p8, p11, p12, p13, p9, p10, p16, p15, p14)));
-        Division emergencyDivision = new Division(new HashSet<>(Arrays.asList(
+        Division emergencyDivision = new Division(new ArrayList<>(Arrays.asList(
                 p4, p5, p6, p9, p13, p12, p11, p8)));
 
-        Set<Point2f> sRoom1 = new HashSet<>();
+        List<Point2f> sRoom1 = new ArrayList<>();
         sRoom1.add(p1);
         sRoom1.add(p2);
         sRoom1.add(p5);
@@ -58,47 +59,47 @@ public class Hospital extends Environment {
         this.addArea(surgeryRoom1, true);
         surgeryRooms.add(surgeryRoom1);
 
-        Set<Point2f> sRoom2 = new HashSet<>();
+        List<Point2f> sRoom2 = new ArrayList<>();
         sRoom2.add(p2);
         sRoom2.add(p3);
         sRoom2.add(p10);
         sRoom2.add(p9);
-        sRoom1.add(p6);
-        sRoom1.add(p5);
+        sRoom2.add(p6);
+        sRoom2.add(p5);
         Area surgeryRoom2 = new Area(sRoom2, 20);
         surgeryDivision1.addRoom(surgeryRoom2);
         this.addArea(surgeryRoom2, true);
         surgeryRooms.add(surgeryRoom2);
 
-        Set<Point2f> sRoom3 = new HashSet<>();
+        List<Point2f> sRoom3 = new ArrayList<>();
         sRoom3.add(p7);
         sRoom3.add(p8);
         sRoom3.add(p11);
         sRoom3.add(p12);
-        sRoom1.add(p15);
-        sRoom1.add(p14);
+        sRoom3.add(p15);
+        sRoom3.add(p14);
         Area surgeryRoom3 = new Area(sRoom3, 20);
         surgeryDivision2.addRoom(surgeryRoom3);
         this.addArea(surgeryRoom3, true);
         surgeryRooms.add(surgeryRoom3);
 
-        Set<Point2f> sRoom4 = new HashSet<>();
+        List<Point2f> sRoom4 = new ArrayList<>();
         sRoom4.add(p9);
         sRoom4.add(p10);
         sRoom4.add(p16);
         sRoom4.add(p15);
-        sRoom1.add(p12);
-        sRoom1.add(p13);
+        sRoom4.add(p12);
+        sRoom4.add(p13);
         Area surgeryRoom4 = new Area(sRoom4, 20);
         surgeryDivision2.addRoom(surgeryRoom4);
         this.addArea(surgeryRoom4, true);
         surgeryRooms.add(surgeryRoom4);
 
-        Set<Point2f> cRoom1 = new HashSet<>();
+        List<Point2f> cRoom1 = new ArrayList<>();
         cRoom1.add(p4);
         cRoom1.add(p6);
-        cRoom1.add(p11);
         cRoom1.add(p13);
+        cRoom1.add(p11);
         consultingRoom = new Area(cRoom1, 10);
         emergencyDivision.addRoom(consultingRoom);
         this.addArea(consultingRoom, true);
