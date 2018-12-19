@@ -50,6 +50,7 @@ public class GUI extends Application {
     private float halfY;
     private float scaleX;
     private float scaleY;
+    private int selectedRover;
 
     private static MainController mainController = null;
 
@@ -76,6 +77,7 @@ public class GUI extends Application {
 
         mainController = MainController.getInstance();
         robots = new ArrayList<>();
+        selectedRover = -1;
 
         setScaling();
         drawEnvironment();
@@ -170,6 +172,7 @@ public class GUI extends Application {
             return;
         }
         IControllableRover robot = robots.get(itemIndex);
+        selectedRover = itemIndex;
 
         updateInfo(robot);
     }
@@ -206,6 +209,7 @@ public class GUI extends Application {
             Rectangle rect = new Rectangle((int) (halfX + scaleX(r.getJavaPosition().x) - 5),
                     (int) (halfY + scaleY(r.getJavaPosition().y) - 5), 10, 10);
             if (rect.contains(xPos, yPos)) {
+                selectedRover = robots.indexOf(r);
                 updateInfo(r);
                 break;
             }
@@ -254,11 +258,19 @@ public class GUI extends Application {
     private void updateGUI() {
         drawEnvironment();
         List<IControllableRover> roverList = mainController.getRoverList();
-        for (IControllableRover r : roverList) {
-            final float x = halfX + scaleX(r.getJavaPosition().getX()) - 5;
-            final float y = halfY + scaleY(r.getJavaPosition().getY()) - 5;
+        for (int i = 0; i < roverList.size(); i++) {
+            IControllableRover r = roverList.get(i);
+            final float width = 15f;
+            final float x = halfX + scaleX(r.getJavaPosition().getX()) - width / 2;
+            final float y = halfY + scaleY(r.getJavaPosition().getY()) - width / 2;
+
             gc.setFill(Color.GREEN);
-            gc.fillOval(x, y, 15, 15); // Draw
+            gc.fillOval(x, y, width, width);
+
+            if (selectedRover == i) {
+                gc.setFill(Color.FIREBRICK);
+                gc.fillOval(x + 2.5, y + 2.5, 10, 10);
+            }
 
             if (!robots.contains(r)) {
                 try {
