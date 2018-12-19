@@ -9,6 +9,7 @@ import project.Point;
 import javax.vecmath.Point2f;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class Robot extends AbstractRobotSimulator implements IControllableRover {
     private int id;
@@ -20,6 +21,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private List<Area> currentRooms;
     private Environment environment;
     private boolean stopped;
+    private AtomicBoolean waitingForEnter;
 
     public Robot(Point position, String name, Environment environment) {
         super(position, name);
@@ -27,6 +29,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         this.environment = environment;
         currentRooms = new ArrayList<>();
         stopped = false;
+        waitingForEnter = new AtomicBoolean(false);
         synchronized (this) {
             id = idCount++;
         }
@@ -82,10 +85,15 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return new Status(this);
     }
 
+    /**
+     * Starts a rover if the rover is not waiting to enter an area
+     */
     @Override
     public void start() {
         stopped = false;
-        setDestination(destination);
+        if (!waitingForEnter.get()) {
+            setDestination(destination);
+        }
     }
 
     /**
@@ -160,6 +168,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                 for (Area area : environment.getAreas()) { // Check all areas if a new has been entered or left
                     if (area.contains(roverPos)) {
                         if (!lastRooms.contains(area)) {
+                            waitingForEnter.set(true);
                             // Entered a new room
                             currentRooms.add(area);
                             area.enter(this);
@@ -186,13 +195,6 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    while (stopped) { // If the stop button was pressed in the GUI, wait until start is pressed
-                        try {
-                            Thread.sleep(20);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
                     while (!newAreas.isEmpty()) { // Wait for all the new areas to be empty of rovers
                         newAreas.removeIf(area -> area.canEnter(this));
                         if (!newAreas.isEmpty()) {
@@ -203,7 +205,17 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                             }
                         }
                     }
+                    waitingForEnter.set(false);
+                    while (stopped) { // If the stop button was pressed in the GUI, wait until start is pressed
+                        try {
+                            Thread.sleep(20);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     start();
+                } else {
+                    waitingForEnter.set(false);
                 }
                 try {
                     Thread.sleep(16);
