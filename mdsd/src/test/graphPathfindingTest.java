@@ -6,7 +6,7 @@ import java.util.Arrays;
 import javax.vecmath.Point2f;
 
 import mdsd.controller.GraphOfPoints;
-import mdsd.model.EnvironmentAdoptee;
+import mdsd.model.Environment;
 
 /**
  * A terrible temporary test of the pathfinding in GraphOfPoints.
@@ -41,7 +41,7 @@ public class graphPathfindingTest {
 
 		System.out.println(Arrays.toString(g.NodesWithCostToPointArray(g.shortestPath(n1, n4))));
 		
-		g = new GraphOfPoints(new EnvironmentAdoptee(), 4,3);
+		g = new GraphOfPoints(new Environment(), 4,3);
 		System.out.println(g);
 	}
 }

@@ -1,23 +1,20 @@
 package mdsd.controller;
 
-import mdsd.model.EnvironmentAdoptee;
 import mdsd.model.Area;
+import mdsd.model.Environment;
+
 import java.util.ArrayList;
 import java.util.List;
 
-
-
 public class MainController implements Observer {
     private List<IControllableRover> rovers;
-    private EnvironmentAdoptee environment;
+    private Environment environment;
     private ScoreCalculator scoreCalculator;
-    //private Procedure procedure;
     private static MainController mainController = null;
 
     private MainController() {
-        rovers = new ArrayList<>();
-        environment = new EnvironmentAdoptee();
-        scoreCalculator = new ScoreCalculator();
+        this.rovers = new ArrayList<>();
+        this.environment = new Environment();
     }
 
     public static MainController getInstance() {
@@ -26,6 +23,51 @@ public class MainController implements Observer {
         }
         return mainController;
     }
+
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
+    /*
+     * Main loop for the MainController.
+     */
+    /*public void loopForever() {
+        try {
+            while (true) {
+                // Update rover areas
+                for (IControllableRover rover : rovers) {
+                    rover.update();
+                    Point2f roverPos = rover.getJavaPosition();
+                    if (rover.getRoom() == null || !rover.getRoom().contains(roverPos)) {
+                        Runnable roverUpdate = () -> {
+
+                            for (Area room : environment.getAreas()) {
+                                if (room.contains(roverPos)) {
+                                    rover.stop();
+                                    rover.setRoom(room);
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    } finally {
+                                        rover.start();
+                                    }
+                                    break;
+                                }
+                            }
+
+                        };
+
+                        Thread roverUpdateThread = new Thread(roverUpdate);
+                        roverUpdateThread.start();
+                    }
+                }
+                Thread.sleep(16);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     public void addRovers(List<IControllableRover> rovers) {
         this.rovers.addAll(rovers);
@@ -41,16 +83,11 @@ public class MainController implements Observer {
 
     }
 
-    // TODO
     public int getScore() {
-        if (scoreCalculator == null) {
-            return 0;
-        }
-        return scoreCalculator.score;
+        return (scoreCalculator == null ? 0 : scoreCalculator.getScore());
     }
 
-    // TODO, return copy?
-    public EnvironmentAdoptee getEnvironment() {
+    public Environment getEnvironment() {
         return environment;
     }
 
@@ -59,45 +96,22 @@ public class MainController implements Observer {
 
     }
 
-    // TODO
-    public List<IControllableRover> getRovers() {
-        List<IControllableRover> list = new ArrayList<>();
-        if (rovers == null) {
-            return list;
-        }
-        for (IControllableRover r : rovers) {
-            if (r != null) {
-                list.add(r);
-            }
-        }
-        return list;
+    public List<IControllableRover> getRoverList() {
+        return new ArrayList<>(rovers);
     }
 
-    // TODO
     public void stopRover(IControllableRover rover) {
         rover.stop();
     }
 
     public void stop() {
-        if (rovers == null) {
-            return;
-        }
         for (IControllableRover r : rovers) {
-            if (r == null) {
-                continue;
-            }
             r.stop();
         }
     }
 
     public void start() {
-        if (rovers == null) {
-            return;
-        }
         for (IControllableRover r : rovers) {
-            if (r == null) {
-                continue;
-            }
             r.start();
         }
     }
@@ -107,31 +121,7 @@ public class MainController implements Observer {
         // TODO
     }
 
-    protected class ScoreCalculator implements Runnable {
-        private IProcedure[] procedures;
-        public IProcedure activeProcedure;
-        public int score = 0;
-        public boolean running = true;
-
-        private void changeProcedure(IProcedure procedure) {
-            this.activeProcedure = procedure;
-        }
-
-        private void scoreLoop() {
-
-        }
-
-        public void run() {
-            while (running) {
-
-                // score += activeProcedure.calculateScore();
-
-                try {
-                    this.wait(20000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
+    public void setScoreCalculator(ScoreCalculator sc) {
+        this.scoreCalculator = sc;
     }
 }

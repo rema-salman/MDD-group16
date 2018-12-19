@@ -5,13 +5,10 @@ import project.AbstractSimulatorMonitor;
 import project.Point;
 import simbad.sim.*;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import mdsd.controller.Robot;
-
-@SuppressWarnings("unused")
 public class TestMission {
 
     @SuppressWarnings("unused")
@@ -40,10 +37,10 @@ public class TestMission {
         AbstractWall roomWall6 = new HorizontalWall(0f, 4f, 6f, e, color);
 
         Set<Robot> robots = new HashSet<>();
-        Robot robot1 = new Robot(new Point(-6, -8), "Robot 1");
-        Robot robot2 = new Robot(new Point(-3, -8), "Robot 2");
-        Robot robot3 = new Robot(new Point(3, -8), "Robot 3");
-        Robot robot4 = new Robot(new Point(6, -8), "Robot 4");
+        Robot robot1 = new Robot(new Point(-6, -8), "Robot 1", null); // TODO add environment
+        Robot robot2 = new Robot(new Point(-3, -8), "Robot 2", null);
+        Robot robot3 = new Robot(new Point(3, -8), "Robot 3", null);
+        Robot robot4 = new Robot(new Point(6, -8), "Robot 4", null);
 
         robots.add(robot1);
         robots.add(robot2);
@@ -51,35 +48,40 @@ public class TestMission {
         robots.add(robot4);
 
 
-        AbstractSimulatorMonitor controller = new SimulatorMonitor(robots, e);
+        AbstractSimulatorMonitor<Robot> controller = new SimulatorMonitor(robots, e);
 
         robot1.setDestination(new Point(-7.5, -8));
         robot2.setDestination(new Point(-4.5, -2));
         robot3.setDestination(new Point(3, -3));
         robot4.setDestination(new Point(7.5, -8));
+        robot1.start();
+        robot2.start();
+        robot3.start();
+        robot4.start();
 
         try {
             Thread.sleep(4000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot4.setDestination(new Point(7.5, 8));
         robot1.setDestination(new Point(-7.5, 8));
+        robot4.start();
+        robot1.start();
 
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot2.setDestination(new Point(3, -3));
         robot3.setDestination(new Point(3, 9));
+        robot2.start();
+        robot3.start();
 
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot2.setDestination(new Point(3, -8));
@@ -87,20 +89,22 @@ public class TestMission {
         try {
             Thread.sleep(7000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot1.setDestination(new Point(-3, 8));
         robot4.setDestination(new Point(3, 8));
+        robot1.start();
+        robot4.start();
 
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         robot1.setDestination(new Point(-3, 3));
         robot4.setDestination(new Point(4, 4));
+        robot1.start();
+        robot4.start();
 
         try {
             Thread.sleep(7000);
@@ -110,6 +114,8 @@ public class TestMission {
         }
         robot1.setDestination(new Point(-3, -8));
         robot4.setDestination(new Point(-3, 3));
+        robot1.start();
+        robot4.start();
 
         try {
             Thread.sleep(7000);
@@ -119,9 +125,6 @@ public class TestMission {
         }
 
         robot4.setDestination(new Point(-3, 8));
-        // robot1.start();
-
-
+        robot4.start();
     }
-
 }

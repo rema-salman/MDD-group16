@@ -1,12 +1,13 @@
 package mdsd.controller;
 
+import mdsd.model.Area;
 import mdsd.model.Mission;
+
 import javax.vecmath.Point2f;
+import java.util.List;
 
 /**
  * A rover that can be controlled by an operator.
- *
- * @author bondi
  */
 public interface IControllableRover extends Observable {
 
@@ -14,6 +15,12 @@ public interface IControllableRover extends Observable {
      * Set a new mission for the rover to execute.
      */
     void setMission(Mission mission);
+
+    /**
+     * "Main loop" function for the rover, updates rover with data from
+     * simulator.
+     */
+    void update();
 
     /*
      * Get the current mission of the rover.
@@ -47,16 +54,10 @@ public interface IControllableRover extends Observable {
 
     int getId();
 
-    /*
-     * gets the rover's reward points
-     */
-    int getRewardPoints();
+    List<Area> getRooms();
 
-    /*
-     * Adds new reward points to the existent ones
-     * 
-     * @param newRewardPoints
-     */
+    void run();
 
-    void addRewardPoints(int newRewardPoints);
+    Robot.Status getStatus();
+
 }

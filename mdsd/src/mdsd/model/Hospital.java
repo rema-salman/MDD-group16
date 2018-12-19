@@ -1,24 +1,25 @@
 package mdsd.model;
 
-import java.awt.Color;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.vecmath.Point2f;
-
 import mdsd.controller.Robot;
 import project.Point;
-import simbad.sim.HorizontalWall;
-import simbad.sim.VerticalWall;
-import simbad.sim.Wall;
 
-public class Hospital extends EnvironmentAdoptee {
+import javax.vecmath.Point2f;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class Hospital extends Environment {
+    private Area consultingRoom;
+    private List<Area> surgeryRooms;
+    private List<Area> wifiZones;
+    private List<Area> eatingAreas;
 
     public Hospital() {
         super();
-        this.rovers = new HashSet<>();
-        this.missions = new Mission[4];
+        surgeryRooms = new ArrayList<>();
+        wifiZones = new ArrayList<>();
+        eatingAreas = new ArrayList<>();
         Color c1 = Color.BLUE;
         Color c2 = Color.RED;
 
@@ -39,105 +40,116 @@ public class Hospital extends EnvironmentAdoptee {
         Point2f p15 = new Point2f(6, 0);
         Point2f p16 = new Point2f(6, -6);
 
-        SurgeryDivision sd1 = new SurgeryDivision(
-                new HashSet<>(Arrays.asList(p1, p2, p3, p10, p9, p6, p5, p4, p8, p7)));
-        SurgeryDivision sd2 = new SurgeryDivision(
-                new HashSet<>(Arrays.asList(p7, p8, p11, p12, p13, p9, p10, p16, p15, p14)));
-        EmergencyDivision ed = new EmergencyDivision(new HashSet<>(Arrays.asList(p4, p5, p6, p9, p13, p12, p11, p8)));
+        Division surgeryDivision1 = new Division(new ArrayList<>(Arrays.asList(
+                p1, p2, p3, p10, p9, p6, p5, p4, p8, p7)));
+        Division surgeryDivision2 = new Division(new ArrayList<>(Arrays.asList(
+                p7, p8, p11, p12, p13, p9, p10, p16, p15, p14)));
+        Division emergencyDivision = new Division(new ArrayList<>(Arrays.asList(
+                p4, p5, p6, p9, p13, p12, p11, p8)));
 
-        Set<Point2f> sRoom1 = new HashSet<>();
+        List<Point2f> sRoom1 = new ArrayList<>();
         sRoom1.add(p1);
         sRoom1.add(p2);
         sRoom1.add(p5);
         sRoom1.add(p4);
         sRoom1.add(p8);
         sRoom1.add(p7);
-        Area a1 = new SurgeryRoom(sRoom1, sd1);
-        this.addArea(a1);
+        Area surgeryRoom1 = new Area(sRoom1, 20);
+        surgeryDivision1.addRoom(surgeryRoom1);
+        this.addArea(surgeryRoom1, true);
+        surgeryRooms.add(surgeryRoom1);
 
-        Set<Point2f> sRoom2 = new HashSet<>();
+        List<Point2f> sRoom2 = new ArrayList<>();
         sRoom2.add(p2);
         sRoom2.add(p3);
         sRoom2.add(p10);
         sRoom2.add(p9);
-        sRoom1.add(p6);
-        sRoom1.add(p5);
-        Area a2 = new SurgeryRoom(sRoom2, sd1);
-        this.addArea(a2);
+        sRoom2.add(p6);
+        sRoom2.add(p5);
+        Area surgeryRoom2 = new Area(sRoom2, 20);
+        surgeryDivision1.addRoom(surgeryRoom2);
+        this.addArea(surgeryRoom2, true);
+        surgeryRooms.add(surgeryRoom2);
 
-        Set<Point2f> sRoom3 = new HashSet<>();
+        List<Point2f> sRoom3 = new ArrayList<>();
         sRoom3.add(p7);
         sRoom3.add(p8);
         sRoom3.add(p11);
         sRoom3.add(p12);
-        sRoom1.add(p15);
-        sRoom1.add(p14);
-        Area a3 = new SurgeryRoom(sRoom3, sd2);
-        this.addArea(a3);
+        sRoom3.add(p15);
+        sRoom3.add(p14);
+        Area surgeryRoom3 = new Area(sRoom3, 20);
+        surgeryDivision2.addRoom(surgeryRoom3);
+        this.addArea(surgeryRoom3, true);
+        surgeryRooms.add(surgeryRoom3);
 
-        Set<Point2f> sRoom4 = new HashSet<>();
+        List<Point2f> sRoom4 = new ArrayList<>();
         sRoom4.add(p9);
         sRoom4.add(p10);
         sRoom4.add(p16);
         sRoom4.add(p15);
-        sRoom1.add(p12);
-        sRoom1.add(p13);
-        Area a4 = new SurgeryRoom(sRoom4, sd2);
-        this.addArea(a4);
+        sRoom4.add(p12);
+        sRoom4.add(p13);
+        Area surgeryRoom4 = new Area(sRoom4, 20);
+        surgeryDivision2.addRoom(surgeryRoom4);
+        this.addArea(surgeryRoom4, true);
+        surgeryRooms.add(surgeryRoom4);
 
-        Set<Point2f> cRoom1 = new HashSet<>();
+        List<Point2f> cRoom1 = new ArrayList<>();
         cRoom1.add(p4);
         cRoom1.add(p6);
-        cRoom1.add(p11);
         cRoom1.add(p13);
-        Area a5 = new ConsultingRoom(cRoom1, ed);
-        this.addArea(a5);
+        cRoom1.add(p11);
+        consultingRoom = new Area(cRoom1, 10);
+        emergencyDivision.addRoom(consultingRoom);
+        this.addArea(consultingRoom, true);
 
-        super.addBoundry(-6.0f, -6.0f, 6.0f, this, c2, true);
-        super.addBoundry(6.0f, -6.0f, 6.0f, this, c2, true);
-        super.addBoundry(6.0f, -6.0f, -3.5f, this, c2, false);
-        super.addBoundry(6.0f, -2.5f, 2.5f, this, c2, false);
-        super.addBoundry(6.0f, 3.5f, 6.0f, this, c2, false);
-        super.addBoundry(-6.0f, -6.0f, -3.5f, this, c2, false);
-        super.addBoundry(-6.0f, -2.5f, 2.5f, this, c2, false);
-        super.addBoundry(-6.0f, 3.5f, 6.0f, this, c2, false);
+        super.addHorizontalBoundary(-6.0f, -6.0f, 6.0f, c2);
+        super.addHorizontalBoundary(6.0f, -6.0f, 6.0f, c2);
+        super.addVerticalBoundary(6.0f, -6.0f, -3.5f, c2);
+        super.addVerticalBoundary(6.0f, -2.5f, 2.5f, c2);
+        super.addVerticalBoundary(6.0f, 3.5f, 6.0f, c2);
+        super.addVerticalBoundary(-6.0f, -6.0f, -3.5f, c2);
+        super.addVerticalBoundary(-6.0f, -2.5f, 2.5f, c2);
+        super.addVerticalBoundary(-6.0f, 3.5f, 6.0f, c2);
 
         // create four rooms with doors
-        super.addWall(3f, -2.25f, 2.25f, this, c1, true);
-        super.addWall(3f, -2.25f, 2.25f, this, c1, false);
-        super.addWall(-3f, -2.25f, 2.25f, this, c1, true);
-        super.addWall(-3f, -2.25f, 2.25f, this, c1, false);
-        
-        for (Obstacle ob : this.getObstacles()) {
-            if (ob.horizontal) {
-                super.addWall(ob.x, ob.y, ob.length, this, c1, true);
-            } else {
-                super.addWall(ob.x, ob.y, ob.length, this, c1, false);
-            }
-        }
+        super.addHorizontalWall(3f, -2.25f, 2.25f, c1);
+        super.addVerticalWall(3f, -2.25f, 2.25f, c1);
+        super.addHorizontalWall(-3f, -2.25f, 2.25f, c1);
+        super.addVerticalWall(-3f, -2.25f, 2.25f, c1);
 
-        super.addWall(0f, 6.0f, 4.0f, this, c2, true);
-        super.addWall(0f, -6.0f, -4.0f, this, c2, true);
-        super.addWall(0f, 6f, 4.0f, this, c2, false);
-        super.addWall(0f, -6f, -4.0f, this, c2, false);
-        
-        for (Obstacle ob : this.getObstacles()) {
-            if (ob.horizontal) {
-                super.addWall(ob.x, ob.y, ob.length, this, c2, true);
-            } else {
-                super.addWall(ob.x, ob.y, ob.length, this, c2, false);
-            }
-        }
+        super.addHorizontalWall(0f, 6.0f, 4.0f, c2);
+        super.addHorizontalWall(0f, -6.0f, -4.0f, c2);
+        super.addVerticalWall(0f, 6.0f, 4.0f, c2);
+        super.addVerticalWall(0f, -6.0f, -4.0f, c2);
 
-        Robot rover1 = new Robot(new Point(5, -5), "Rover 1");
-        Robot rover2 = new Robot(new Point(5, 5), "Rover 2");
-        Robot rover3 = new Robot(new Point(-5, 5), "Rover 3");
-        Robot rover4 = new Robot(new Point(-5, -5), "Rover 4");
+        Robot rover1 = new Robot(new Point(5, -5), "Rover 1", this);
+        Robot rover2 = new Robot(new Point(5, 5), "Rover 2", this);
+        Robot rover3 = new Robot(new Point(-5, 5), "Rover 3", this);
+        Robot rover4 = new Robot(new Point(-5, -5), "Rover 4", this);
         rovers.add(rover1);
         rovers.add(rover2);
         rovers.add(rover3);
         rovers.add(rover4);
 
+        this.wifiZones = new ArrayList<>();
+        this.eatingAreas = new ArrayList<>();
     }
 
+    public Area getConsultingRoom() {
+        return consultingRoom;
+    }
+
+    public List<Area> getSurgeryRooms() {
+        return surgeryRooms;
+    }
+
+    public List<Area> getWifiZones() {
+        return wifiZones;
+    }
+
+    public List<Area> getEatingAreas() {
+        return eatingAreas;
+    }
 }

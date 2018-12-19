@@ -1,23 +1,17 @@
 package mdsd.model;
 
-import java.awt.Color;
-import java.util.HashSet;
-import java.util.Set;
-
-import javax.vecmath.Point2f;
-
 import mdsd.controller.Robot;
 import project.Point;
-import simbad.sim.HorizontalWall;
-import simbad.sim.VerticalWall;
-import simbad.sim.Wall;
 
-public class University extends EnvironmentAdoptee {
+import javax.vecmath.Point2f;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class University extends Environment {
 
     public University() {
         super();
-        this.rovers = new HashSet<>();
-//        this.missions = new Mission[4]; //maybe they can be added here
         Color c = Color.GRAY; // because it's boring ..
 
         Point2f p1 = new Point2f(-5, 5);
@@ -30,74 +24,73 @@ public class University extends EnvironmentAdoptee {
         Point2f p8 = new Point2f(5, 0);
         Point2f p9 = new Point2f(5, -5);
 
-        Set<Point2f> roomA = new HashSet<>();
+        List<Point2f> roomA = new ArrayList<>();
         roomA.add(p1);
         roomA.add(p2);
         roomA.add(p5);
         roomA.add(p4);
-        Area a1 = new PhysicalArea(roomA);
-        this.addArea(a1);
+        Area a1 = new Area(roomA);
+        this.addArea(a1, true);
 
-        Set<Point2f> roomB = new HashSet<>();
+        List<Point2f> roomB = new ArrayList<>();
         roomB.add(p2);
         roomB.add(p3);
         roomB.add(p6);
         roomB.add(p5);
-        Area a2 = new PhysicalArea(roomB);
-        this.addArea(a2);
+        Area a2 = new Area(roomB);
+        this.addArea(a2, true);
 
-        Set<Point2f> roomC = new HashSet<>();
+        List<Point2f> roomC = new ArrayList<>();
         roomC.add(p4);
         roomC.add(p5);
         roomC.add(p8);
         roomC.add(p7);
-        Area a3 = new PhysicalArea(roomC);
-        this.addArea(a3);
+        Area a3 = new Area(roomC);
+        this.addArea(a3, true);
 
-        Set<Point2f> roomD = new HashSet<>();
+        List<Point2f> roomD = new ArrayList<>();
         roomD.add(p5);
         roomD.add(p6);
         roomD.add(p9);
         roomD.add(p8);
-        Area a4 = new PhysicalArea(roomD);
-        this.addArea(a4);
+        Area a4 = new Area(roomD);
+        this.addArea(a4, true);
 
-        super.addBoundry(-5.0f, -5.0f, 5.0f, this, c, true);
-        super.addBoundry(5.0f, -5.0f, 5.0f, this, c, true);
-        super.addBoundry(5.0f, -5.0f, -3.0f, this, c, false);
-        super.addBoundry(5.0f, -2.0f, 2.0f, this, c, false);
-        super.addBoundry(5.0f, 3f, 5.0f, this, c, false);
-        super.addBoundry(-5.0f, -5.0f, -3.0f, this, c, false);
-        super.addBoundry(-5.0f, -2.0f, 2.0f, this, c, false);
-        super.addBoundry(-5.0f, 3f, 5.0f, this, c, false);
+        super.addHorizontalBoundary(-5.0f, -5.0f, 5.0f, c);
+        super.addHorizontalBoundary(5.0f, -5.0f, 5.0f, c);
+        super.addVerticalBoundary(5.0f, -5.0f, -3.0f, c);
+        super.addVerticalBoundary(5.0f, -2.0f, 2.0f, c);
+        super.addVerticalBoundary(5.0f, 3.0f, 5.0f, c);
+        super.addVerticalBoundary(-5.0f, -5.0f, -3.0f, c);
+        super.addVerticalBoundary(-5.0f, -2.0f, 2.0f, c);
+        super.addVerticalBoundary(-5.0f, 3.0f, 5.0f, c);
 
         // create four rooms with doors
-        super.addWall(0f, -2.0f, 2f, this, c, true);
-        super.addWall(0f, -2f, 2f, this, c, false);
-        super.addWall(0f, 5.0f, 3.0f, this, c, true);
-        super.addWall(0f, -5.0f, -3.0f, this, c, true);
-        super.addWall(0f, 5f, 3f, this, c, false);
-        super.addWall(0f, -5f, -3f, this, c, false);
-        
-        // horizontal (yPos, xStart,xEnd)
-        // vertical (xPos, yStart, yEnd)
+        super.addHorizontalWall(0f, -2.0f, 2.0f, c);
+        super.addVerticalWall(0f, -2.0f, 2.0f, c);
+        super.addHorizontalWall(0f, 5.0f, 3.0f, c);
+        super.addHorizontalWall(0f, -5.0f, -3.0f, c);
+        super.addVerticalWall(0f, 5.0f, 3.0f, c);
+        super.addVerticalWall(0f, -5.0f, -3.0f, c);
+
+        // horizontal -> (yPos, xStart, xEnd)
+        // vertical   -> (xPos, yStart, yEnd)
         for (Obstacle ob : this.getObstacles()) {
             if (ob.horizontal) {
-                super.addWall(ob.x, ob.y, ob.length, this, c,true);
+                super.addHorizontalWall(ob.x, ob.y, ob.length, c);
             } else {
-                super.addWall(ob.x, ob.y, ob.length, this, c,false);
+                super.addVerticalWall(ob.x, ob.y, ob.length, c);
             }
         }
-        
+
         //adding the initial robots' positions inside the environment 
-        Robot rover1 = new Robot(new Point(2.5, -7), "Rover 1");
-        Robot rover2 = new Robot(new Point(2.5, 7), "Rover 2");
-        Robot rover3 = new Robot(new Point(-2.5, 7), "Rover 3");
-        Robot rover4 = new Robot(new Point(-2.5, -7), "Rover 4");
+        Robot rover1 = new Robot(new Point(2.5, -7), "Rover 1", this);
+        Robot rover2 = new Robot(new Point(2.5, 7), "Rover 2", this);
+        Robot rover3 = new Robot(new Point(-2.5, 7), "Rover 3", this);
+        Robot rover4 = new Robot(new Point(-2.5, -7), "Rover 4", this);
         rovers.add(rover1);
         rovers.add(rover2);
         rovers.add(rover3);
         rovers.add(rover4);
-
     }
 }

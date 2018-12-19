@@ -42,4 +42,9 @@ public class Mission {
     public Point2f getCurrentPoint() {
         return points[currentHeading];
     }
+
+    public int getNumberOfPoints() {
+        return points.length;
+    }
+
 }

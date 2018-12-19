@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      xmlns="http://javafx.com/javafx/8.0.162" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <HBox>
+            <children>
+                <Label text="Id: "/>
+                <Label fx:id="robotId"/>
+            </children>
+        </HBox>
+        <HBox>
+            <children>
+                <Label text="Name: "/>
+                <Label fx:id="robotName"/>
+            </children>
+        </HBox>
+        <HBox>
+            <children>
+                <Label text="Position: "/>
+                <Label fx:id="robotPosition"/>
+            </children>
+        </HBox>
+        <HBox>
+            <children>
+                <Label text="Mission points: "/>
+                <Label fx:id="robotMPoints"/>
+            </children>
+        </HBox>
+        <HBox>
+            <children>
+                <Label text="Destination: "/>
+                <Label fx:id="robotDestination"/>
+            </children>
+        </HBox>
+        <HBox>
+            <children>
+                <Label text="Stopped: "/>
+                <Label fx:id="robotStopped"/>
+            </children>
+        </HBox>
+    </children>
+</VBox>
