@@ -11,9 +11,10 @@ public class RewardSystem implements ScoreCalculator, Runnable {
 
     private Procedure procedureA;
     private Procedure procedureB;
-    public Procedure activeProcedure;
-    public int score = 0;
-    public boolean running;
+    private Procedure activeProcedure;
+    private int score = 0;
+    private boolean paused;
+    private boolean running;
 
     public RewardSystem(List<IControllableRover> rovers,
                         Procedure procedureA, Procedure procedureB,
@@ -24,28 +25,44 @@ public class RewardSystem implements ScoreCalculator, Runnable {
         this.activeProcedure = procedureA;
         this.physicalAreas = physicalAreas;
         this.logicalAreas = logicalAreas;
+        this.paused = false;
+        this.running = true;
     }
 
-    public int calculateScore() {
-
-        return 0;
-    }
-
+    @Override
     public int getScore() {
         return score;
     }
 
-    public void stop() {
-        this.running = false;
+    @Override
+    public void pause() {
+        paused = true;
     }
 
+    @Override
+    public void resume() {
+        paused = false;
+    }
+
+    @Override
+    public void stop() {
+        running = false;
+    }
+
+    @Override
     public void run() {
-        this.running = true;
         while (running) {
             try {
                 Thread.sleep(20000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
+            }
+            while (paused) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
             score += activeProcedure.calculateReward();
 
@@ -73,4 +90,5 @@ public class RewardSystem implements ScoreCalculator, Runnable {
             }
         }
     }
+
 }

@@ -108,12 +108,14 @@ public class MainController implements Observer {
         for (IControllableRover r : rovers) {
             r.stop();
         }
+        scoreCalculator.pause();
     }
 
     public void start() {
         for (IControllableRover r : rovers) {
             r.start();
         }
+        scoreCalculator.resume();
     }
 
     @Override
