@@ -100,6 +100,14 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                 e.printStackTrace();
             }
 
+            while (stopped) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
             destination.setX(point2x); // Set old destination
             destination.setZ(point2y);
             setDestination(destination);
@@ -257,7 +265,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                         waitingForEnter.set(false);
                         while (stopped) { // If the stop button was pressed in the GUI, wait until start is pressed
                             try {
-                                Thread.sleep(20);
+                                Thread.sleep(200);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -267,6 +275,13 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                         waitingForEnter.set(false);
                     }
                 } else if (behavior == BEHAVIOUR_LAWN_MOWER) {
+                    while (stopped) {
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                     if (sonars.getFrontQuadrantHits() > 0 || sonars.getLeftQuadrantHits() > 0 ||
                             sonars.getRightQuadrantHits() > 0 || this.isAtPosition(destination)) {
                         update(); // Only update if hit or at destination
