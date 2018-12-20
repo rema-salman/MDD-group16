@@ -40,7 +40,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
             this.id = idCount++;
         }
         this.behavior = behavior;
-        this.sonars = RobotFactory.addBumperBeltSensor(super.getAgent());
+        this.sonars = RobotFactory.addBumperBeltSensor(super.getAgent(), 24);
 
         waitingForEnter = new AtomicBoolean(false);
     }
@@ -87,8 +87,8 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
             final double point2x = destination.getX();
             final double point2y = destination.getZ();
 
-            final double backX = centerX - point2x;
-            final double backY = centerY - point2y;
+            final double backX = -point2x;
+            final double backY = -point2y;
 
             destination.setX(backX);
             destination.setZ(backY);
