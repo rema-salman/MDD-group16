@@ -51,6 +51,7 @@ public class RewardSystem implements ScoreCalculator, Runnable {
 
     @Override
     public void run() {
+        running = true;
         while (running) {
             try {
                 Thread.sleep(20000);
