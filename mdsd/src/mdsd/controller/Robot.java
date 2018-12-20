@@ -5,6 +5,8 @@ import mdsd.model.Environment;
 import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
 import project.Point;
+import simbad.sim.RangeSensorBelt;
+import simbad.sim.RobotFactory;
 
 import javax.vecmath.Point2f;
 import java.util.ArrayList;
@@ -22,8 +24,10 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private Environment environment;
     private boolean stopped;
     private AtomicBoolean waitingForEnter;
+    private int behavior;  // 0:Missions, 1:TravelinSalesRover, 2:LawnMower
+    RangeSensorBelt sonars;
 
-    public Robot(Point position, String name, Environment environment) {
+    public Robot(Point position, String name, Environment environment, int behavior) {
         super(position, name);
         this.destination = position;
         this.environment = environment;
@@ -32,11 +36,14 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         synchronized (this) {
             this.id = idCount++;
         }
+        this.behavior = behavior;
+        this.sonars = RobotFactory.addSonarBeltSensor(super.getAgent(), 8);
+
         waitingForEnter = new AtomicBoolean(false);
     }
 
-    public Robot(Point2f position, String name, Environment environment) {
-        this(new project.Point(position.getX(), position.getY()), name, environment);
+    public Robot(Point2f position, String name, Environment environment, int behavior) {
+        this(new project.Point(position.getX(), position.getY()), name, environment, behavior);
     }
 
     @Override
@@ -63,14 +70,32 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     }
 
     public void update() {
-        if (mission != null) {
-            if (this.isAtPosition(destination)) {
+        if (behavior == 0 || behavior == 1) { // Mission and TravelingSalesRover
+
+            if (mission != null && this.isAtPosition(destination)) {
                 Point2f newPoint = mission.getNextPoint();
                 if (newPoint != null) {
                     setDestination(newPoint);
                     start();
                 }
             }
+
+        } else if (behavior == 2) {  // LawnMower implementation
+
+            boolean hasHit = false;
+            for (int i=0; i < 8; ++i) {
+                if (sonars.hasHit(i)) {
+                    hasHit = true;
+                    break;
+                }
+            }
+
+            if (hasHit || this.isAtPosition(destination)) {
+                destination.setX(Math.random() * 1000 - 500);
+                destination.setZ(Math.random() * 1000 - 500);
+                setDestination(destination);
+            }
+
         }
     }
 
