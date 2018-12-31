@@ -37,10 +37,10 @@ public class TestMission {
         AbstractWall roomWall6 = new HorizontalWall(0f, 4f, 6f, e, color);
 
         Set<Robot> robots = new HashSet<>();
-        Robot robot1 = new Robot(new Point(-6, -8), "Robot 1", null); // TODO add environment
-        Robot robot2 = new Robot(new Point(-3, -8), "Robot 2", null);
-        Robot robot3 = new Robot(new Point(3, -8), "Robot 3", null);
-        Robot robot4 = new Robot(new Point(6, -8), "Robot 4", null);
+        Robot robot1 = new Robot(new Point(-6, -8), "Robot 1", null, Robot.BEHAVIOUR_MISSION); // TODO add environment
+        Robot robot2 = new Robot(new Point(-3, -8), "Robot 2", null, Robot.BEHAVIOUR_MISSION);
+        Robot robot3 = new Robot(new Point(3, -8), "Robot 3", null, Robot.BEHAVIOUR_MISSION);
+        Robot robot4 = new Robot(new Point(6, -8), "Robot 4", null, Robot.BEHAVIOUR_MISSION);
 
         robots.add(robot1);
         robots.add(robot2);

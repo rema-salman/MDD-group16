@@ -5,6 +5,8 @@ import mdsd.model.Environment;
 import mdsd.model.Mission;
 import project.AbstractRobotSimulator;
 import project.Point;
+import simbad.sim.RangeSensorBelt;
+import simbad.sim.RobotFactory;
 
 import javax.vecmath.Point2f;
 import java.util.ArrayList;
@@ -22,8 +24,13 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private Environment environment;
     private boolean stopped;
     private AtomicBoolean waitingForEnter;
+    private int behavior;  // 0:Missions, 1:TravelinSalesRover, 2:LawnMower
+    public static int BEHAVIOUR_MISSION = 0;
+    public static int BEHAVIOUR_TRAVELLING_SALES_ROVER = 1;
+    public static int BEHAVIOUR_LAWN_MOWER = 2;
+    private RangeSensorBelt sonars;
 
-    public Robot(Point position, String name, Environment environment) {
+    public Robot(Point position, String name, Environment environment, int behavior) {
         super(position, name);
         this.destination = position;
         this.environment = environment;
@@ -32,11 +39,14 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         synchronized (this) {
             this.id = idCount++;
         }
+        this.behavior = behavior;
+        this.sonars = RobotFactory.addBumperBeltSensor(super.getAgent(), 24);
+
         waitingForEnter = new AtomicBoolean(false);
     }
 
-    public Robot(Point2f position, String name, Environment environment) {
-        this(new project.Point(position.getX(), position.getY()), name, environment);
+    public Robot(Point2f position, String name, Environment environment, int behavior) {
+        this(new project.Point(position.getX(), position.getY()), name, environment, behavior);
     }
 
     @Override
@@ -63,14 +73,59 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     }
 
     public void update() {
-        if (mission != null) {
-            if (this.isAtPosition(destination)) {
+        if (behavior == BEHAVIOUR_MISSION || behavior == BEHAVIOUR_TRAVELLING_SALES_ROVER) { // Mission and TravelingSalesRover
+            if (mission != null && this.isAtPosition(destination)) {
                 Point2f newPoint = mission.getNextPoint();
                 if (newPoint != null) {
                     setDestination(newPoint);
                     start();
                 }
             }
+        } else if (behavior == BEHAVIOUR_LAWN_MOWER) {  // LawnMower implementation
+            final double centerX = getPosition().getX();
+            final double centerY = getPosition().getZ();
+            final double point2x = destination.getX();
+            final double point2y = destination.getZ();
+
+            final double backX = -point2x;
+            final double backY = -point2y;
+
+            destination.setX(backX);
+            destination.setZ(backY);
+            setDestination(destination); // Back away for 0.5s
+
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            while (stopped) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            destination.setX(point2x); // Set old destination
+            destination.setZ(point2y);
+            setDestination(destination);
+
+            final double rotateWith = 0.3 + Math.random() * Math.PI / 2;
+
+            double newX = getPosition().getX() + (point2x - centerX) * Math.cos(rotateWith) - (point2y - centerY) * Math.sin(rotateWith);
+            double newY = centerY + (point2x - centerX) * Math.sin(rotateWith) + (point2y - centerY) * Math.cos(rotateWith);
+
+            if ((newX < 500 && newX > 0) || (newX > -500 && newX < 0) ||
+                    (newY < 500 && newY > 0) || (newY > -500 && newY < 0)) {
+                newX += 500;
+                newY += 500;
+            }
+
+            destination.setX(newX);
+            destination.setZ(newY);
+            setDestination(destination);
         }
     }
 
@@ -157,65 +212,80 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
 
     @Override
     public void run() {
+        update();
         new Thread(() -> {
             while (true) {
-                update();
-                Point2f roverPos = getJavaPosition();
-                List<Area> lastRooms = new ArrayList<>(currentRooms);
-                boolean newRoom = false;
-                List<Area> newAreas = new ArrayList<>();
+                if (behavior == BEHAVIOUR_MISSION || behavior == BEHAVIOUR_TRAVELLING_SALES_ROVER) {
+                    update();
+                    Point2f roverPos = getJavaPosition();
+                    List<Area> lastRooms = new ArrayList<>(currentRooms);
+                    boolean newRoom = false;
+                    List<Area> newAreas = new ArrayList<>();
 
-                for (Area area : environment.getAreas()) { // Check all areas if a new has been entered or left
-                    if (area.contains(roverPos)) {
-                        if (!lastRooms.contains(area)) {
-                            waitingForEnter.set(true);
-                            // Entered a new room
-                            currentRooms.add(area);
-                            area.enter(this);
-                            for (Area area2 : environment.getAreas()) {
-                                if (!area2.equals(area)) { // Leave all old areas
-                                    area2.leave(this);
+                    for (Area area : environment.getAreas()) { // Check all areas if a new has been entered or left
+                        if (area.contains(roverPos)) {
+                            if (!lastRooms.contains(area)) {
+                                waitingForEnter.set(true);
+                                // Entered a new room
+                                currentRooms.add(area);
+                                area.enter(this);
+                                for (Area area2 : environment.getAreas()) {
+                                    if (!area2.equals(area)) { // Leave all old areas
+                                        area2.leave(this);
+                                    }
+                                }
+                                newRoom = true;
+                                newAreas.add(area);
+                            }
+                        } else {
+                            if (lastRooms.contains(area)) {
+                                // Left a room
+                                currentRooms.remove(area);
+                                area.leave(this);
+                            }
+                        }
+                    }
+                    if (newRoom) { // If entered a new room
+                        setDestination(getPosition()); // Stop without setting the stopped boolean
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        while (!newAreas.isEmpty()) { // Wait for all the new areas to be empty of rovers
+                            newAreas.removeIf(area -> area.canEnter(this));
+                            if (!newAreas.isEmpty()) {
+                                try {
+                                    Thread.sleep(200);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
                                 }
                             }
-                            newRoom = true;
-                            newAreas.add(area);
                         }
-                    } else {
-                        if (lastRooms.contains(area)) {
-                            // Left a room
-                            currentRooms.remove(area);
-                            area.leave(this);
-                        }
-                    }
-                }
-                if (newRoom) { // If entered a new room
-                    setDestination(getPosition()); // Stop without setting the stopped boolean
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    while (!newAreas.isEmpty()) { // Wait for all the new areas to be empty of rovers
-                        newAreas.removeIf(area -> area.canEnter(this));
-                        if (!newAreas.isEmpty()) {
+                        waitingForEnter.set(false);
+                        while (stopped) { // If the stop button was pressed in the GUI, wait until start is pressed
                             try {
                                 Thread.sleep(200);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                         }
+                        start();
+                    } else {
+                        waitingForEnter.set(false);
                     }
-                    waitingForEnter.set(false);
-                    while (stopped) { // If the stop button was pressed in the GUI, wait until start is pressed
+                } else if (behavior == BEHAVIOUR_LAWN_MOWER) {
+                    while (stopped) {
                         try {
-                            Thread.sleep(20);
+                            Thread.sleep(200);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                     }
-                    start();
-                } else {
-                    waitingForEnter.set(false);
+                    if (sonars.getFrontQuadrantHits() > 0 || sonars.getLeftQuadrantHits() > 0 ||
+                            sonars.getRightQuadrantHits() > 0 || this.isAtPosition(destination)) {
+                        update(); // Only update if hit or at destination
+                    }
                 }
                 try {
                     Thread.sleep(16);
