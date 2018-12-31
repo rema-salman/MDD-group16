@@ -1,24 +1,23 @@
 package test;
 
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
+import mdsd.controller.IControllableRover;
+import mdsd.controller.Procedure;
+import mdsd.controller.RewardSystem;
+import mdsd.model.Area;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mdsd.controller.IControllableRover;
-import mdsd.controller.Procedure;
-import mdsd.controller.RewardSystem;
-import mdsd.model.Area;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 class RewardSystemTest {
 
     private List<IControllableRover> rovers;
-    private List<Area> physicalAreas; 
-    private List<Area> logicalAreas; 
+    private List<Area> physicalAreas;
+    private List<Area> logicalAreas;
 
     private Procedure testProcedureA;
     private Procedure testProcedureB;

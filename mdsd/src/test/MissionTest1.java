@@ -3,14 +3,12 @@ package test;
 import mdsd.controller.Robot;
 import mdsd.model.Environment;
 import mdsd.model.Mission;
-
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.vecmath.Point2f;
-import static org.junit.jupiter.api.Assertions.*;
 
 class MissionTest1 {
 
@@ -22,7 +20,7 @@ class MissionTest1 {
     // TODO define mission, rover and environment
     @BeforeEach
     void setUp() {
-        points = new Point2f[] { (new Point2f(3, 3)), (new Point2f(0, 0)) };
+        points = new Point2f[]{(new Point2f(3, 3)), (new Point2f(0, 0))};
         testMission = new Mission(points);
         testRover = new Robot(new Point2f(5, 5), "testRobot", testEnv);
         testEnv = new Environment();

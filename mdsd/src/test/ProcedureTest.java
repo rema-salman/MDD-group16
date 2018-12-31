@@ -1,21 +1,16 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.vecmath.Point2f;
-
+import mdsd.controller.IControllableRover;
+import mdsd.controller.Procedure;
+import mdsd.model.Area;
 import org.junit.Assert;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mdsd.controller.IControllableRover;
-import mdsd.controller.Procedure;
-import mdsd.controller.Robot;
-import mdsd.model.Area;
-import mdsd.model.Environment;
-import mdsd.model.Hospital;
+import javax.vecmath.Point2f;
+import java.util.ArrayList;
+import java.util.List;
 
 class ProcedureTest {
 

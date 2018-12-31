@@ -4,19 +4,16 @@ import mdsd.controller.Robot;
 import mdsd.model.Area;
 import mdsd.model.Environment;
 import mdsd.model.Mission;
+import org.junit.Assert;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
+import javax.vecmath.Point2f;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import javax.vecmath.Point2f;
-
-import org.junit.Assert;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class RobotTest {
 
@@ -35,7 +32,7 @@ class RobotTest {
 
     @BeforeEach
     void setUp() {
-        points = new Point2f[] { (new Point2f(3, 3)), (new Point2f(0, 0)) };
+        points = new Point2f[]{(new Point2f(3, 3)), (new Point2f(0, 0))};
         testMission = new Mission(points);
         testRover = new Robot(new Point2f(5, 5), "testRobot", testEnv);
         testEnv = new Environment();
