@@ -49,6 +49,14 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         this(new project.Point(position.getX(), position.getY()), name, environment, behavior);
     }
 
+    public Robot(Point position, String name, Environment environment) {
+        this(position, name, environment, BEHAVIOUR_MISSION);
+    }
+
+    public Robot(Point2f position, String name, Environment environment) {
+        this(position, name, environment, BEHAVIOUR_MISSION);
+    }
+
     @Override
     public String toString() {
         return super.getName();
