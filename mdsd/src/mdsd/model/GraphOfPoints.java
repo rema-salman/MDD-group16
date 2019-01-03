@@ -1,6 +1,4 @@
-package mdsd.controller;
-
-import mdsd.model.Environment;
+package mdsd.model;
 
 import javax.vecmath.Point2f;
 import java.util.*;

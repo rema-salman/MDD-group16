@@ -1,7 +1,7 @@
 package test;
 
-import mdsd.controller.GraphOfPoints;
 import mdsd.model.Environment;
+import mdsd.model.GraphOfPoints;
 
 import javax.vecmath.Point2f;
 import java.util.ArrayList;

@@ -2,11 +2,12 @@ package mdsd;
 
 import javafx.application.Application;
 import mdsd.controller.*;
-import mdsd.controller.GraphOfPoints.Edge;
-import mdsd.controller.GraphOfPoints.Node;
 import mdsd.model.Area;
+import mdsd.model.GraphOfPoints;
 import mdsd.model.Hospital;
 import mdsd.model.Mission;
+import mdsd.model.GraphOfPoints.Edge;
+import mdsd.model.GraphOfPoints.Node;
 import mdsd.view.GUI;
 import project.AbstractSimulatorMonitor;
 
