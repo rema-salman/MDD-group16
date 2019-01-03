@@ -1,6 +1,5 @@
 package mdsd.controller;
 
-import mdsd.model.Area;
 import mdsd.model.Environment;
 
 import java.util.ArrayList;
@@ -28,59 +27,8 @@ public class MainController implements Observer {
         this.environment = environment;
     }
 
-    /*
-     * Main loop for the MainController.
-     */
-    /*public void loopForever() {
-        try {
-            while (true) {
-                // Update rover areas
-                for (IControllableRover rover : rovers) {
-                    rover.update();
-                    Point2f roverPos = rover.getJavaPosition();
-                    if (rover.getRoom() == null || !rover.getRoom().contains(roverPos)) {
-                        Runnable roverUpdate = () -> {
-
-                            for (Area room : environment.getAreas()) {
-                                if (room.contains(roverPos)) {
-                                    rover.stop();
-                                    rover.setRoom(room);
-                                    try {
-                                        Thread.sleep(2000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    } finally {
-                                        rover.start();
-                                    }
-                                    break;
-                                }
-                            }
-
-                        };
-
-                        Thread roverUpdateThread = new Thread(roverUpdate);
-                        roverUpdateThread.start();
-                    }
-                }
-                Thread.sleep(16);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }*/
-
     public void addRovers(List<IControllableRover> rovers) {
         this.rovers.addAll(rovers);
-    }
-
-    // TODO
-    public void getAllRoverPositions() {
-
-    }
-
-    // TODO
-    public void getRoverPositions(Area area) {
-
     }
 
     public int getScore() {
@@ -91,9 +39,10 @@ public class MainController implements Observer {
         return environment;
     }
 
-    // TODO, return type
-    public void getRoverStatus() {
-
+    public void getAllRoversStatus() {
+        for (IControllableRover r : rovers) {
+            r.getStatus();
+        }
     }
 
     public List<IControllableRover> getRoverList() {
@@ -118,12 +67,15 @@ public class MainController implements Observer {
         scoreCalculator.resume();
     }
 
-    @Override
-    public void receiveEvent(Object event) {
-        // TODO
-    }
-
     public void setScoreCalculator(ScoreCalculator sc) {
         this.scoreCalculator = sc;
+    }
+
+    @Override
+    public String[] getFaults(){
+        for (IControllableRover r : rovers) {
+            return r.getFaults();
+        }
+        return null;
     }
 }

@@ -47,24 +47,6 @@ class MissionTest1 {
         Assert.assertEquals("Number Of Misson's Points", 2, points.length);
     }
 
-
-//            testRover.setDestination(testMission.getNextPoint());
-//            Assert.assertEquals("Mission is sat to the next point.", true, testRover.getJavaPosition()== testMission.getNextPoint());
-//        }
-//        Assert.assertTrue("Car new position", car.currentPosition.x == 25);
-//        
-//
-//        while (testMission.getCurrentPoint() != null) {
-//            Point2f dest = testMission.getCurrentPoint();
-//            testRover.setDestination(dest);
-//            try {
-//                this.wait(10000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//            assertEquals(dest, testRover.getJavaPosition());
-//        }
-
     @AfterEach
     void tearDown() {
     }

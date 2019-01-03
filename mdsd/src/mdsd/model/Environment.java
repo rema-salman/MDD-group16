@@ -8,10 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Environment extends EnvironmentDescription {
-    //private List<Division> divisions;  // Should divisions be part of Environment or not?
-    private List<Area> physicalAreas;  // E.g. rooms
-    private List<Area> logicalAreas;   // E.g. the coverage of a Wi-Fi router
-    private List<Obstacle> obstacles;  // E.g. walls
+    // private List<Division> divisions; // Should divisions be part of Environment
+    // or not?
+    private List<Area> physicalAreas; // E.g. rooms
+    private List<Area> logicalAreas; // E.g. the coverage of a Wi-Fi router
+    private List<Obstacle> obstacles; // E.g. walls
     List<IControllableRover> rovers;
     private List<Mission> missions;
 
@@ -169,26 +170,11 @@ public class Environment extends EnvironmentDescription {
     }
 
     public void addArea(Area area, boolean physical) {
-        Color c = Color.GRAY;
         if (physical) {
             physicalAreas.add(area);
         } else {
             logicalAreas.add(area);
         }
-        /*for (Shape shape : area.getShapes()) {
-            Rectangle2D bounds = shape.getBounds2D();
-            float x = (float) bounds.getX();
-            float y = (float) bounds.getY();
-            float width = (float) bounds.getWidth();
-            float height = (float) bounds.getHeight();
-            if (physical) {
-                addHorizontalWall(x, y, width, c);
-                addVerticalWall(x, y, height, c);
-            } else {
-                addHorizontalBoundary(x, y, width, c);
-                addVerticalBoundary(x, y, height, c);
-            }
-        }*/
     }
 
     public void addPhysicalArea(Area area) {

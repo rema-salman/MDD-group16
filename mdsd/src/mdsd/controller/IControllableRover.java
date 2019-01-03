@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * A rover that can be controlled by an operator.
  */
-public interface IControllableRover extends Observable {
+public interface IControllableRover extends Observer {
 
     /*
      * Set a new mission for the rover to execute.
@@ -17,8 +17,7 @@ public interface IControllableRover extends Observable {
     void setMission(Mission mission);
 
     /**
-     * "Main loop" function for the rover, updates rover with data from
-     * simulator.
+     * "Main loop" function for the rover, updates rover with data from simulator.
      */
     void update();
 
@@ -43,11 +42,6 @@ public interface IControllableRover extends Observable {
     void stop();
 
     /*
-     * Get a description of all faults of the rover, if any.
-     */
-    String[] getFaults();
-
-    /*
      * Check if the rover is faulty or not.
      */
     boolean isFaulty();
@@ -59,5 +53,7 @@ public interface IControllableRover extends Observable {
     void run();
 
     Robot.Status getStatus();
+
+    String[] getFaults();
 
 }
