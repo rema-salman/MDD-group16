@@ -13,7 +13,7 @@ import java.util.Arrays;
  *
  * @author Mattias
  */
-public class graphPathfindingTest {
+public class PathfindingTest {
 
     public static void main(String[] args) {
     	//------------------------------------@before this bit I think?--------------------------
