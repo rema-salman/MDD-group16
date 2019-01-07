@@ -28,10 +28,16 @@ public class GraphOfPoints {
      * @param size
      * @param tileSize
      */
+    @Deprecated
     public GraphOfPoints(Environment environment, int widthInTiles, float tileSize) {
         gridNodes = environmentToNodes(environment, widthInTiles, tileSize);
     }
 
+    /**
+     * Obsolete and unfinished.
+     * Required if automatic creation of a graph from an environment is to be implemented.
+     */
+    @Deprecated
     private Node[][] environmentToNodes(Environment environment, int widthInTiles, float tileSize) {
         //Index if true if something is occupying the space in a given tile.
         boolean[][] grid = createOccupiedGrid(environment, widthInTiles, tileSize);
@@ -101,12 +107,22 @@ public class GraphOfPoints {
         return null;
     }
 
+    /**
+     * Obsolete and unfinished.
+     * Required if automatic creation of a graph from an environment is to be implemented.
+     */
+    @Deprecated
     private boolean[][] createOccupiedGrid(Environment environment, int widthInTiles, float tileSize) {
         boolean[][] grid = new boolean[widthInTiles][widthInTiles];
         //TODO: Check for collision with objects in environment, set those booleans to true
         return grid;
     }
 
+    public static Point2f[] shortestPathArray(Node start, Node target)
+    {
+    	return nodesWithCostToPointArray(shortestPath(start,target));
+    }
+    
     /**
      * Given two nodes returns the shortest path using A*, with euclidian
      * distance as the heuristic function, between the two nodes if it exists,
@@ -175,7 +191,7 @@ public class GraphOfPoints {
      * @return
      * @see shortestPath back to points again.
      */
-    public static Point2f[] NodesWithCostToPointArray(List<NodeWithCost> l) {
+    public static Point2f[] nodesWithCostToPointArray(List<NodeWithCost> l) {
         Point2f[] points = new Point2f[l.size()];
         for (int i = 0; i < l.size(); i++) {
             points[i] = l.get(i).node.point;
