@@ -95,8 +95,6 @@ public class GUI extends Application {
         final float envW = mainController.getEnvironment().getWidth() + 1;
         final float envH = mainController.getEnvironment().getHeight() + 1;
 
-        System.out.println("Environment: envW: " + envW + ", envH: " + envH);
-
         scaleX = Math.abs(w / envW);
         scaleY = Math.abs(h / envH);
 

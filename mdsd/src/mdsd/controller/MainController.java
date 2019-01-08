@@ -71,11 +71,16 @@ public class MainController implements Observer {
         this.scoreCalculator = sc;
     }
 
-    @Override
-    public String[] getFaults(){
+    public List<String> getFaults() {
+        List<String> faults = new ArrayList<>();
         for (IControllableRover r : rovers) {
-            return r.getFaults();
+            faults.addAll(r.getFaults());
         }
-        return null;
+        return faults;
+    }
+
+    @Override
+    public void onEvent(IControllableRover rover, Object event) {
+        System.out.println("Event received from rover " + rover.getId() + ": " + event);
     }
 }

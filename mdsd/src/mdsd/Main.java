@@ -4,10 +4,10 @@ import javafx.application.Application;
 import mdsd.controller.*;
 import mdsd.model.Area;
 import mdsd.model.GraphOfPoints;
-import mdsd.model.Hospital;
-import mdsd.model.Mission;
 import mdsd.model.GraphOfPoints.Edge;
 import mdsd.model.GraphOfPoints.Node;
+import mdsd.model.Hospital;
+import mdsd.model.Mission;
 import mdsd.view.GUI;
 import project.AbstractSimulatorMonitor;
 
@@ -35,6 +35,7 @@ public class Main {
         Set<Robot> robots = new HashSet<>();
         for (IControllableRover rover : rovers) {
             robots.add((Robot) rover);
+            rover.addObserver(mc);
         }
         AbstractSimulatorMonitor<Robot> controller = new SimulatorMonitor(robots, hospitalEnv);
 
@@ -48,8 +49,8 @@ public class Main {
         areasB.add(hospitalEnv.getWifiZones());
         areasB.add(hospitalEnv.getEatingAreas());
 
-        Procedure procedureA = new Procedure(rovers, areasA);//, rewards);
-        Procedure procedureB = new Procedure(rovers, areasB);//, rewards);
+        Procedure procedureA = new Procedure(rovers, areasA);
+        Procedure procedureB = new Procedure(rovers, areasB);
         ScoreCalculator sc = new RewardSystem(rovers, procedureA, procedureB,
                 hospitalEnv.getPhysicalAreas(), hospitalEnv.getLogicalAreas());
 

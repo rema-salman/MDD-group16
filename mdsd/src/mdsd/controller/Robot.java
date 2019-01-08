@@ -19,30 +19,30 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
     private Mission mission;
     private Point destination;
     private List<Area> currentRooms;
+    private List<Observer> observers;
     private Environment environment;
     private boolean stopped;
     private AtomicBoolean waitingForEnter;
-    private int behavior; // 0:Missions, 1:TravelinSalesRover, 2:LawnMower
+    private int behavior; // 0:Missions, 1:TravelingSalesRover, 2:LawnMower
     public static int BEHAVIOUR_MISSION = 0;
     public static int BEHAVIOUR_TRAVELLING_SALES_ROVER = 1;
     public static int BEHAVIOUR_LAWN_MOWER = 2;
 
     private RangeSensorBelt sonars; // for the obstacle avoidance
-    private boolean isFaulty;
-    private String[] faults;
+    private List<String> faults;
 
     public Robot(Point position, String name, Environment environment, int behavior) {
         super(position, name);
         this.destination = position;
         this.environment = environment;
+        observers = new ArrayList<>();
         currentRooms = new ArrayList<>();
         stopped = false;
         synchronized (this) {
             this.id = idCount++;
         }
         this.behavior = behavior;
-        this.faults = null;
-        this.isFaulty = false;
+        this.faults = new ArrayList<>();
         this.sonars = RobotFactory.addBumperBeltSensor(super.getAgent(), 24);
 
         waitingForEnter = new AtomicBoolean(false);
@@ -83,9 +83,10 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return super.getPosition();
     }
 
+    @Override
     public void update() {
         if (behavior == BEHAVIOUR_MISSION || behavior == BEHAVIOUR_TRAVELLING_SALES_ROVER) { // Mission and
-                                                                                             // TravelingSalesRover
+            // TravelingSalesRover
             if (mission != null && this.isAtPosition(destination)) {
                 Point2f newPoint = mission.getNextPoint();
                 if (newPoint != null) {
@@ -141,6 +142,7 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
             destination.setZ(newY);
             setDestination(destination);
         }
+        checkFaults();
     }
 
     @Override
@@ -154,9 +156,6 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return new Status(this);
     }
 
-    /**
-     * Starts a rover if the rover is not waiting to enter an area
-     */
     @Override
     public void start() {
         stopped = false;
@@ -165,48 +164,31 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         }
     }
 
-    /**
-     * Stops the rover until start() is called
-     */
     @Override
     public void stop() {
         stopped = true;
         setDestination(getPosition());
     }
 
-    /**
-     * returns an array of stings for each faced obstacle to be used in the main
-     * controller
-     * 
-     * @return String[]
-     */
     @Override
-    public String[] getFaults() {
-        if (faults.length != 0) {
-            return faults;
-        }
-        return null;
+    public List<String> getFaults() {
+        return faults;
     }
 
-    /**
-     * adds the faults(faced obstacle) for each rover if its found as a string
-     * 
-     * @return boolean
-     */
     @Override
     public boolean isFaulty() {
-        if (!isFaulty) {
-            int faultCounter = 0;
-            String str = " Obstacle number " + faultCounter + "is there";
-            for (int i = 0; i < faults.length; i++) {
-                if (faults[i] == null) {
-                    faults[i] = str;
-                    faultCounter++;
-                }
-                isFaulty = false;
-            }
+        return !faults.isEmpty();
+    }
+
+    private void checkFaults() {
+        List<String> newFaults = new ArrayList<>();
+        // TODO detect faults
+        faults.addAll(newFaults);
+
+        // Then notify observers
+        for (String s : newFaults) {
+            reportEvent(s);
         }
-        return isFaulty;
     }
 
     @Override
@@ -232,11 +214,23 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
         return currentRooms;
     }
 
-    /**
-     * This method is responsible of the rover performance of the mission and
-     * checking the restrictions, such one rover per room and the waiting time until
-     * the other leaves
-     */
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void reportEvent(Object event) {
+        for (Observer o : observers) {
+            o.onEvent(this, event);
+        }
+    }
+
     @Override
     public void run() {
         update();
@@ -312,8 +306,6 @@ public class Robot extends AbstractRobotSimulator implements IControllableRover 
                     if (sonars.getFrontQuadrantHits() > 0 || sonars.getLeftQuadrantHits() > 0
                             || sonars.getRightQuadrantHits() > 0 || this.isAtPosition(destination)) {
                         update(); // Only update if hit or at destination
-                        isFaulty = true; // flag that there's an obstacle
-                        
                     }
                 }
                 try {
