@@ -9,7 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 
-@SuiteClasses({MissionTest.class, MissionTest1.class, RobotTest.class, RewardSystemTest.class, ProcedureTest.class})
+@SuiteClasses({MissionTest.class, MissionTest1.class, RobotTest.class, RewardSystemTest.class, ProcedureTest.class, PathfindingTest.class})
 
 public class JunitTestSuite {
 
